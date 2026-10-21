@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Guide de la Flamme</title>
+  <meta name="description" content="Guide non officiel et sourcé d'Enshrouded : builds, guides, équipement, compétences, construction et carte.">
+  <meta name="theme-color" content="#0b0c13">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <!-- Base commune avec le site actuel, puis la refonte par-dessus -->
+  <link rel="stylesheet" href="styles.css?v=202610211126">
+  <link rel="stylesheet" href="refonte/refonte.css?v=202610211126">
+</head>
+<body class="rf">
+  <a class="rf-skip" href="#app">Aller au contenu</a>
+  <div class="rf-fog" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <!-- Barre latérale (ordinateur) -->
+  <aside class="rf-side" aria-label="Menu">
+    <a href="#accueil" class="rf-brand" aria-label="Guide de la Flamme — accueil">
+      <span class="rf-flame" data-icon="flame"></span>
+      <span><strong>Guide de la Flamme</strong><small>Guide de fan d'Enshrouded</small></span>
+    </a>
+    <button class="rf-search-btn" data-palette type="button"><span data-icon="search"></span><span>Rechercher…</span><kbd>Ctrl K</kbd></button>
+    <nav class="rf-nav" aria-label="Navigation principale">
+      <a href="#accueil" data-view="accueil"><span data-icon="flame"></span>Accueil</a>
+      <span class="rf-nav-title">Jouer</span>
+      <a href="#guides" data-view="guides"><span data-icon="book"></span>Guides</a>
+      <a href="#builds" data-view="builds"><span data-icon="star"></span>Builds</a>
+      <a href="#competences" data-view="competences"><span data-icon="tree"></span>Compétences</a>
+      <span class="rf-nav-title">Explorer</span>
+      <a href="#equipements" data-view="equipements"><span data-icon="sword"></span>Équipements</a>
+      <a href="#carte" data-view="carte"><span data-icon="map"></span>Carte</a>
+      <a href="#construction" data-view="construction"><span data-icon="home"></span>Construction</a>
+      <a href="#comparateur" data-view="comparateur"><span data-icon="compare"></span>Comparateur<span id="cmp-count" class="count"></span></a>
+      <span class="rf-nav-title">Le site</span>
+      <a href="#maj" data-view="maj"><span data-icon="refresh"></span>Mises à jour &amp; sources</a>
+    </nav>
+    <div class="rf-side-foot">
+      <span id="version-chip" class="version-chip"></span>
+      <button class="rf-link" id="help-btn" type="button"><span data-icon="help"></span>Comment lire ce site</button>
+      <a class="rf-link" href="./"><span data-icon="back"></span>Revenir à l'ancienne version</a>
+    </div>
+  </aside>
+
+  <!-- Barre du haut (mobile) -->
+  <header class="rf-top">
+    <a href="#accueil" class="rf-brand" aria-label="Guide de la Flamme — accueil">
+      <span class="rf-flame" data-icon="flame"></span>
+      <span><strong>Guide de la Flamme</strong></span>
+    </a>
+    <button class="icon-btn" data-palette type="button" aria-label="Rechercher"><span data-icon="search"></span></button>
+    <button class="icon-btn" data-help type="button" aria-label="Comment lire ce site"><span data-icon="help"></span></button>
+  </header>
+
+  <div class="rf-main">
+    <div class="rf-preview" role="note"><span data-icon="star"></span><span><b>Aperçu de la nouvelle version.</b><span class="rf-preview-long"> Même contenu que le site actuel, nouvelle présentation.</span></span><a href="./">Version actuelle</a></div>
+    <div id="freshness" class="wrap"></div>
+    <main id="app" class="wrap" tabindex="-1"></main>
+    <footer class="wrap site-footer">
+      Projet de fan non affilié à Keen Games. Images d'objets, de personnages et rendus de carte © Keen Games, repris de <a href="https://enshrouded.wiki.gg" target="_blank" rel="noopener">enshrouded.wiki.gg</a> (textes du wiki sous licence CC BY-SA 4.0). Icônes dessinées pour ce site (en partie issues de Lucide, licence ISC).
+      Données et sources : <a href="#maj">Mises à jour &amp; sources</a> · <a href="./">Version actuelle du site</a>.
+    </footer>
+  </div>
+
+  <!-- Barre du bas (mobile) -->
+  <nav class="rf-bottom" aria-label="Navigation rapide">
+    <a href="#accueil" data-view="accueil"><span data-icon="flame"></span>Accueil</a>
+    <a href="#guides" data-view="guides"><span data-icon="book"></span>Guides</a>
+    <a href="#builds" data-view="builds"><span data-icon="star"></span>Builds</a>
+    <a href="#carte" data-view="carte"><span data-icon="map"></span>Carte</a>
+    <button type="button" id="rf-more" aria-expanded="false" aria-controls="rf-sheet"><span data-icon="grid"></span>Plus</button>
+  </nav>
+  <div class="rf-sheet" id="rf-sheet" hidden>
+    <div class="rf-sheet-panel" role="dialog" aria-label="Toutes les rubriques">
+      <a href="#equipements" data-view="equipements"><span data-icon="sword"></span><b>Équipements</b><small>Armes, armures, anneaux, sorts</small></a>
+      <a href="#competences" data-view="competences"><span data-icon="tree"></span><b>Compétences</b><small>L'arbre et le tronc commun</small></a>
+      <a href="#construction" data-view="construction"><span data-icon="home"></span><b>Construction</b><small>Bâtiments, blocs, autel</small></a>
+      <a href="#comparateur" data-view="comparateur"><span data-icon="compare"></span><b>Comparateur</b><small>Jusqu'à 4 objets</small></a>
+      <a href="#maj" data-view="maj"><span data-icon="refresh"></span><b>Sources</b><small>Versions et fiabilité</small></a>
+      <a href="./"><span data-icon="back"></span><b>Ancienne version</b><small>Le site actuel</small></a>
+    </div>
+  </div>
+
+  <dialog id="dlg" class="dialog">
+    <button class="icon-btn dlg-close" aria-label="Fermer" data-close><span data-icon="x"></span></button>
+    <div id="dlg-body"></div>
+  </dialog>
+  <dialog id="palette" class="rf-palette" aria-label="Recherche">
+    <div class="rf-pal-head"><span data-icon="search"></span><input id="pal-q" type="search" placeholder="Objet, guide, build, compétence, bloc…" aria-label="Rechercher dans tout le guide" autocomplete="off" aria-controls="pal-res"><button class="icon-btn" data-pal-close type="button" aria-label="Fermer"><span data-icon="x"></span></button></div>
+    <div id="pal-res" class="rf-pal-res" role="listbox" aria-label="Résultats"></div>
+    <div class="rf-pal-foot"><span><kbd>↑</kbd><kbd>↓</kbd> choisir</span><span><kbd>Entrée</kbd> ouvrir</span><span><kbd>Échap</kbd> fermer</span></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="icons.js?v=202610211126"></script>
+  <script src="data/sources.js?v=202610211126"></script>
+  <script src="data/items.js?v=202610211126"></script>
+  <script src="data/skills.js?v=202610211126"></script>
+  <script src="data/builds.js?v=202610211126"></script>
+  <script src="data/builds-1.0.js?v=202610211126"></script>
+  <script src="data/versions.js?v=202610211126"></script>
+  <script src="data/catalog.js?v=202610211126"></script>
+  <script src="data/images.js?v=202610211126"></script>
+  <script src="data/map.js?v=202610211126"></script>
+  <script src="data/progression.js?v=202610211126"></script>
+  <script src="data/tronc-commun.js?v=202610211126"></script>
+  <script src="data/construction.js?v=202610211126"></script>
+  <script src="data/blocs-images.js?v=202610211126"></script>
+  <script src="data/guides.js?v=202610211126"></script>
+  <script src="data/merge.js?v=202610211126"></script>
+  <script src="refonte/refonte.js?v=202610211126"></script>
+  <script src="app.js?v=202610211126"></script>
+</body>
+</html>

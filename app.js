@@ -3,6 +3,8 @@
 (() => {
   "use strict";
   const D = window.ENS, ICONS = window.ENS_ICONS;
+  // Extensions facultatives (page refonte.html) : vues en plus, vue d'accueil, rappel après chaque navigation.
+  const EXT = window.ENS_EXT || {};
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const app = $("#app");
@@ -1030,18 +1032,20 @@
 
   // ── Routeur
   function route() {
-    const h = decodeURIComponent(location.hash.slice(1)) || "builds";
+    const h = decodeURIComponent(location.hash.slice(1)) || EXT.accueil || "builds";
     const [view] = h.split(/[/=]/);
-    $$(".tabs a").forEach((a) => a.classList.toggle("active", a.dataset.view === view || ((view === "build" || view === "planner") && a.dataset.view === "builds")));
+    $$("a[data-view]").forEach((a) => a.classList.toggle("active", a.dataset.view === view || ((view === "build" || view === "planner") && a.dataset.view === "builds")));
     if ($("#dlg").open) $("#dlg").close();
     if (leaflet) { leaflet.map.remove(); leaflet = null; }
-    if (view === "build") viewBuild(h.split("/")[1]);
+    if (EXT.vues?.[view]) EXT.vues[view](h);
+    else if (view === "build") viewBuild(h.split("/")[1]);
     else if (view === "planner") viewPlanner(location.hash.split("=")[1]);
     else if (view === "carte") { const [, kind, val] = h.split("/"); if (kind) mapMode = "objets"; viewCarte(kind === "item" ? { item: val } : kind === "region" ? { region: val } : kind === "cons" ? { cons: val } : null); }
     else if (view === "construction") viewConstruction(h.split("/")[1]);
     else if (view === "guides") viewGuides(h.split("/")[1]);
     else ({ builds: viewBuilds, equipements: viewEquipements, competences: viewCompetences, comparateur: viewComparateur, maj: viewMaj }[view] || viewBuilds)();
     window.scrollTo(0, 0);
+    EXT.apres?.(view, h);
   }
 
   // ── Événements (délégation)
@@ -1086,6 +1090,10 @@
   });
   $("#help-btn").addEventListener("click", helpDialog);
   $("#dlg").addEventListener("click", (e) => { if (e.target.id === "dlg") e.target.close(); });
+
+  // Outils partagés avec les extensions (refonte.html)
+  window.ENS_API = { app, D, $, $$, esc, norm, icon, art, sdot, getItem, itemDetail, skillDetail, helpDialog, openDialog, toast, hydrateIcons,
+    rarKey, lvTxt, keyStat, styleIcon, styleColor, treeColor, TREE_UI, TAGS, BUILDS, SKILLS, buildCard, gcard, G, GCAT, CONS, CAT };
 
   hydrateIcons(); renderHeader(); saveCompare();
   window.addEventListener("hashchange", route);
