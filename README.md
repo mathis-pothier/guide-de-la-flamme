@@ -23,7 +23,9 @@ Guide de fan, non officiel, en français. Site statique, sans dépendance ni com
 | `data/skills.js` | Compétences de l'arbre (coût, rangs, effet, prérequis) | **données** |
 | `data/builds.js` | Styles de jeu, builds, recommandations de compétences | **éditorial** |
 | `data/versions.js` | Version du jeu prise en compte, couverture, historique des patchs | suivi |
-| `app.js`, `styles.css`, `index.html` | Interface | — |
+| `app.js`, `styles.css`, `index.html` | Interface : `app.js` affiche toutes les vues, `styles.css` les composants | — |
+| `refonte/refonte.css`, `refonte/refonte.js`, `refonte/img/` | Habillage du site dans le style du jeu (chargé par `index.html` après `styles.css`) : accueil, recherche globale (Ctrl K ou « / »), menu latéral sur ordinateur et barre d'onglets en bas sur mobile. Personnages tirés des rendus de sets du wiki | — |
+| `ancien.html` | Ancienne présentation du site (mêmes données, lien en pied de page) ; `refonte.html` redirige vers l'accueil | — |
 | `scripts/validate.mjs` | Contrôle de cohérence des données | outil |
 | `scripts/check-updates.mjs` | Détection des nouvelles annonces Steam | outil |
 | `data/catalog.js`, `data/map.js` | Catalogue de 833 objets et carte, générés depuis le wiki | **données générées** |
