@@ -24,16 +24,17 @@ def vtt_en_texte(vtt):
 
 
 def telecharger(video):
+    # Langue d'origine de la vidéo seulement : les traductions auto (ex. "fr" d'une vidéo EN)
+    # renvoient vite des 429 qui font échouer tout le téléchargement. Manuels avant auto.
+    pref = ["fr", "fr-orig"] if video["langue"] == "FR" else ["en", "en-orig"]
     with tempfile.TemporaryDirectory() as tmp:
         cmd = [sys.executable, "-m", "yt_dlp", "--skip-download", "--write-subs", "--write-auto-subs",
-               "--sub-langs", "fr,fr-orig,en,en-orig", "--sub-format", "vtt",
+               "--ignore-errors", "--sub-langs", ",".join(pref), "--sub-format", "vtt",
                "-o", f"{tmp}/%(id)s.%(ext)s", video["url"]]
         subprocess.run(cmd, capture_output=True, text=True, timeout=300)
         fichiers = sorted(Path(tmp).glob("*.vtt"))
         if not fichiers:
             return None
-        # Langue d'origine de la vidéo en priorité, sous-titres manuels avant auto
-        pref = ["fr", "fr-orig"] if video["langue"] == "FR" else ["en", "en-orig"]
         fichiers.sort(key=lambda f: next((i for i, p in enumerate(pref) if f.name.endswith(f".{p}.vtt")), 9))
         f = fichiers[0]
         return f.name.split(".")[-2], vtt_en_texte(f.read_text(encoding="utf-8"))
