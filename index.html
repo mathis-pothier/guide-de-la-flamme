@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Guide de la Flamme</title>
+  <meta name="description" content="Guide non officiel et sourcé des équipements, compétences et builds d'Enshrouded.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a href="#builds" class="brand" aria-label="Guide de la Flamme — accueil">
+        <span class="brand-flame" data-icon="flame"></span>
+        <span><strong>Guide de la Flamme</strong><small>Guide de fan pour Enshrouded</small></span>
+      </a>
+      <div class="header-actions">
+        <span id="version-chip" class="version-chip"></span>
+        <button class="icon-btn" id="help-btn" aria-label="Comment lire ce site" title="Comment lire ce site"><span data-icon="help"></span></button>
+      </div>
+    </div>
+    <nav class="wrap tabs" aria-label="Navigation principale">
+      <a href="#builds" data-view="builds"><span data-icon="star"></span><span class="lbl">Builds</span></a>
+      <a href="#equipements" data-view="equipements"><span data-icon="sword"></span><span class="lbl">Équipements</span></a>
+      <a href="#competences" data-view="competences"><span data-icon="tree"></span><span class="lbl">Compétences</span></a>
+      <a href="#carte" data-view="carte"><span data-icon="map"></span><span class="lbl">Carte</span></a>
+      <a href="#comparateur" data-view="comparateur"><span data-icon="compare"></span><span class="lbl">Comparer</span><span id="cmp-count" class="count"></span></a>
+      <a href="#maj" data-view="maj"><span data-icon="refresh"></span><span class="lbl">Sources</span></a>
+    </nav>
+  </header>
+
+  <div id="freshness" class="wrap"></div>
+  <main id="app" class="wrap" tabindex="-1"></main>
+
+  <dialog id="dlg" class="dialog">
+    <button class="icon-btn dlg-close" aria-label="Fermer" data-close><span data-icon="x"></span></button>
+    <div id="dlg-body"></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <footer class="wrap site-footer">
+    Projet de fan non affilié à Keen Games. Images d'objets et rendus de carte © Keen Games, repris de <a href="https://enshrouded.wiki.gg" target="_blank" rel="noopener">enshrouded.wiki.gg</a> (textes du wiki sous licence CC BY-SA 4.0). Icônes de secours dessinées pour ce site (en partie issues de Lucide, licence ISC).
+    Données et sources : <a href="#maj">Mises à jour &amp; sources</a>.
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="icons.js"></script>
+  <script src="data/sources.js"></script>
+  <script src="data/items.js"></script>
+  <script src="data/skills.js"></script>
+  <script src="data/builds.js"></script>
+  <script src="data/builds-1.0.js"></script>
+  <script src="data/versions.js"></script>
+  <script src="data/catalog.js"></script>
+  <script src="data/images.js"></script>
+  <script src="data/map.js"></script>
+  <script src="data/progression.js"></script>
+  <script src="data/tronc-commun.js"></script>
+  <script src="data/merge.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

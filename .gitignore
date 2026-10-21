@@ -1,0 +1,8 @@
+# Outils locaux de l'éditeur
+.claude/
+# Systèmes
+.DS_Store
+Thumbs.db
+desktop.ini
+# Node (aucune dépendance, par précaution)
+node_modules/
