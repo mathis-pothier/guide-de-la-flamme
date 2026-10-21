@@ -13,14 +13,22 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const log = (m) => console.log(m);
 
 async function api(q, tries = 5) {
+  let last = "";
   for (let i = 0; i < tries; i++) {
     try {
       const r = await fetch(API + q, { headers: UA });
-      if (r.ok) { const t = await r.text(); if (t.startsWith("{")) return JSON.parse(t); }
-    } catch { /* nouvel essai */ }
+      const t = await r.text();
+      if (r.ok && t.startsWith("{")) return JSON.parse(t);
+      // Diagnostic lisible dans le journal de l'Action
+      const title = (t.match(/<title>([^<]*)<\/title>/i) || [])[1] || "";
+      last = /maintenance/i.test(title) ? `wiki.gg en maintenance (HTTP ${r.status})`
+        : r.status === 403 || r.status === 429 ? `accès refusé ou limité par le wiki (HTTP ${r.status}${title ? ", « " + title + " »" : ""})`
+        : `réponse inattendue (HTTP ${r.status}${title ? ", « " + title + " »" : ""})`;
+    } catch (e) { last = "connexion impossible (" + (e.cause?.code || e.message) + ")"; }
+    console.log(`  essai ${i + 1}/${tries} : ${last}`);
     await sleep(1500 * (i + 1));
   }
-  throw new Error("Échec de l'API du wiki : " + q.slice(0, 100));
+  throw new Error(`Collecte impossible — ${last}. Rien n'a été modifié ; la prochaine collecte prendra le relais.`);
 }
 async function members(cat, depth = 2, seen = new Set()) {
   if (seen.has(cat)) return [];
