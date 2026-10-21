@@ -498,3 +498,10 @@ code { background: var(--bg-2); padding: 1px 5px; border-radius: 5px; font-size:
 .cons-pin .ic { width: 16px; height: 16px; stroke-width: 2.2; }
 .pop-cons small { color: var(--muted); }
 @media (max-width: 720px) { .loc { grid-template-columns: 1fr; } .bgrid, .blgrid { grid-template-columns: 1fr; } }
+.bl-ic.has-img { background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--cc) 18%, transparent), transparent 70%), var(--bg-2); }
+.bl-ic.has-img > .ic, .bl-ic.has-img > .bl-mono { display: none; }
+.bl-ic img { width: 88%; height: 88%; object-fit: contain; }
+/* Capture de l'établi (870×1022) : on ne montre que le rendu du bloc, en haut à droite (x 560–790, y 45–275). */
+.bl-crop { width: 100%; height: 100%; border-radius: 11px; background-repeat: no-repeat; background-size: 378% auto; background-position: 87.5% 5.7%; }
+.bl-ic.sm { width: 64px; height: 64px; margin: 4px 0; }
+.pop-bl { display: flex; justify-content: center; }

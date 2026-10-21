@@ -315,5 +315,10 @@ window.ENS.sources = [
     id: "yt-settlement", nom: "YouTube — « Building Our First Settlement Base & Blacksmith Home: Enshrouded 1.0 »", type: "video", fiabilite: "faible",
     url: "https://www.youtube.com/watch?v=SM5oN9wCuzc", consulte: "2026-10-21",
     note: "Première base et maison du forgeron ; vidéo non analysée."
+  },
+  {
+    id: "fandom-blocks", nom: "Enshrouded Wiki (Fandom) — captures de l'établi", type: "wiki", fiabilite: "moyenne",
+    url: "https://enshrouded.fandom.com/wiki/Workbench_Recipes", consulte: "2026-10-21", miseAJourSource: "2025-07-31",
+    note: "Images des blocs de construction : captures de l'écran de l'établi (870×1022), recadrées sur le rendu du bloc. Utilisées tant que le wiki officiel (wiki.gg) ne fournit pas d'icône. Images © Keen Games."
   }
 ];

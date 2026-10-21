@@ -667,7 +667,7 @@
       (cMarkers[id] ||= []).push(mk);
       return mk;
     };
-    cLayer.blocs = L.layerGroup(CONS.blocs.flatMap((b, i) => (b.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("blocs", "block", b.nom, `<br>${esc(b.recette)}<br><small>${esc(b.lieu || "")}</small><br><a class="btn small" href="#construction/blocs">Tous les blocs</a>`, "bloc-" + i))));
+    cLayer.blocs = L.layerGroup(CONS.blocs.flatMap((b, i) => (b.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("blocs", "block", b.nom, `<div class="pop-bl">${blocArt(b, "sm")}</div>${esc(b.recette)}<br><small>${esc(b.lieu || "")}</small><br><a class="btn small" href="#construction/blocs">Tous les blocs</a>`, "bloc-" + i))));
     cLayer.artisans = L.layerGroup(CONS.survivants.flatMap((s, i) => (s.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("artisans", "users", `${s.nom} (${s.role})`, `<br><small>${esc(s.debloque)}</small>`, "artisan-" + i))));
     cLayer.bases = L.layerGroup(CONS.emplacements.flatMap((s, i) => (s.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("bases", "home", s.nom, `<br><small>${esc(s.etape)} · ${esc(s.pourquoi)}</small>`, "base-" + i))));
     Object.entries(cLayer).forEach(([k, l]) => { if (cLayers.has(k)) l.addTo(map); });
@@ -717,6 +717,16 @@
   const BCAT = { Bois: ["Bois", "c-rng"], Pierre: ["Pierre", "c-base"], Lumineux: ["Lumineux", "c-mag"], "Métal et autres": ["Métal et autres", "c-war"] };
   const BMODE = { ramassage: ["Se débloque en ramassant le matériau", "leaf"], fabrication: ["Se débloque en fabriquant le matériau", "hammer"], lieu: ["À trouver dans le monde", "pin"] };
   const pinnedBloc = (b) => (b.marqueurs || []).some((id) => MARKERS[id]);
+  const BIMG = D.blocsImages || {};
+  // Image du bloc : icône du wiki officiel, ou capture de l'établi (wiki Fandom) recadrée sur le rendu du bloc ; sinon icône dessinée.
+  const blocArt = (b, cls = "") => {
+    const im = BIMG[b.nom];
+    const gen = `${icon("block")}<span class="bl-mono">${esc(initials(b.nom))}</span>`;
+    if (!im) return `<span class="bl-ic ${cls}">${gen}</span>`;
+    return im.type === "capture"
+      ? `<span class="bl-ic has-img ${cls}" title="Rendu du bloc (capture de l'établi, wiki Fandom)"><span class="bl-crop" style="background-image:url('${esc(im.fichier)}')"></span></span>`
+      : `<span class="bl-ic has-img ${cls}"><img src="${esc(im.fichier)}" alt="" loading="lazy" onerror="this.parentNode.classList.remove('has-img');this.remove()">${gen}</span>`;
+  };
   function viewConstruction(tab) {
     if (!CONS.blocs.length) { app.innerHTML = `<div class="empty">${icon("alert")}<p>Données de construction absentes.</p></div>`; return; }
     tab = CTABS.some(([k]) => k === tab) ? tab : "batiments";
@@ -790,7 +800,7 @@
       && (!q || q.split(/\s+/).every((w) => norm([b.nom, b.recette, b.lieu, b.region, b.quete].join(" ")).includes(w))));
     $("#bloc-count").textContent = `${list.length} bloc${list.length > 1 ? "s" : ""}`;
     $("#bloc-list").innerHTML = list.map(([b, i]) => `<article class="bl ${BCAT[b.cat]?.[1] || ""}">
-      <span class="bl-ic">${icon("block")}<span class="bl-mono">${esc(initials(b.nom))}</span></span>
+      ${blocArt(b)}
       <div class="bl-body"><b>${esc(b.nom)}</b>
         <small>${icon("hammer")}${esc(b.recette)}</small>
         <small>${icon(BMODE[b.mode][1])}${esc(b.mode === "ramassage" ? "Ramasser le matériau" : b.mode === "fabrication" ? (b.lieu || "Fabriquer le matériau") : (b.lieu || "Lieu non documenté"))}</small>

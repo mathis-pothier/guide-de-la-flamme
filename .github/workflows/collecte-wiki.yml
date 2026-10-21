@@ -38,6 +38,10 @@ jobs:
       - name: Télécharger les nouvelles images
         run: node scripts/fetch-images.mjs
 
+      - name: Images des blocs de construction (icônes du wiki dès qu'il répond)
+        run: node scripts/fetch-block-images.mjs
+        continue-on-error: true
+
       - name: Vérifier la cohérence des données
         run: node scripts/validate.mjs
 
