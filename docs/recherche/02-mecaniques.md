@@ -115,7 +115,8 @@ attraper ; plus de chances de rares/épiques. Compétence centrale **Fisherman's
 
 Système de logique type « redstone » `[games-gg-sparkworks]` `[pcgames-review]` :
 - **Déblocage** : abriter le Charpentier, quête *Contraptions and Mechanisms*, trouver le **Sparkworks Tool** dans un coffre
-  du **Trapped Night Sanctum**, fabriquer le **Sparkworks Workbench**.
+  du **Trapped Night Sanctum**, fabriquer le **Sparkworks Workbench**. (Les vidéos parlent d'un « Knight's Sanctum » à
+  Revelwood : probablement le même lieu mal transcrit.)
 - **Entrées** : leviers, boutons, plaques de pression, zones de déclenchement. **Sorties** : portes, trappes, pièges,
   apparitions d'ennemis (Spawner), feux d'artifice. **Logique** : portes NOT et OR, horloges (délais).
 - Éditeur de **graphe 2D**, boîtiers de jonction renommables. L'outil n'est nécessaire que pour éditer, pas pour utiliser.

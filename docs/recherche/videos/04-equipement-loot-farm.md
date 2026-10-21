@@ -1,0 +1,44 @@
+# Équipement, loot et farm (d'après les vidéos)
+
+Synthèse d'une vingtaine de vidéos « où trouver » et « farm ». Beaucoup de routes de coffres datent d'avant la 1.0 (**[pré-1.0]**) : les lieux existent toujours, mais le niveau du butin et les temps de réapparition ont changé.
+
+## Règles du butin
+- **Coffres d'or > coffres d'argent > coffres en bois.** Le butin est aléatoire, au niveau de la zone ; un coffre d'or peut donner 2 légendaires.
+- **Réapparition** : depuis la mise à jour 7 (Wake of the Water), les coffres ne se remplissent plus en relançant la partie, il y a un minuteur. 04AM parle de 30 à 60 minutes pour un coffre à étincelles des îles flottantes ; His & Hers relancent leur route toutes les 35 minutes. Certaines vidéos plus anciennes (et Mat'Lejeu) disent encore « à chaque redémarrage du serveur » : à vérifier en 1.0. [HackTheMinotaur](https://www.youtube.com/watch?v=EjwpeatN8uM), [Total Survives](https://www.youtube.com/watch?v=ebUQpxEdvJM)
+- **Toujours emporter** : pioche (on creuse jusqu'aux coffres enterrés, sous les tombes ou les tas d'or, et à travers les portes), **crochets** (lockpicks), un autel de la Flamme. Un autel posé à côté d'une porte verrouillée permet de la démonter.
+- En 1.0, le niveau max d'un objet trouvé est 50, améliorable jusqu'à 55. Total Survives dit avoir vu des objets 56 à 60, plus rares.
+- Dans les réglages du monde, on peut monter la quantité de butin (150 %, 200 %) pour moins farmer. [04AM](https://www.youtube.com/watch?v=loBHNw8R_kY)
+- Les objets légendaires ont 5 bonus d'arbre au lieu de 3 : fabriquer d'abord la version rare, puis chercher la légendaire.
+
+## Équipement de fin (1.0)
+- Nouvel atelier : **autel d'infusion**, qui combine les ressources de Cinder's Cradle (fragments archaïques, cœurs, poussière scintillante, coquille de magma) en **infusion archaïque**, nécessaire au meilleur équipement. Les Anciens ont aussi leur propre **forge à gemmes**. [04AM](https://www.youtube.com/watch?v=5bIcnFdiik4)
+- Nouveaux sets par artisan : alchimiste = **Life Lock** (soutien) et **Flame Arcanist** (mage « canon de verre ») ; forgeron = **Crest Flame** et **Ember Guard** (+ 3 boucliers dont celui d'Aristar) ; chasseresse = **Ashwind Strider** et **Sky Specter**. Le set de Lord Vargoth (« Soulbound ») se fait chez Lorraine Crim. [04AM](https://www.youtube.com/watch?v=5bIcnFdiik4)
+- **Set de l'Artificier** (mage) : pièces cachées dans les îles flottantes (bottes dans une maison des Gardens of Earthly Delights, pantalon dans une tour à tremplins). Les **salles à étincelles** (10 étincelles pour ouvrir, ou un autel pour démonter la porte) donnent souvent 2 légendaires. [04AM](https://www.youtube.com/watch?v=zC5uYMCoztU)
+- Route de fin de partie au départ de la **Citadelle de Cinder's Cradle** : étincelles au sol, coffres d'argent et d'or, une porte à 10 étincelles qu'on peut aussi casser à la pioche dorée (environ 40 coups). Prévoir des **crochets archaïques** et un autel sur l'île du nord-est (premières météorites). [Total Survives](https://www.youtube.com/watch?v=gWjai7JoTsA)
+
+## Routes de coffres (milieu et fin de partie)
+- **Cromville Castle** (nord de Veilwater, au-dessus de Starfish) : coffre d'or secret derrière le trône, l'épée **Guard of the North** dans un mannequin au bout d'un couloir (à gauche du trône, crochet ou pioche), d'autres coffres d'or dans la cathédrale et les tours. **[pré-1.0, niveau 45-50]** [UnyPhi](https://www.youtube.com/watch?v=87IES8uf2xA), [Trav Is Gaming](https://www.youtube.com/watch?v=E-lrtEHhoFA), [Total Survives](https://www.youtube.com/watch?v=ebUQpxEdvJM)
+- Route « 5 coffres d'or + 2 d'argent toutes les 35 minutes » à partir de 2 autels près de Cromville (Flamme 8-9 conseillée, sinon on meurt dans le Shroud mais on garde le butin). [His & Hers](https://www.youtube.com/watch?v=7EUennu6uOs)
+- **Gateway Outpost** (Veilwater) : coffre d'or au fond de la tour principale. Autre coffre d'or dans le village minier au sud, et un dans le **temple Drak** à l'ouest (salles qui se remplissent d'eau). [UnyPhi](https://www.youtube.com/watch?v=87IES8uf2xA)
+- Pour atteindre ces zones en pré-1.0 il fallait la Flamme 9 : 14 survivants, 60 étincelles, 60 minerai d'or, 60 poussière de vitriol vert, 30 passiflores, 60 aigues-marines, 30 perles et la tête de Hydra (chaîne de quêtes Vengeance). [HackTheMinotaur](https://www.youtube.com/watch?v=EjwpeatN8uM)
+- Temple Drak de Veilwater : gemme **des courants** (Gem of Currents) lâchée par les élites. [Mordarim](https://www.youtube.com/watch?v=6l4HjyKXPjQ)
+- **Sun Temple** (coin sud-est de la carte, au sud de la Spire de Kindlewastes) : nombreux coffres, on peut contourner les énigmes à la pioche ; planeur **Ghost Glider** possible, et anciennement les sets Mage, **Radiant Paladin** et **Eagle Eye** de niveau 25. [His & Hers](https://www.youtube.com/watch?v=azX9cx_3Le0), [ESO](https://www.youtube.com/watch?v=kQ8T-uBt8nU)
+- Montagnes **[pré-1.0]** : coffre légendaire dans le Shroud à l'ouest de Wickmouth ; **Gateway Outpost (Albaneve)** pour les anneaux exceptionnels (santé, endurance, mana, givre) ; coffre au sud-ouest de Spooky Grave, Billfire Garrison. [04AM](https://www.youtube.com/watch?v=loBHNw8R_kY)
+
+## Début de partie
+- **Pike's Mead Reach** (nord-est de la Spire de Revelwood, après la traversée du Shroud) : épée **Wolf's Maw** (?) niveau 25 et set **Guard of the North** à ramasser, plus la marmite de la fermière. Le set réduit le temps dans le Shroud. [ESO](https://www.youtube.com/watch?v=C5896Ti7CS4)
+- Coffre enterré sous une tombe près d'une cabane de chasseur au sud-est de la Spire de Revelwood (niveau 11, à farmer avec un autel posé juste à côté). Anneau de la Flamme (+40 s de Shroud) dans le même secteur. [ESO](https://www.youtube.com/watch?v=XHD0pho1LWg)
+- Coffre caché sous le 3ᵉ pilier du **pont de Braelyn** (grappin + pioche) et coffre d'or dans le premier puits d'élixir sous la Spire de Springlands. [Sofa Supastar](https://www.youtube.com/watch?v=xIXMvhH8_K8)
+- Hache **Golden War Hero** et **gantelets enflammés** à coup sûr dans un bâtiment (VikingRevival, lieu à préciser). [VikingRevival](https://www.youtube.com/watch?v=vJW-IY2dy-8)
+- Premier set fabricable utile : **Rising Fighter** chez le forgeron (four à charbon : bûches + terre → 15 charbon toutes les 5 min ; forge : plaques de métal). [ESO](https://www.youtube.com/watch?v=03500rFqbEU)
+
+## Ferme et ressources
+- Débloquer la **fermière Emily Frey** (Ancient Vault of the Farmer, au nord de la Spire de Springlands) et l'**alchimiste Balthazar** (meule pour la farine d'os). Le silex de la meule : mine au nord de Longkeep. [P4wnyhof](https://www.youtube.com/watch?v=7ktAx0wB4bg), [Techmedic](https://www.youtube.com/watch?v=IVIHz962oDQ)
+- **Terre fertile** : inutile de la fabriquer, la creuser à la pioche dans les champs de **Harvest Homestead** ou de **Woodguard**. **Un seul bloc suffit** : le **râteau** l'étale à l'infini, et on peut garder un carré pour en reprendre à la pioche. Si elle ne s'étale pas, poser des fondations au lieu de plafonds. [P4wnyhof](https://www.youtube.com/watch?v=7ktAx0wB4bg), [Fervor](https://www.youtube.com/watch?v=R7rBrz-3STA)
+- Terre fertile = croissance ×2 ; **terre fertilisée** (nitrates) = encore plus rapide (« 4 fois » selon P4wnyhof). [Caffeinated Replays](https://www.youtube.com/watch?v=FYmqtW5iUS8), [Techmedic](https://www.youtube.com/watch?v=IVIHz962oDQ)
+- **Lit de semis** (10 bûches, 2 ferrailles, 10 terres) : 1 plante + eau + farine d'os → 5 plants ; maintenir le bouton pour planter en marchant. Ramasser une plante sauvage pour la première fois débloque sa graine. Pousse de 10 minutes à plus d'une heure, réglable. [SmartCeltic](https://www.youtube.com/watch?v=6oGeJFcgqv8)
+- **Potions infinies** : cèpes (Penny Bun, 9 dans le lit de Woodguard) + baies violettes (autour de Longkeep), alchimiste au rayon 0 m à côté du champ. Potion + = potion de base + **lys de minuit** (fleur bleue de nuit à Springlands, ne se cultive pas). Potion de mana = 2 spores du Shroud. [P4wnyhof](https://www.youtube.com/watch?v=FQUBaYLLMK8)
+- **Station de rangement rapide** (charpentier) : vide l'inventaire dans les coffres magiques autour. Coût : cœur du Shroud, colle, pierre de Revelwood. [P4wnyhof](https://www.youtube.com/watch?v=FQUBaYLLMK8)
+- **Résine** : arbres à feuilles rouges et arbres à moitié morts. [GamerCory](https://www.youtube.com/watch?v=HdF1isHGlzY)
+- Sel : cristaux autour d'une tour proche de la base de départ, plus près que la mine indiquée par la chasseresse. [Piloup](https://www.youtube.com/watch?v=Wc2F_Gs1d7U)
+- **Animaux** **[pré-1.0]** : appâts chez la fermière, poser l'appât et attendre à distance, puis caresser. Il faut un toit, un coussin et une mangeoire, et deux animaux pour la reproduction. 8 espèces à l'époque (chèvres, chats, chiens, sangliers, chèvres frisées, yaks, poules…). Chèvres au nord du Cinder Vault. [04AM](https://www.youtube.com/watch?v=IxLD4C6jLMI)

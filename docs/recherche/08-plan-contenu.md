@@ -38,4 +38,7 @@ historique des patchs et registre de sources.
 - L'autre fil du projet a listé **198 vidéos** (111 en 1.0, 28 en FR) dans `/mnt/project-files/videos/liste-videos-enshrouded.csv`.
   Thèmes les plus couverts : builds/compétences (52), débutant/progression (48), nouveautés 1.0 (39), équipement/loot (34).
   Peu de vidéos sur les **énigmes (12)**, les **quêtes (12)** et les **boss (11)** : c'est là que le site peut se démarquer.
-- Les transcriptions ne sont pas récupérables depuis le cloud (YouTube bloqué) ; elles se feront sur le PC de Theo.
+- Les transcriptions ont été faites (181 sur 198) et résumées dans [videos/](videos/README.md). Elles apportent
+  surtout des **solutions d'énigmes** (Mistbury Catacombs, Sun Temple, caveaux, Spire de Veilwater, port au tapis rouge),
+  le détail des **6 donjons-balises**, des **routes de coffres** et des **astuces de construction** : bonnes bases pour les
+  guides de salles, à revérifier en jeu (beaucoup sont pré-1.0).
