@@ -50,6 +50,12 @@ affichent donc toujours la fiabilité des données sous-jacentes.
 - **Comparateur** : jusqu'à 4 objets côte à côte, meilleure valeur surlignée.
 - **Mises à jour & sources** : version, couverture des données, historique des patchs, registre des sources.
 
+## Publier une modification
+
+Avant chaque commit qui change le site, lancez `node scripts/stamp-version.mjs` : il ajoute un numéro de version aux
+fichiers de `index.html` pour que les navigateurs ne mélangent pas l'ancienne et la nouvelle version (GitHub Pages les
+garde 10 minutes en cache). La collecte automatique du wiki le fait toute seule.
+
 ## Mise à jour des données
 
 Voir [MISE-A-JOUR.md](MISE-A-JOUR.md). En résumé : `node scripts/check-updates.mjs` → lire la note officielle →

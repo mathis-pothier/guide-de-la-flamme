@@ -41,6 +41,9 @@ jobs:
       - name: Vérifier la cohérence des données
         run: node scripts/validate.mjs
 
+      - name: Numéro de version des fichiers (cache des navigateurs)
+        run: node scripts/stamp-version.mjs
+
       - name: Résumer les changements
         id: diff
         run: node scripts/diff-catalog.mjs "$RUNNER_TEMP/old-catalog.js" data/catalog.js "$RUNNER_TEMP/pr.md"
