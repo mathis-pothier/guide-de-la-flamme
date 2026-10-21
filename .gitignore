@@ -6,3 +6,4 @@ Thumbs.db
 desktop.ini
 # Node (aucune dépendance, par précaution)
 node_modules/
+captures-carte/

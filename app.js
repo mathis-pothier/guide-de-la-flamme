@@ -665,7 +665,7 @@
     const sess = ADMIN?.session;
     app.innerHTML = `
       <h1>Carte</h1>
-      <div class="fresh" style="margin:6px 0 10px">${icon("info")}<span>Fond : carte du wiki (rendu du jeu, nov. 2025). <b>Cinder's Cradle (1.0) n'y figure pas encore</b> : aucune carte 1.0 vierge sous licence réutilisable n'est disponible. Positions : voir la légende.</span></div>
+      <div class="fresh" style="margin:6px 0 10px">${icon("info")}<span>Fond : <b>carte du jeu 1.0</b>, captures en jeu assemblées le 21/10/2026 (sélecteur en haut à droite pour l'ancienne carte du wiki, plus détaillée mais d'avant la 1.0). Positions des lieux : carte du wiki ; fiabilité : voir la légende.</span></div>
       <div class="map-layout">
         <div class="map-wrap"><div id="leaflet" class="leaflet-box"></div><div id="mp-pickbar" class="mp-pickbar" hidden>${icon("pin")} Cliquez sur la carte pour placer le point <button class="btn small" data-mppickcancel>Annuler</button></div></div>
         <aside class="map-side">
@@ -689,7 +689,8 @@
             <h3>Ajouts des administrateurs</h3><ul class="tight small">${Object.entries(MC.statuts).map(([k, v]) => `<li><span class="mp-st st-${k}">${esc(v.nom)}</span> ${esc(v.desc)}</li>`).join("")}</ul>
           </div></details>
           <details class="more"><summary>${icon("external")}Sources et autres cartes</summary><div class="small">
-            <p>Fond et lieux : <a href="${esc(MAP.source)}" target="_blank" rel="noopener">carte du wiki</a> (marqueurs mis à jour le ${fmtDate(MAP.marqueursDate)}, relevés le 20/10/2026, rendu © Keen Games). Objets, blocs et survivants : pages du wiki et guides cités dans chaque fiche.</p>
+            ${Object.values(MC.fonds).map((f) => `<p><b>${esc(f.nom)}</b> : ${esc(f.desc)}</p>`).join("")}
+            <p>Lieux : <a href="${esc(MAP.source)}" target="_blank" rel="noopener">carte du wiki</a> (marqueurs mis à jour le ${fmtDate(MAP.marqueursDate)}, relevés le 20/10/2026, rendu © Keen Games). Objets, blocs et survivants : pages du wiki et guides cités dans chaque fiche.</p>
             <p>Cartes 1.0 complètes (non réutilisables ici, liens seulement) : <a href="https://enshrouded.th.gl/" target="_blank" rel="noopener">The Hidden Gaming Lair</a>, <a href="https://mapgenie.io/enshrouded/maps/embervale" target="_blank" rel="noopener">Map Genie</a>, <a href="https://allthings.how/enshrouded/map/" target="_blank" rel="noopener">AllThings.How</a>.</p>
           </div></details>
         </aside>
@@ -726,8 +727,19 @@
     if (!window.L) { box.innerHTML = `<div class="empty">${icon("alert")}<p>La bibliothèque de carte (Leaflet) n'a pas pu être chargée : une connexion Internet est nécessaire.</p></div>`; leaflet = null; return; }
     const L = window.L, S = MAP.taille, T = MAP.tuile;
     const map = L.map(box, { crs: L.CRS.Simple, minZoom: -4, maxZoom: 1, zoomSnap: 0.5, attributionControl: true, maxBounds: [[-1500, -1500], [S + 1500, S + 1500]] });
-    map.attributionControl.setPrefix(false).addAttribution('Carte : <a href="https://enshrouded.wiki.gg/wiki/Map" target="_blank" rel="noopener">wiki Enshrouded</a> · rendu © Keen Games');
-    MAP.tuiles.forEach((t) => L.imageOverlay(`images/map/tiles/${t.f}.jpg`, [[t.y * T - 2, t.x * T - 2], [(t.y + 1) * T + 2, (t.x + 1) * T + 2]]).addTo(map));
+    map.attributionControl.setPrefix(false);
+    // Fonds : carte du jeu 1.0 (captures assemblées) ou carte du wiki (avant 1.0) ; choix mémorisé dans le navigateur.
+    const fonds = {};
+    for (const [k, f] of Object.entries(MC.fonds)) {
+      const tiles = f.grille ? Array.from({ length: f.grille * f.grille }, (_, i) => { const c = i % f.grille, r = Math.floor(i / f.grille); return { f: `${c}_${r}`, x: c, y: f.grille - 1 - r }; }) : MAP.tuiles;
+      // bord : marge (en unités de la carte) incluse dans chaque tuile et recouvrant les voisines, pour éviter les lignes entre tuiles
+      const t = S / (f.grille || S / T), b = f.bord || 2;
+      fonds[k] = L.layerGroup(tiles.map((p) => L.imageOverlay(`${f.dossier}/${p.f}.${f.ext}`, [[p.y * t - b, p.x * t - b], [(p.y + 1) * t + b, (p.x + 1) * t + b]], { attribution: f.credit })));
+    }
+    let fond = MC.fondDefaut; try { const s = localStorage.getItem("ens.mapFond"); if (fonds[s]) fond = s; } catch { /* stockage indisponible */ }
+    fonds[fond].addTo(map);
+    L.control.layers(Object.fromEntries(Object.entries(fonds).map(([k, l]) => [MC.fonds[k].nom, l])), null, { position: "topright" }).addTo(map);
+    map.on("baselayerchange", (e) => { const k = Object.keys(fonds).find((x) => fonds[x] === e.layer); try { localStorage.setItem("ens.mapFond", k); } catch { /* rien */ } });
     map.fitBounds([[0, 0], [S, S]]);
     L.control.scale({ imperial: false, metric: false }).addTo(map);
     // Regroupement des marqueurs proches (lisibilité) ; repli sur une couche simple si le module n'est pas chargé.

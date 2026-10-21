@@ -40,6 +40,17 @@ window.ENS.mapConfig = {
     zone:          { nom: "Zone seulement",        desc: "Seule la région est connue : le point indique la zone, pas l'emplacement." }
   },
 
+  // Fonds de carte (sélecteur en haut à droite de la carte). Même repère que les marqueurs : 0 à 10240.
+  fonds: {
+    "jeu-1.0": { nom: "Carte du jeu 1.0", dossier: "images/map/tiles-1.0", ext: "webp", grille: 8, bord: 40, date: "2026-10-21",
+      credit: "Fond : captures de la carte en jeu (1.0) · rendu © Keen Games",
+      desc: "Captures de la carte en jeu (version 1.0) assemblées le 21/10/2026, calées sur la carte du wiki (écart mesuré : moins de 10 unités). Résolution plus faible que le fond du wiki : flou au zoom maximal." },
+    wiki: { nom: "Carte du wiki (avant 1.0)", dossier: "images/map/tiles", ext: "jpg", date: "2025-11-11",
+      credit: 'Fond : <a href="https://enshrouded.wiki.gg/wiki/Map" target="_blank" rel="noopener">wiki Enshrouded</a> · rendu © Keen Games',
+      desc: "Rendu du jeu publié par le wiki (nov. 2025) : plus détaillé, mais antérieur à la 1.0 (côtes et régions modifiées depuis)." }
+  },
+  fondDefaut: "jeu-1.0",
+
   raretes: ["Commune", "Peu commune", "Rare", "Épique", "Légendaire"],
   statuts: {
     valide:     { nom: "Validé",      desc: "Visible par tous." },

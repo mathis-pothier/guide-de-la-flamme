@@ -11,7 +11,7 @@ window.ENS.meta = {
   couverture: [
     { domaine: "Catalogue d'objets", etat: "partiel", detail: "850 objets (armes, pièces d'armure, sets, anneaux, boucliers, sorts) lus sur le wiki le 20/10/2026 ; 526 pages modifiées depuis la 1.0. Dégâts des armes non repris (calculs du wiki périmés)." },
     { domaine: "Compétences", etat: "partiel", detail: "Effets issus du wiki (structure pré-1.0). Nouvelles compétences 1.0 intégrées avec coûts/rangs, valeurs souvent non publiées." },
-    { domaine: "Carte", etat: "partiel", detail: "Carte du wiki intégrée : fond de nov. 2025 (sans Cinder's Cradle), marqueurs d'août 2026. Carte dynamique unique (lieux, objets, blocs, survivants, ajouts des administrateurs) ; cartes 1.0 complètes de th.gl, Map Genie et AllThings.How en liens seulement (pas de licence de réutilisation)." },
+    { domaine: "Carte", etat: "partiel", detail: "Carte dynamique unique : fond 1.0 tiré de captures en jeu (21/10/2026), lieux du wiki (marqueurs d'août 2026), ancien fond du wiki en option, objets, blocs, survivants, ajouts des administrateurs ; cartes 1.0 complètes de th.gl, Map Genie et AllThings.How en liens seulement (pas de licence de réutilisation)." },
     { domaine: "Anneaux", etat: "1.0", detail: "38 anneaux nommés sur le wiki + 7 lignées lues dans les fichiers 1.0 (PinDrop)." },
     { domaine: "Amulettes", etat: "absent", detail: "Aucune catégorie d'amulette sur le wiki ni dans les bases consultées." },
     { domaine: "Builds", etat: "editorial", detail: "10 builds ; équipement 1.0 pièce par pièce pour 9 d'entre eux d'après KeenGamer, AoEAH, PinDrop et Enshrouded Builds, plus un classement automatique du catalogue." }

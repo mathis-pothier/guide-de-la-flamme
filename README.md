@@ -69,14 +69,21 @@ affichent donc toujours la fiabilité des données sous-jacentes.
 
 | Source | Usage ici | Pourquoi |
 |---|---|---|
-| Carte du wiki (DataMaps de enshrouded.wiki.gg, `Map:Embervale`) | Fond (64 tuiles) + 570 marqueurs de lieux | Seul fond vierge téléchargeable ; rendu © Keen Games, marqueurs sous la licence du wiki (CC BY-SA 4.0 annoncée, **page Copyrights à revérifier** : le wiki était en maintenance lors du relevé du 20/10/2026) |
+| Captures de la carte en jeu (1.0), prises par le propriétaire du site le 21/10/2026 | **Fond par défaut** « Carte du jeu 1.0 » : 34 captures assemblées → `images/map/tiles-1.0/` (64 tuiles WebP) | Seule source d'un fond 1.0 complet réutilisable ici ; rendu © Keen Games, même statut que le rendu du wiki (illustration d'un site de fan) |
+| Carte du wiki (DataMaps de enshrouded.wiki.gg, `Map:Embervale`) | Fond « Carte du wiki (avant 1.0) » (sélecteur) + 570 marqueurs de lieux | Seul fond vierge téléchargeable ; rendu © Keen Games, marqueurs sous la licence du wiki (CC BY-SA 4.0 annoncée, **page Copyrights à revérifier** : le wiki était en maintenance lors du relevé du 20/10/2026) |
 | Pages d'objets, de blocs et de survivants du wiki, guides cités | Placement des objets « dans ce lieu » | Lieu cité par la source, rattaché au marqueur du lieu |
 | The Hidden Gaming Lair (th.gl), Map Genie, AllThings.How | **Liens seulement** | Cartes 1.0 complètes, mais sans licence de réutilisation (données et tuiles propriétaires) : ni intégration ni copie |
 
 ### Limites de précision
 
-- Le fond date d'avant la 1.0 (rendu de nov. 2025) : **Cinder's Cradle n'y figure pas**. Aucune carte 1.0 vierge sous licence
-  réutilisable n'a été trouvée ; le fond pourra être remplacé dans `data/map.js` (`tuiles`, `taille`) quand le wiki la publiera.
+- **Fond 1.0** : la carte en jeu couvre le même carré que celle du wiki (cadre de la carte = monde de 0 à 10240). Calage mesuré
+  sur six zones : écart inférieur à 10 unités. Résolution : 4096 px pour 10240 unités (2,5 unités par pixel), donc flou au zoom
+  maximal ; le fond du wiki reste plus net mais date d'avant la 1.0 (son grand lobe ouest, sans aucun lieu, n'existe pas en 1.0).
+  Les bords de mer non couverts par les captures (bord gauche au milieu, un peu à droite) ont été complétés par la mer voisine,
+  et le repère du joueur a été effacé.
+- **Les positions des lieux viennent toujours du wiki** (relevé d'août 2026) : les lieux ajoutés ou déplacés en 1.0 peuvent manquer.
+- **Refaire le fond 1.0** : prendre les captures (carte en jeu, zoom fixe, un tiers de chevauchement, PNG), les mettre dans
+  `captures-carte/` (exclu de Git) puis demander l'assemblage ; les fonds sont déclarés dans `fonds` de `data/map-config.js`.
 - Chaque point indique sa fiabilité : **Position exacte** (coordonnée publiée), **Dans ce lieu** (l'objet est dans le lieu, pas
   forcément au point exact), **Approximative** (estimation, à vérifier en jeu), **Zone seulement** (seule la région est connue).
 - Les objets, blocs et survivants dont la source ne cite aucun lieu présent sur la carte n'y figurent pas (ils restent dans leurs onglets).
