@@ -660,14 +660,15 @@
     });
     // Couches Construction
     const cLayer = {}, cMarkers = {};
-    const consPin = (kind, ic, title, html, id) => (mid) => {
+    const consPin = (kind, ic, title, html, id, pinHtml) => (mid) => {
       const m = MARKERS[mid];
-      const mk = L.marker([m.y, m.x], { icon: L.divIcon({ className: "cons-pin c-" + kind, html: `<span>${icon(ic)}</span>`, iconSize: [30, 30], iconAnchor: [15, 15] }), title, zIndexOffset: 400 })
+      const big = !!pinHtml;
+      const mk = L.marker([m.y, m.x], { icon: L.divIcon({ className: "cons-pin c-" + kind + (big ? " with-img" : ""), html: pinHtml || `<span>${icon(ic)}</span>`, iconSize: big ? [40, 40] : [30, 30], iconAnchor: big ? [20, 20] : [15, 15] }), title, zIndexOffset: 400 })
         .bindPopup(`<div class="pop-cons"><b>${esc(title)}</b><br><span class="muted">${esc(m.nom)}</span>${html}</div>`);
       (cMarkers[id] ||= []).push(mk);
       return mk;
     };
-    cLayer.blocs = L.layerGroup(CONS.blocs.flatMap((b, i) => (b.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("blocs", "block", b.nom, `<div class="pop-bl">${blocArt(b, "sm")}</div>${esc(b.recette)}<br><small>${esc(b.lieu || "")}</small><br><a class="btn small" href="#construction/blocs">Tous les blocs</a>`, "bloc-" + i))));
+    cLayer.blocs = L.layerGroup(CONS.blocs.flatMap((b, i) => (b.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("blocs", "block", b.nom, `<div class="pop-bl">${blocArt(b, "sm")}</div>${esc(b.recette)}<br><small>${esc(b.lieu || "")}</small><br><a class="btn small" href="#construction/blocs">Tous les blocs</a>`, "bloc-" + i, BIMG[b.nom] ? blocArt(b, "pin") : null))));
     cLayer.artisans = L.layerGroup(CONS.survivants.flatMap((s, i) => (s.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("artisans", "users", `${s.nom} (${s.role})`, `<br><small>${esc(s.debloque)}</small>`, "artisan-" + i))));
     cLayer.bases = L.layerGroup(CONS.emplacements.flatMap((s, i) => (s.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("bases", "home", s.nom, `<br><small>${esc(s.etape)} · ${esc(s.pourquoi)}</small>`, "base-" + i))));
     Object.entries(cLayer).forEach(([k, l]) => { if (cLayers.has(k)) l.addTo(map); });
