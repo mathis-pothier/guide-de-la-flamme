@@ -536,6 +536,12 @@ code { background: var(--bg-2); padding: 1px 5px; border-radius: 5px; font-size:
 .mp-pin .ic { width: 15px; height: 15px; stroke-width: 2.2; color: var(--pc); }
 .mp-pin img { position: absolute; inset: 2px; width: calc(100% - 4px); height: calc(100% - 4px); object-fit: contain; border-radius: 50%; background: #1a2226; }
 .mp-pin.adm { border-radius: 8px; border-width: 3px; }
+.mp-sym { display: grid; place-items: center; width: 34px; height: 34px; }
+.leaflet-container .mp-sym img { width: 34px; height: 34px; max-width: none; object-fit: contain; filter: drop-shadow(0 0 2px #000) drop-shadow(0 1px 3px rgba(0,0,0,.8)); transition: transform .12s; }
+.mp-sym:hover img { transform: scale(1.18); }
+.mp-sym > .ic { display: none; }
+.mp-sym.ko { width: 28px; height: 28px; border-radius: 50%; background: color-mix(in srgb, var(--pc) 30%, #1a2226); border: 2px solid var(--pc); box-shadow: 0 1px 4px rgba(0,0,0,.6); }
+.mp-sym.ko > .ic { display: block; width: 15px; height: 15px; stroke-width: 2.2; color: var(--pc); }
 .mp-pin.adm::after { content: "+"; position: absolute; top: -7px; right: -7px; width: 14px; height: 14px; border-radius: 50%; background: var(--ember); color: #1a1006; font: 800 11px/14px Inter, sans-serif; text-align: center; }
 .mp-pin.st-en_attente { border-style: dashed; }
 .mp-pin.st-masque { opacity: .45; }
@@ -631,3 +637,6 @@ ol.g-pins li::marker { color: var(--ember-2); font-weight: 800; }
   .g-nav .btn { flex: 1 1 100%; justify-content: center; }
 }
 @media (max-width: 720px) { .g-sec table.g-wide { min-width: 560px; } }
+.mp-leg-img { width: 22px; height: 22px; object-fit: contain; filter: drop-shadow(0 0 1px #000); }
+.mp-sym.grp { position: relative; }
+.mp-sym.grp b { position: absolute; right: -8px; bottom: -6px; min-width: 18px; padding: 0 4px; border-radius: 9px; background: var(--ember); color: #1a1006; font: 800 10px/16px Inter, sans-serif; text-align: center; border: 1.5px solid #1a1006; }

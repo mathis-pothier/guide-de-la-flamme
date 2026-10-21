@@ -57,7 +57,7 @@ affichent donc toujours la fiabilité des données sous-jacentes.
 - **Compétences** : recommandations générales, coop et par build ; liste filtrable avec coûts, conflits et sources.
 - **Construction** : 8 idées de bâtiments pas à pas (base en croix, maison 3×5, ferme, coffres, atelier, confort…), les 61 blocs du wiki avec recette et lieu de déblocage, les emplacements de base conseillés, l'autel et le confort, les artisans à sauver et des tutoriels vidéo (`data/construction.js`).
 - **Carte** : carte dynamique unique (Leaflet) : lieux du wiki, objets, blocs, survivants, emplacements de base et ajouts des
-  administrateurs ; filtres par catégorie et rareté, recherche, regroupement des marqueurs, légende, fiche par point (nom,
+  administrateurs ; filtres par catégorie et rareté, recherche, regroupement des marqueurs, légende, symboles du jeu pour les lieux (« +N » = autres points au même endroit, un clic les écarte), fiche par point (nom,
   catégorie, description, rareté, source, fiabilité de la position, date de vérification). Voir [Carte dynamique](#carte-dynamique).
 - **Guides** : 24 guides pratiques classés par catégorie (débuter, Flamme, boss, builds, équipement, donjons et énigmes, construction), avec sommaire, encadrés « à vérifier en jeu » et sources.
 - **Comparateur** : jusqu'à 4 objets côte à côte, meilleure valeur surlignée.

@@ -684,6 +684,7 @@
           <div id="mp-list" class="map-list"></div>
           <details class="more"><summary>${icon("info")}Légende</summary><div>
             <div class="mp-legend">${cats.map(([, c]) => `<span><span class="mp-ic sm" style="--pc:${c.couleur}">${icon(c.icone)}</span>${esc(c.nom)}</span>`).join("")}</div>
+            <h3>Symboles des lieux (carte du jeu)</h3><div class="mp-legend">${Object.values(MAP.groupes || {}).filter((g) => g.icone).map((g) => `<span><img class="mp-leg-img" src="${esc(g.icone)}" alt="" onerror="this.remove()">${esc(g.nom)}</span>`).join("")}</div>
             <h3>Fiabilité de la position</h3><ul class="tight small">${Object.entries(MC.precisions).map(([k, v]) => `<li><span class="mp-prec prec-${k}">${esc(v.nom)}</span> ${esc(v.desc)}</li>`).join("")}</ul>
             <h3>Ajouts des administrateurs</h3><ul class="tight small">${Object.entries(MC.statuts).map(([k, v]) => `<li><span class="mp-st st-${k}">${esc(v.nom)}</span> ${esc(v.desc)}</li>`).join("")}</ul>
           </div></details>
@@ -730,8 +731,16 @@
     map.fitBounds([[0, 0], [S, S]]);
     L.control.scale({ imperial: false, metric: false }).addTo(map);
     // Regroupement des marqueurs proches (lisibilité) ; repli sur une couche simple si le module n'est pas chargé.
-    const layer = (L.markerClusterGroup ? L.markerClusterGroup({ disableClusteringAtZoom: -1, maxClusterRadius: 48, showCoverageOnHover: false, spiderfyOnMaxZoom: false,
-      iconCreateFunction: (cl) => { const n = cl.getChildCount(); return L.divIcon({ className: "mp-cluster", html: `<span>${n}</span>`, iconSize: n > 99 ? [44, 44] : [36, 36] }); } }) : L.layerGroup()).addTo(map);
+    // De près, seuls les points au même endroit (objets d'un lieu) restent groupés : le groupe affiche le symbole du lieu
+    // et le nombre de points en plus ; un clic les écarte.
+    const PROCHE = -3;
+    const layer = (L.markerClusterGroup ? L.markerClusterGroup({ maxClusterRadius: (z) => z >= PROCHE ? 6 : 36, showCoverageOnHover: false, spiderfyOnMaxZoom: true,
+      iconCreateFunction: (cl) => {
+        const n = cl.getChildCount();
+        const lieu = (cl._zoom ?? map.getZoom()) >= PROCHE && cl.getAllChildMarkers().map((m) => m.options.pt).find((p) => p?.origine === "wiki" && p.icone);
+        if (lieu) return L.divIcon({ className: "mp-marker", html: `<span class="mp-sym grp"><img src="${esc(lieu.icone)}" alt=""><b>+${n - 1}</b></span>`, iconSize: [34, 34], iconAnchor: [17, 17] });
+        return L.divIcon({ className: "mp-cluster", html: `<span>${n}</span>`, iconSize: n > 99 ? [44, 44] : [36, 36] });
+      } }) : L.layerGroup()).addTo(map);
     const markers = new Map();
     let pickMarker = null, regionCircle = null, onPick = null;
     const pinHtml = (p) => {
@@ -739,14 +748,15 @@
       const it = p.itemId && getItem(p.itemId);
       if (it) return { html: art(it, "pin"), size: 40 };
       if (p.bloc && BIMG[p.bloc.nom]) return { html: blocArt(p.bloc, "pin"), size: 40 };
-      const img = p.icone ? `<img src="${esc(p.icone)}" alt="" onerror="this.remove()">` : "";
-      return { html: `<span class="mp-pin ${p.origine === "admin" ? "adm st-" + esc(p.statut) : ""}" style="--pc:${c.couleur}">${icon(c.icone)}${img}</span>`, size: 28 };
+      // Symbole du jeu (icône de la carte du wiki) affiché tel quel ; pastille de catégorie si l'icône manque ou ne charge pas.
+      if (p.icone && p.origine !== "admin") return { html: `<span class="mp-sym" style="--pc:${c.couleur}"><img src="${esc(p.icone)}" alt="" onerror="this.parentNode.classList.add('ko');this.remove()">${icon(c.icone)}</span>`, size: 34 };
+      return { html: `<span class="mp-pin ${p.origine === "admin" ? "adm st-" + esc(p.statut) : ""}" style="--pc:${c.couleur}">${icon(c.icone)}</span>`, size: 28 };
     };
     function draw(list) {
       layer.clearLayers(); markers.clear();
       for (const p of list) {
         const { html, size } = pinHtml(p);
-        const mk = L.marker([p.y, p.x], { icon: L.divIcon({ className: "mp-marker", html, iconSize: [size, size], iconAnchor: [size / 2, size / 2] }), title: p.nom, zIndexOffset: p.origine === "admin" ? 800 : p.origine === "wiki" ? 0 : 400 })
+        const mk = L.marker([p.y, p.x], { icon: L.divIcon({ className: "mp-marker", html, iconSize: [size, size], iconAnchor: [size / 2, size / 2] }), pt: p, title: p.nom, zIndexOffset: p.origine === "admin" ? 800 : p.origine === "wiki" ? 0 : 400 })
           .bindPopup(() => pointCard(p), { maxWidth: 320, minWidth: 240 });
         mk.addTo(layer);
         markers.set(p.id, mk);
