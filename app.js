@@ -889,6 +889,69 @@
     $("#cmp-clear")?.addEventListener("click", () => { compare = []; saveCompare(); viewComparateur(); });
   }
 
+  // ════════════ GUIDES ════════════
+  const G = D.guides || { categories: [], liste: [], sources: {} };
+  const GCAT = byId(G.categories);
+  let gcat = "";
+  const gsrc = (id) => G.sources[id] || SOURCES[id];
+  // **gras** et [lien](#vue) autorisés dans les textes des guides
+  const gtext = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\[([^\]]+)\]\((#[\w/-]+)\)/g, '<a href="$2">$1</a>');
+  const gbloc = (b) => b.p ? `<p>${gtext(b.p)}</p>`
+    : b.ul ? `<ul class="tight">${b.ul.map((x) => `<li>${gtext(x)}</li>`).join("")}</ul>`
+    : b.ol ? `<ol class="g-steps">${b.ol.map((x) => `<li>${gtext(x)}</li>`).join("")}</ol>`
+    : b.table ? `<div class="table-wrap"><table${b.table.tete.length > 3 ? ' class="g-wide"' : ""}><thead><tr>${b.table.tete.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${b.table.lignes.map((r) => `<tr>${r.map((v, k) => `<td>${k ? gtext(v) : `<b>${gtext(v)}</b>`}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`
+    : b.astuce ? `<div class="g-note tip">${icon("star")}<p><b>Astuce.</b> ${gtext(b.astuce)}</p></div>`
+    : b.attention ? `<div class="g-note warn">${icon("alert")}<p>${gtext(b.attention)}</p></div>`
+    : b.verifier ? `<div class="g-note check">${icon("help")}<p><b>À vérifier en jeu.</b> ${gtext(b.verifier)}</p></div>` : "";
+  const nVerif = (g) => g.sections.reduce((n, s) => n + s.blocs.filter((b) => b.verifier).length, 0);
+  const gcard = (g) => { const c = GCAT[g.cat] || {}; return `<a class="bld g-card" href="#guides/${esc(g.id)}">
+      <div class="bld-top"><span class="emblem ${c.cls || ""}">${icon(g.icone)}</span><div><h3>${esc(g.titre)}</h3>
+        <div class="tags"><span class="tag hot">${esc(g.niveau)}</span><span class="tag">${esc(g.version)}</span>${g.spoiler ? `<span class="tag ed">${icon("alert")}Spoilers</span>` : ""}</div></div></div>
+      <p>${esc(g.resume)}</p></a>`; };
+  function viewGuides(id) {
+    if (id) return viewGuide(id);
+    if (gcat && !GCAT[gcat]) gcat = "";
+    const verif = G.liste.reduce((n, g) => n + nVerif(g), 0);
+    app.innerHTML = `
+      <h1>Guides</h1>
+      <p class="lead">Des guides pratiques rédigés à partir de nos recherches sur la 1.0 : par où commencer, comment monter la Flamme, battre les boss, résoudre les salles et bâtir sa base.</p>
+      <div class="facts">
+        <div class="fact"><b>${G.liste.length}</b><span>guides</span></div>
+        <div class="fact"><b>${G.categories.length}</b><span>catégories</span></div>
+        <div class="fact"><b>${verif}</b><span>points signalés « à vérifier en jeu »</span></div>
+      </div>
+      <div class="chips scroll" role="group" aria-label="Catégorie" style="margin-top:14px"><button class="chip" data-gcat="" aria-pressed="${!gcat}">${icon("grid")}Toutes</button>${G.categories.map((c) => `<button class="chip ${c.cls}" data-gcat="${c.id}" aria-pressed="${gcat === c.id}">${icon(c.icone)}${esc(c.nom)}</button>`).join("")}</div>
+      ${G.categories.filter((c) => !gcat || c.id === gcat).map((c) => `<section class="g-cat">
+        <h2>${icon(c.icone)}${esc(c.nom)}</h2><p class="small muted">${esc(c.desc)}</p>
+        <div class="bgrid">${G.liste.filter((g) => g.cat === c.id).map(gcard).join("")}</div></section>`).join("")}
+      <p class="small muted" style="margin-top:22px">Les noms d'objets, de lieux et de compétences restent en anglais tant que nous n'avons pas relevé les noms officiels français dans le jeu. Ce qui n'est pas encore confirmé en 1.0 est signalé dans chaque guide. Mis à jour le ${fmtDate(G.maj)}.</p>`;
+  }
+  function viewGuide(id) {
+    const g = G.liste.find((x) => x.id === id);
+    if (!g) { app.innerHTML = `<div class="empty">${icon("help")}<p>Guide introuvable.</p><a class="btn" href="#guides">Retour aux guides</a></div>`; return; }
+    const c = GCAT[g.cat] || {};
+    const others = G.liste.filter((x) => x.cat === g.cat && x !== g);
+    const i = G.liste.indexOf(g), prev = G.liste[i - 1], next = G.liste[i + 1];
+    const srcs = (g.sources || []).map(gsrc).filter(Boolean);
+    const body = `
+      <nav class="g-toc" aria-label="Sommaire"><b>Sommaire</b><ol>${g.sections.map((s, k) => `<li><button data-gto="g-s${k}">${esc(s.titre)}</button></li>`).join("")}</ol></nav>
+      ${g.sections.map((s, k) => `<section class="g-sec" id="g-s${k}"><h2>${esc(s.titre)}</h2>${s.blocs.map(gbloc).join("")}</section>`).join("")}`;
+    app.innerHTML = `
+      <a class="back" href="#guides">${icon("back")}Tous les guides</a>
+      <article class="guide">
+        <header class="g-head"><span class="emblem ${c.cls || ""}">${icon(g.icone)}</span><div>
+          <div class="tags"><span class="tag">${icon(c.icone)}${esc(c.nom)}</span><span class="tag hot">${esc(g.niveau)}</span><span class="tag">Version ${esc(g.version)}</span>${nVerif(g) ? `<span class="tag">${icon("help")}${nVerif(g)} à vérifier</span>` : ""}</div>
+          <h1>${esc(g.titre)}</h1><p class="lead">${esc(g.resume)}</p></div></header>
+        ${g.spoiler ? `<div class="g-note warn">${icon("alert")}<p><b>Spoilers.</b> Ce guide révèle la fin de l'histoire.</p></div><details class="more g-spoil"><summary>${icon("book")}Afficher le guide</summary><div>${body}</div></details>` : body}
+        ${g.liens ? `<h2>${icon("link")}Sur le site</h2><div class="btn-row">${g.liens.map(([l, h]) => `<a class="btn small" href="${esc(h)}">${esc(l)}</a>`).join("")}</div>` : ""}
+        <h2>${icon("book")}Sources</h2>
+        <p class="small muted">Texte rédigé pour ce site à partir de ces sources, recoupées entre elles quand c'est possible.</p>
+        <div class="chips small-chips">${srcs.map((s) => `<a class="src-chip" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.nom)}</a>`).join("")}</div>
+      </article>
+      ${others.length ? `<h2>${icon(c.icone)}Dans la même catégorie</h2><div class="bgrid">${others.map(gcard).join("")}</div>` : ""}
+      <nav class="g-nav" aria-label="Guides voisins">${prev ? `<a class="btn" href="#guides/${esc(prev.id)}">${icon("back")}${esc(prev.titre)}</a>` : "<span></span>"}${next ? `<a class="btn" href="#guides/${esc(next.id)}">${esc(next.titre)}${icon("arrow")}</a>` : ""}</nav>`;
+  }
+
   // ════════════ MISES À JOUR & SOURCES ════════════
   const COV = { "1.0": ["ok", "À jour"], partiel: ["warn", "Partiel"], "pre-1.0": ["warn", "Avant 1.0"], absent: ["bad", "Absent"], editorial: ["ed", "Conseils"] };
   function viewMaj() {
@@ -940,13 +1003,14 @@
     else if (view === "planner") viewPlanner(location.hash.split("=")[1]);
     else if (view === "carte") { const [, kind, val] = h.split("/"); if (kind) mapMode = "objets"; viewCarte(kind === "item" ? { item: val } : kind === "region" ? { region: val } : kind === "cons" ? { cons: val } : null); }
     else if (view === "construction") viewConstruction(h.split("/")[1]);
+    else if (view === "guides") viewGuides(h.split("/")[1]);
     else ({ builds: viewBuilds, equipements: viewEquipements, competences: viewCompetences, comparateur: viewComparateur, maj: viewMaj }[view] || viewBuilds)();
     window.scrollTo(0, 0);
   }
 
   // ── Événements (délégation)
   document.addEventListener("click", (e) => {
-    const t = e.target.closest("[data-item],[data-skill],[data-slot],[data-quiz],[data-quiz-reset],[data-stage],[data-cat],[data-sub],[data-skb],[data-tree],[data-share],[data-cmp],[data-cmp-toggle],[data-cmp-remove],[data-del-mine],[data-help],[data-close],[data-mapmode],[data-mapfocus],[data-region],[data-ctab],[data-bcat],[data-bmode]");
+    const t = e.target.closest("[data-item],[data-skill],[data-slot],[data-quiz],[data-quiz-reset],[data-stage],[data-cat],[data-sub],[data-skb],[data-tree],[data-share],[data-cmp],[data-cmp-toggle],[data-cmp-remove],[data-del-mine],[data-help],[data-close],[data-mapmode],[data-mapfocus],[data-region],[data-ctab],[data-bcat],[data-bmode],[data-gcat],[data-gto]");
     if (!t) return;
     const d = t.dataset;
     if (d.item) itemDetail(d.item);
@@ -972,6 +1036,8 @@
     else if (d.ctab) { location.hash = "#construction/" + d.ctab; }
     else if (d.bcat !== undefined) { cons.cat = d.bcat; renderBlocs(); }
     else if (d.bmode !== undefined) { cons.mode = d.bmode; renderBlocs(); }
+    else if (d.gcat !== undefined) { gcat = d.gcat; viewGuides(); }
+    else if (d.gto) document.getElementById(d.gto)?.scrollIntoView({ behavior: "smooth", block: "start" });
   });
   document.addEventListener("change", (e) => {
     const ck = e.target.dataset?.clayer;

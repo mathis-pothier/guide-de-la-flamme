@@ -29,6 +29,7 @@ Guide de fan, non officiel, en français. Site statique, sans dépendance ni com
 | `data/catalog.js`, `data/map.js` | Catalogue de 833 objets et carte, générés depuis le wiki | **données générées** |
 | `data/builds-1.0.js` | Équipement 1.0 pièce par pièce par build (guides KeenGamer, AoEAH, PinDrop…) | **éditorial** |
 | `data/construction.js` | Onglet Construction : blocs (wiki), bâtiments et emplacements (guides), autel, confort, artisans, vidéos | **données + éditorial** |
+| `data/guides.js` | Onglet Guides : 24 guides rédigés en 7 catégories à partir de `docs/recherche/` (sources et points « à vérifier en jeu » par guide) | **éditorial** |
 | `data/merge.js` | Fusion objets vérifiés + catalogue du wiki | — |
 | `scripts/collect.html` | Collecte du wiki depuis le navigateur (avec `node scripts/serve.mjs 8081 --collect`) | outil |
 | `scripts/build-data.mjs` | Transforme la collecte en catalogue et carte | outil |
@@ -48,6 +49,7 @@ affichent donc toujours la fiabilité des données sous-jacentes.
 - **Compétences** : recommandations générales, coop et par build ; liste filtrable avec coûts, conflits et sources.
 - **Construction** : 8 idées de bâtiments pas à pas (base en croix, maison 3×5, ferme, coffres, atelier, confort…), les 61 blocs du wiki avec recette et lieu de déblocage, les emplacements de base conseillés, l'autel et le confort, les artisans à sauver et des tutoriels vidéo (`data/construction.js`).
 - **Carte** : carte du wiki (rendu du jeu) avec les objets épinglés à leur emplacement précis, recherche, calques de lieux (Ancient Spire, Elixir Well, Shroud Root…), objets par région ; carte 1.0 complète intégrée (AllThings.How) et liens vers th.gl / Map Genie. Leaflet est chargé depuis cdnjs (connexion nécessaire pour la carte).
+- **Guides** : 24 guides pratiques classés par catégorie (débuter, Flamme, boss, builds, équipement, donjons et énigmes, construction), avec sommaire, encadrés « à vérifier en jeu » et sources.
 - **Comparateur** : jusqu'à 4 objets côte à côte, meilleure valeur surlignée.
 - **Mises à jour & sources** : version, couverture des données, historique des patchs, registre des sources.
 
