@@ -3477,22 +3477,6 @@
    "url": "https://enshrouded.wiki.gg/images/Flame_Shrine.png?f7157e"
   },
   {
-   "file": "images/map/elixir-well.png",
-   "url": "https://enshrouded.wiki.gg/images/Elixir_Well.png?470820"
-  },
-  {
-   "file": "images/map/shroud-root.png",
-   "url": "https://enshrouded.wiki.gg/images/Shroud_Root.png?470820"
-  },
-  {
-   "file": "images/map/hollow-halls.png",
-   "url": "https://enshrouded.wiki.gg/images/Hollow_Halls.png?4dd2cb"
-  },
-  {
-   "file": "images/map/shroud-lair.png",
-   "url": "https://enshrouded.wiki.gg/images/Shroud_Lair.png?918805"
-  },
-  {
    "file": "images/map/sun-temple.png",
    "url": "https://enshrouded.wiki.gg/images/Sun_Temple.png?fec76f"
   },
@@ -3505,8 +3489,48 @@
    "url": "https://enshrouded.wiki.gg/images/Ancient_Vault.png?5328e7"
   },
   {
+   "file": "images/map/ancient-obelisk.png",
+   "url": "https://enshrouded.wiki.gg/images/Ancient_Obelisk.png?2513c6"
+  },
+  {
+   "file": "images/map/elixir-well.png",
+   "url": "https://enshrouded.wiki.gg/images/Elixir_Well.png?470820"
+  },
+  {
+   "file": "images/map/shroud-root.png",
+   "url": "https://enshrouded.wiki.gg/images/Shroud_Root.png?470820"
+  },
+  {
+   "file": "images/map/balefire.png",
+   "url": "https://enshrouded.wiki.gg/images/Balefire.png?d350ee"
+  },
+  {
+   "file": "images/map/hollow-halls.png",
+   "url": "https://enshrouded.wiki.gg/images/Hollow_Halls.png?4dd2cb"
+  },
+  {
+   "file": "images/map/village.png",
+   "url": "https://enshrouded.wiki.gg/images/Village.png?1fe776"
+  },
+  {
+   "file": "images/map/camp.png",
+   "url": "https://enshrouded.wiki.gg/images/Camp.png?28f523"
+  },
+  {
+   "file": "images/map/farm.png",
+   "url": "https://enshrouded.wiki.gg/images/Farm.png?bc765d"
+  },
+  {
+   "file": "images/map/mine.png",
+   "url": "https://enshrouded.wiki.gg/images/Mine.png?e0a231"
+  },
+  {
    "file": "images/map/enemy-camp.png",
    "url": "https://enshrouded.wiki.gg/images/Enemy_Camp.png?f08829"
+  },
+  {
+   "file": "images/map/shroud-lair.png",
+   "url": "https://enshrouded.wiki.gg/images/Shroud_Lair.png?918805"
   },
   {
    "file": "images/map/sun-temple.png",
@@ -3517,16 +3541,40 @@
    "url": "https://enshrouded.wiki.gg/images/Tomb.png?95ad20"
   },
   {
-   "file": "images/map/village.png",
-   "url": "https://enshrouded.wiki.gg/images/Village.png?1fe776"
-  },
-  {
    "file": "images/map/cave-passage.png",
    "url": "https://enshrouded.wiki.gg/images/Cave_Passage.png?c431fe"
   },
   {
-   "file": "images/map/balefire.png",
-   "url": "https://enshrouded.wiki.gg/images/Balefire.png?d350ee"
+   "file": "images/map/big-ammonite.png",
+   "url": "https://enshrouded.wiki.gg/images/Big_Ammonite.png?4e01db"
+  },
+  {
+   "file": "images/map/music-sheet.png",
+   "url": "https://enshrouded.wiki.gg/images/Music_Sheet.png?91a286"
+  },
+  {
+   "file": "images/map/queen-pikemead-statue-piece-base.png",
+   "url": "https://enshrouded.wiki.gg/images/Queen_Pikemead_Statue_Piece_%28Base%29.png?b27a0b"
+  },
+  {
+   "file": "images/map/ripped-alchemists-wall-hanging-left.png",
+   "url": "https://enshrouded.wiki.gg/images/Ripped_Alchemist%27s_Wall_Hanging_%28Left%29.png?8f75e2"
+  },
+  {
+   "file": "images/map/cyclops-torso.png",
+   "url": "https://enshrouded.wiki.gg/images/Cyclops_Torso.png?35f5f3"
+  },
+  {
+   "file": "images/map/wall-tapestry-left.png",
+   "url": "https://enshrouded.wiki.gg/images/Wall_Tapestry_%28Left%29.png?cd0690"
+  },
+  {
+   "file": "images/map/onys-map-piece.png",
+   "url": "https://enshrouded.wiki.gg/images/Ony%27s_Map_Piece.png?e3acce"
+  },
+  {
+   "file": "images/map/drak-relief-i.png",
+   "url": "https://enshrouded.wiki.gg/images/Drak_Relief_I.png?a666e5"
   }
  ]
 }

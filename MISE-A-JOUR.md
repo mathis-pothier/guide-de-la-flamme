@@ -63,3 +63,17 @@ node scripts/check-updates.mjs --save
 si une date manque, ou si `meta.versionJeu` ne correspond pas à la dernière entrée de l'historique.
 
 Le site affiche automatiquement un avertissement lorsque `derniereActualisation` a plus de 30 jours.
+
+## 6. Carte : points ajoutés par les administrateurs
+
+Les ajouts de l'onglet Carte vivent dans `data/map-points.json` (un commit par action, voir le README, section
+« Carte dynamique »). Après une mise à jour du jeu :
+
+- relire les points **En attente** (case « Voir aussi les ajouts en attente et masqués », une fois connecté) et les valider
+  ou les supprimer ;
+- **masquer** les points dont l'objet ou l'emplacement a changé, puis les corriger ou les supprimer ;
+- si le wiki publie un fond de carte 1.0, mettre à jour `data/map.js` (tuiles, taille) puis vérifier les positions saisies
+  à la main (elles sont en coordonnées de 0 à 10240 sur le fond actuel).
+
+`validate.mjs` contrôle aussi `data/map-points.json` (champs, identifiants en double) ; la CI `verification.yml` le lance
+à chaque push : un fichier corrompu à la main est signalé avant publication.

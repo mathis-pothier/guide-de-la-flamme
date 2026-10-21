@@ -582,135 +582,358 @@
   }
 
   // ════════════ CARTE ════════════
-  let mapMode = "objets", leaflet = null;
-  const GROUP_DEFAULT = ["Ancient_Spire", "Elixir_Well", "Shroud_Root", "Hollow_Halls", "Shroud_Lair"];
-  const mapLayers = new Set(store.get("ens.mapLayers", GROUP_DEFAULT));
-  const mapItems = () => D.items.filter((it) => hasMapPin(it));
-  const regionItems = (r) => D.items.filter((it) => !hasMapPin(it) && regionOf(it) === r && it.obtention && !/fabrication|craft/i.test(it.obtention));
+  // Carte dynamique : un seul modèle de points (lieux du wiki, objets, blocs, survivants, emplacements de base,
+  // ajouts des administrateurs), avec fiche, filtres, recherche, légende et administration via GitHub (admin.js).
+  const MC = D.mapConfig || { categories: {}, groupesWiki: {}, precisions: {}, raretes: [], statuts: {}, categoriesAjout: [] };
+  const ADMIN = window.ENS_ADMIN;
+  const CONS = D.construction || { blocs: [], survivants: [], emplacements: [] };
+  let leaflet = null;
+  const mp = { q: "", rar: "", cats: new Set(store.get("ens.mapCats2", Object.keys(MC.categories).filter((c) => c !== "collection"))), adminView: false };
+  let adminPoints = [], adminLoad = { etat: "attente", erreur: "", ignores: 0 };
+  const CAT_OF_ITEM = (it) => it.categorie === "arme" ? "arme" : it.categorie === "armure" || it.categorie === "set" ? "armure" : "equipement";
+
+  // Points de référence (lecture seule) : construits une fois à partir des données du site.
+  let REF = null;
+  function refPoints() {
+    if (REF) return REF;
+    const out = [];
+    const wikiSrc = { nom: "Carte du wiki (enshrouded.wiki.gg)", url: MAP.source };
+    for (const m of MAP.marqueurs) {
+      const cat = MC.groupesWiki[m.g];
+      if (!cat) continue;
+      const g = MAP.groupes[m.g] || {};
+      out.push({ id: "w-" + m.id, nom: m.nom, categorie: cat, sous: g.nom, description: m.desc || "", x: m.x, y: m.y, precision: "exacte",
+        source: wikiSrc, verifie: MAP.marqueursDate, releve: "2026-10-20", origine: "wiki", icone: g.icone });
+    }
+    for (const it of D.items) for (const mid of (it.marqueurs || []).filter((id) => MARKERS[id])) {
+      const m = MARKERS[mid];
+      out.push({ id: `o-${it.id}-${mid}`, nom: it.nom, categorie: CAT_OF_ITEM(it), sous: it.type, description: it.obtention || it.obtentionEn || "", rarete: it.rarete,
+        x: m.x, y: m.y, lieu: m.nom, precision: "lieu", source: { nom: it.wiki ? "Page de l'objet (wiki)" : "Sources de l'objet", url: it.wiki || "" }, verifie: it.verifie, origine: "objet", itemId: it.id });
+    }
+    CONS.blocs.forEach((b, i) => (b.marqueurs || []).filter((id) => MARKERS[id]).forEach((mid) => { const m = MARKERS[mid];
+      out.push({ id: `b-${i}-${mid}`, nom: b.nom, categorie: "bloc", sous: b.cat, description: `${b.recette}. ${b.lieu || ""}${b.conflit ? " — " + b.conflit : ""}`, x: m.x, y: m.y, lieu: m.nom,
+        precision: "lieu", source: { nom: "Wiki — Building Materials", url: SOURCES["wiki-building"]?.url || "" }, verifie: "2026-10-21", origine: "bloc", bloc: b }); }));
+    CONS.survivants.forEach((s, i) => (s.marqueurs || []).filter((id) => MARKERS[id]).forEach((mid) => { const m = MARKERS[mid];
+      out.push({ id: `s-${i}-${mid}`, nom: `${s.nom} (${s.role})`, categorie: "survivant", sous: "Artisan à sauver", description: s.debloque, x: m.x, y: m.y, lieu: m.nom,
+        precision: "lieu", source: { nom: "Wiki — Survivors", url: SOURCES["wiki-survivors"]?.url || "" }, verifie: "2026-10-21", origine: "survivant" }); }));
+    CONS.emplacements.forEach((s, i) => (s.marqueurs || []).filter((id) => MARKERS[id]).forEach((mid) => { const m = MARKERS[mid];
+      out.push({ id: `c-${i}-${mid}`, nom: s.nom, categorie: "construction", sous: `Emplacement de base · ${s.etape}`, description: s.pourquoi, x: m.x, y: m.y, lieu: m.nom,
+        precision: "approximative", source: { nom: SOURCES[s.sources?.[0]]?.nom || "Guide", url: SOURCES[s.sources?.[0]]?.url || "" }, verifie: "2026-10-21", origine: "base" }); }));
+    return (REF = out);
+  }
+  const adminAsPoints = () => adminPoints.map((p) => ({ ...p, x: p.position.x, y: p.position.y, origine: "admin", verifie: (p.modifie || p.cree).slice(0, 10) }));
+  const allPoints = () => [...refPoints(), ...adminAsPoints()];
+  const visible = (p) => p.origine !== "admin" || p.statut === "valide" || (mp.adminView && ADMIN?.session);
+  function filtered() {
+    const q = norm(mp.q).trim();
+    return allPoints().filter((p) => visible(p) && mp.cats.has(p.categorie)
+      && (!mp.rar || (mp.rar === "aucune" ? !p.rarete : p.rarete === mp.rar))
+      && (!q || q.split(/\s+/).every((w) => norm([p.nom, p.sous, p.description, p.lieu, p.zone, MC.categories[p.categorie]?.nom].join(" ")).includes(w))));
+  }
+
+  // ── Fiche d'un point
+  function pointCard(p) {
+    const c = MC.categories[p.categorie] || MC.categories.autre, pr = MC.precisions[p.precision];
+    const it = p.itemId && getItem(p.itemId);
+    const isAdm = p.origine === "admin", canEdit = isAdm && ADMIN?.session;
+    const visuel = it ? art(it, "sm") : p.bloc ? blocArt(p.bloc, "sm") : `<span class="mp-ic" style="--pc:${c.couleur}">${icon(c.icone)}</span>`;
+    return `<div class="mp-card">
+      <div class="mp-head">${visuel}<div><b>${esc(p.nom)}</b><div class="mp-tags"><span class="mp-cat" style="--pc:${c.couleur}">${icon(c.icone)}${esc(c.nom)}</span>${p.sous ? `<span class="muted small">${esc(p.sous)}</span>` : ""}</div></div></div>
+      ${p.description ? `<p class="mp-desc">${esc(p.description)}</p>` : ""}
+      <dl class="mp-dl">
+        ${p.rarete ? `<dt>Rareté</dt><dd><span class="r-${rarKey(p.rarete)} rar-txt">${esc(p.rarete)}</span></dd>` : ""}
+        ${p.lieu ? `<dt>Lieu</dt><dd>${esc(p.lieu)}</dd>` : ""}${p.zone ? `<dt>Zone</dt><dd>${esc(p.zone)}</dd>` : ""}
+        <dt>Position</dt><dd><span class="mp-prec prec-${esc(p.precision)}" title="${esc(pr?.desc || "")}">${esc(pr?.nom || p.precision)}</span></dd>
+        <dt>Source</dt><dd>${p.source?.url ? `<a href="${esc(p.source.url)}" target="_blank" rel="noopener">${esc(p.source.nom || p.source.texte || "Lien")}</a>` : esc(p.source?.nom || p.source?.texte || "Non renseignée")}${isAdm && p.source?.texte && p.source?.url ? `<br><span class="small">${esc(p.source.texte)}</span>` : ""}</dd>
+        <dt>Vérifié le</dt><dd>${fmtDate(p.verifie)}${p.origine === "wiki" ? ` <span class="small muted">(carte du wiki, relevée le ${fmtDate(p.releve, true)})</span>` : ""}</dd>
+        ${isAdm ? `<dt>Ajouté par</dt><dd>${esc(p.auteur)}, le ${fmtDate(p.cree.slice(0, 10))}</dd>${p.modifie ? `<dt>Modifié</dt><dd>${esc(p.modifiePar || "")} le ${fmtDate(p.modifie.slice(0, 10))}</dd>` : ""}<dt>Statut</dt><dd><span class="mp-st st-${esc(p.statut)}">${esc(MC.statuts[p.statut]?.nom || p.statut)}</span></dd>` : `<dt>Fiabilité</dt><dd class="small">${p.origine === "wiki" ? "Marqueur de la carte du wiki" : p.origine === "objet" ? "Lieu cité par la page de l'objet" : p.origine === "base" ? "Conseil de guide" : "Lieu cité par la source"}</dd>`}
+      </dl>
+      <div class="btn-row">
+        ${it ? `<button class="btn small" data-item="${esc(it.id)}">Fiche de l'objet</button>` : ""}
+        ${canEdit ? `<button class="btn small" data-mpedit="${esc(p.id)}">${icon("edit")}Modifier</button>
+          ${p.statut !== "valide" ? `<button class="btn small" data-mpstatus="${esc(p.id)}:valide">${icon("check")}Valider</button>` : ""}
+          ${p.statut !== "masque" ? `<button class="btn small" data-mpstatus="${esc(p.id)}:masque">Masquer</button>` : ""}
+          <button class="btn small danger" data-mpdel="${esc(p.id)}">${icon("trash")}Supprimer</button>` : ""}
+      </div>
+    </div>`;
+  }
+
   function viewCarte(focus) {
-    const pins = mapItems();
+    const cats = Object.entries(MC.categories);
+    const sess = ADMIN?.session;
     app.innerHTML = `
       <h1>Carte</h1>
-      <div class="seg" role="group" aria-label="Type de carte">
-        <button data-mapmode="objets" aria-pressed="${mapMode === "objets"}">${icon("pin")} Où trouver les objets</button>
-        <button data-mapmode="complete" aria-pressed="${mapMode === "complete"}">${icon("map")} Carte 1.0 complète</button>
-      </div>
-      ${mapMode === "objets" ? `
-        <div class="fresh" style="margin:10px 0">${icon("info")}<span>Fond de carte du wiki (rendu du jeu, nov. 2025) : <b>Cinder's Cradle (1.0) n'y figure pas</b>. Pour cette zone, utilisez « Carte 1.0 complète ».</span></div>
-        <div class="map-layout">
-          <div class="map-wrap"><div id="leaflet" class="leaflet-box"></div></div>
-          <aside class="map-side">
-            <div class="searchbox">${icon("search")}<input id="map-q" type="search" placeholder="Chercher un objet ou un lieu…" aria-label="Chercher sur la carte"></div>
-            <div class="layer-list cons-layers">${CLAYERS.map(([k, label, ic, n]) => `<label class="layer"><input type="checkbox" data-clayer="${k}" ${cLayers.has(k) ? "checked" : ""}><span class="clayer-ic c-${k}">${icon(ic)}</span>${label} <span class="muted">${n()}</span></label>`).join("")}</div>
-            <details class="more" style="margin-top:10px"><summary>${icon("layers")}Lieux affichés</summary><div class="layer-list">
-              ${Object.entries(MAP.groupes).map(([g, info]) => `<label class="layer"><input type="checkbox" data-layer="${g}" ${mapLayers.has(g) ? "checked" : ""}>${info.icone ? `<img src="${esc(info.icone)}" alt="">` : icon("pin")}${esc(info.nom)} <span class="muted">${MAP.marqueurs.filter((m) => m.g === g).length}</span></label>`).join("")}
-            </div></details>
-            <h3 style="margin-top:14px">${icon("pin")} Emplacement précis <span class="muted">(${pins.length})</span></h3>
-            <div id="map-list" class="map-list"></div>
-            <h3 style="margin-top:14px">${icon("compass")} Par région</h3>
-            <p class="small muted">Objets dont le wiki ne donne que la région : la carte centre la zone, sans point exact.</p>
-            <div class="chips">${REGIONS.map((r) => { const n = regionItems(r).length, z = ZONES.find((x) => x.nom === r.nom); return n ? `<button class="chip small" data-region="${esc(r.nom)}">${esc(r.nom)}${z ? ` <span class="muted">niv. ${esc(z.niveau)}</span>` : ""} <span class="count">${n}</span></button>` : ""; }).join("")}</div>
-            <div id="region-list" class="map-list" style="margin-top:8px"></div>
-          </aside>
-        </div>
-        <p class="small muted">Source : <a href="${esc(MAP.source)}" target="_blank" rel="noopener">carte du wiki</a> (marqueurs mis à jour le ${fmtDate(MAP.marqueursDate)}). Emplacements d'objets : liens de carte et lieux cités sur les pages du wiki.</p>`
-      : `
-        <div class="fresh" style="margin:10px 0">${icon("info")}<span>Carte communautaire intégrée (AllThings.How), qui inclut Cinder's Cradle. Ce n'est pas une carte officielle : Keen Games ne publie pas de carte interactive.</span></div>
-        <div class="iframe-box"><iframe src="https://allthings.how/enshrouded/map/" title="Carte interactive Enshrouded (AllThings.How)" loading="lazy" referrerpolicy="no-referrer"></iframe></div>
-        <div class="btn-row" style="margin-top:10px">
-          <a class="btn" href="https://enshrouded.th.gl/" target="_blank" rel="noopener">${icon("external")}The Hidden Gaming Lair (1.0, données du jeu)</a>
-          <a class="btn" href="https://mapgenie.io/enshrouded/maps/embervale" target="_blank" rel="noopener">${icon("external")}Map Genie</a>
-          <a class="btn" href="https://enshrouded.wiki.gg/wiki/Map" target="_blank" rel="noopener">${icon("external")}Carte du wiki</a>
-        </div>
-        <p class="small muted">Ces cartes refusent l'intégration dans une autre page : elles s'ouvrent dans un nouvel onglet.</p>`}`;
-    if (mapMode === "objets") initLeaflet(focus);
+      <div class="fresh" style="margin:6px 0 10px">${icon("info")}<span>Fond : carte du wiki (rendu du jeu, nov. 2025). <b>Cinder's Cradle (1.0) n'y figure pas encore</b> : aucune carte 1.0 vierge sous licence réutilisable n'est disponible. Positions : voir la légende.</span></div>
+      <div class="map-layout">
+        <div class="map-wrap"><div id="leaflet" class="leaflet-box"></div><div id="mp-pickbar" class="mp-pickbar" hidden>${icon("pin")} Cliquez sur la carte pour placer le point <button class="btn small" data-mppickcancel>Annuler</button></div></div>
+        <aside class="map-side">
+          <div class="mp-admin">
+            <button class="btn primary" data-mpadd>${icon("pin")}Ajouter un élément</button>
+            ${sess ? `<div class="small mp-who">${icon("user")}Administrateur : <b>${esc(sess.login)}</b> · <button class="linkbtn" data-mplogout>Se déconnecter</button></div>
+              <label class="layer small"><input type="checkbox" id="mp-adminview" ${mp.adminView ? "checked" : ""}> Voir aussi les ajouts en attente et masqués</label>` : `<div class="small muted">Réservé aux administrateurs (droit d'écriture sur le dépôt GitHub).</div>`}
+          </div>
+          <div class="searchbox">${icon("search")}<input id="map-q" type="search" value="${esc(mp.q)}" placeholder="Chercher un lieu, un objet, un bloc…" aria-label="Chercher sur la carte"></div>
+          <div class="mp-cats" role="group" aria-label="Catégories">
+            ${cats.map(([k, c]) => `<button class="mp-chip" data-mpcat="${k}" aria-pressed="${mp.cats.has(k)}" style="--pc:${c.couleur}">${icon(c.icone)}${esc(c.nom)} <span class="mp-n" data-mpn="${k}"></span></button>`).join("")}
+            <button class="linkbtn small" data-mpall="1">Tout</button> · <button class="linkbtn small" data-mpall="0">Rien</button>
+          </div>
+          <label class="field" style="margin-top:8px">Rareté<select id="mp-rar"><option value="">Toutes</option>${MC.raretes.map((r) => `<option ${mp.rar === r ? "selected" : ""}>${esc(r)}</option>`).join("")}<option value="aucune" ${mp.rar === "aucune" ? "selected" : ""}>Sans rareté</option></select></label>
+          <div class="result-line"><span id="mp-count"></span><span id="mp-load" class="small muted"></span></div>
+          <div id="mp-list" class="map-list"></div>
+          <details class="more"><summary>${icon("info")}Légende</summary><div>
+            <div class="mp-legend">${cats.map(([, c]) => `<span><span class="mp-ic sm" style="--pc:${c.couleur}">${icon(c.icone)}</span>${esc(c.nom)}</span>`).join("")}</div>
+            <h3>Fiabilité de la position</h3><ul class="tight small">${Object.entries(MC.precisions).map(([k, v]) => `<li><span class="mp-prec prec-${k}">${esc(v.nom)}</span> ${esc(v.desc)}</li>`).join("")}</ul>
+            <h3>Ajouts des administrateurs</h3><ul class="tight small">${Object.entries(MC.statuts).map(([k, v]) => `<li><span class="mp-st st-${k}">${esc(v.nom)}</span> ${esc(v.desc)}</li>`).join("")}</ul>
+          </div></details>
+          <details class="more"><summary>${icon("external")}Sources et autres cartes</summary><div class="small">
+            <p>Fond et lieux : <a href="${esc(MAP.source)}" target="_blank" rel="noopener">carte du wiki</a> (marqueurs mis à jour le ${fmtDate(MAP.marqueursDate)}, relevés le 20/10/2026, rendu © Keen Games). Objets, blocs et survivants : pages du wiki et guides cités dans chaque fiche.</p>
+            <p>Cartes 1.0 complètes (non réutilisables ici, liens seulement) : <a href="https://enshrouded.th.gl/" target="_blank" rel="noopener">The Hidden Gaming Lair</a>, <a href="https://mapgenie.io/enshrouded/maps/embervale" target="_blank" rel="noopener">Map Genie</a>, <a href="https://allthings.how/enshrouded/map/" target="_blank" rel="noopener">AllThings.How</a>.</p>
+          </div></details>
+        </aside>
+      </div>`;
+    $("#map-q").addEventListener("input", (e) => { mp.q = e.target.value; renderPoints(); });
+    $("#mp-rar").addEventListener("change", (e) => { mp.rar = e.target.value; renderPoints(); });
+    $("#mp-adminview")?.addEventListener("change", (e) => { mp.adminView = e.target.checked; renderPoints(); });
+    initLeaflet(focus);
+    loadAdminPoints();
   }
-  // Couches de l'onglet Construction
-  const CONS = D.construction || { blocs: [], survivants: [], emplacements: [] };
-  const consPinned = (list) => list.filter((x) => (x.marqueurs || []).some((id) => MARKERS[id]));
-  const CLAYERS = [
-    ["blocs", "Blocs de construction", "block", () => consPinned(CONS.blocs).length],
-    ["artisans", "Artisans à sauver", "users", () => consPinned(CONS.survivants).length],
-    ["bases", "Lieux de base conseillés", "home", () => consPinned(CONS.emplacements).length]
-  ];
-  const cLayers = new Set(store.get("ens.cLayers", ["blocs", "artisans"]));
+
+  async function loadAdminPoints(force) {
+    if (adminLoad.etat === "ok" && !force) { renderPoints(); return; }
+    adminLoad = { etat: "chargement", erreur: "", ignores: 0 };
+    renderLoad();
+    try {
+      const data = ADMIN?.session ? (await ADMIN.loadRemote()).data : await ADMIN.loadPublic();
+      const pts = Array.isArray(data?.points) ? data.points : [];
+      adminPoints = pts.filter((p) => !D.validateMapPoint(p).length);
+      adminLoad = { etat: "ok", erreur: "", ignores: pts.length - adminPoints.length };
+    } catch (e) {
+      adminPoints = [];
+      adminLoad = { etat: "erreur", erreur: location.protocol === "file:" ? "ouvrez le site par un serveur (node scripts/serve.mjs) pour voir les ajouts" : e.message, ignores: 0 };
+    }
+    renderPoints();
+  }
+  function renderLoad() {
+    const el = $("#mp-load"); if (!el) return;
+    el.textContent = adminLoad.etat === "chargement" ? " · chargement des ajouts…" : adminLoad.etat === "erreur" ? ` · ajouts indisponibles : ${adminLoad.erreur}` : adminLoad.ignores ? ` · ${adminLoad.ignores} ajout(s) mal formé(s) ignoré(s)` : "";
+  }
+
   function initLeaflet(focus) {
     const box = $("#leaflet");
-    if (!window.L) { box.innerHTML = `<div class="empty">${icon("alert")}<p>La bibliothèque de carte (Leaflet) n'a pas pu être chargée : une connexion Internet est nécessaire la première fois.</p></div>`; return; }
+    if (!window.L) { box.innerHTML = `<div class="empty">${icon("alert")}<p>La bibliothèque de carte (Leaflet) n'a pas pu être chargée : une connexion Internet est nécessaire.</p></div>`; leaflet = null; return; }
     const L = window.L, S = MAP.taille, T = MAP.tuile;
-    const map = L.map(box, { crs: L.CRS.Simple, minZoom: -4, maxZoom: 1, zoomSnap: 0.5, attributionControl: false, maxBounds: [[-1000, -1000], [S + 1000, S + 1000]] });
+    const map = L.map(box, { crs: L.CRS.Simple, minZoom: -4, maxZoom: 1, zoomSnap: 0.5, attributionControl: true, maxBounds: [[-1500, -1500], [S + 1500, S + 1500]] });
+    map.attributionControl.setPrefix(false).addAttribution('Carte : <a href="https://enshrouded.wiki.gg/wiki/Map" target="_blank" rel="noopener">wiki Enshrouded</a> · rendu © Keen Games');
     MAP.tuiles.forEach((t) => L.imageOverlay(`images/map/tiles/${t.f}.jpg`, [[t.y * T - 2, t.x * T - 2], [(t.y + 1) * T + 2, (t.x + 1) * T + 2]]).addTo(map));
     map.fitBounds([[0, 0], [S, S]]);
-    const layer = {};
-    Object.entries(MAP.groupes).forEach(([g, info]) => {
-      layer[g] = L.layerGroup(MAP.marqueurs.filter((m) => m.g === g).map((m) => L.marker([m.y, m.x], {
-        icon: L.divIcon({ className: "poi", html: info.icone ? `<img src="${esc(info.icone)}" alt="">` : `<span class="poi-gen">${icon("pin")}</span>`, iconSize: [26, 26] }), title: m.nom
-      }).bindPopup(`<b>${esc(m.nom)}</b><br><span class="muted">${esc(info.nom)}</span>${m.desc ? `<br>${esc(m.desc)}` : ""}`)));
-      if (mapLayers.has(g)) layer[g].addTo(map);
-    });
-    const itemMarkers = {};
-    const itemLayer = L.layerGroup().addTo(map);
-    mapItems().forEach((it) => {
-      itemMarkers[it.id] = it.marqueurs.filter((id) => MARKERS[id]).map((id) => {
-        const m = MARKERS[id];
-        return L.marker([m.y, m.x], { icon: L.divIcon({ className: "item-pin r-" + rarKey(it.rarete), html: art(it, "pin"), iconSize: [40, 40], iconAnchor: [20, 20] }), title: it.nom, zIndexOffset: 500 })
-          .bindPopup(`<div class="pop">${art(it, "sm")}<div><b>${esc(it.nom)}</b><br><span>${esc(m.nom)}</span><br><button class="btn small" data-item="${esc(it.id)}">Voir la fiche</button></div></div>`)
-          .addTo(itemLayer);
-      });
-    });
-    // Couches Construction
-    const cLayer = {}, cMarkers = {};
-    const consPin = (kind, ic, title, html, id, pinHtml) => (mid) => {
-      const m = MARKERS[mid];
-      const big = !!pinHtml;
-      const mk = L.marker([m.y, m.x], { icon: L.divIcon({ className: "cons-pin c-" + kind + (big ? " with-img" : ""), html: pinHtml || `<span>${icon(ic)}</span>`, iconSize: big ? [40, 40] : [30, 30], iconAnchor: big ? [20, 20] : [15, 15] }), title, zIndexOffset: 400 })
-        .bindPopup(`<div class="pop-cons"><b>${esc(title)}</b><br><span class="muted">${esc(m.nom)}</span>${html}</div>`);
-      (cMarkers[id] ||= []).push(mk);
-      return mk;
+    L.control.scale({ imperial: false, metric: false }).addTo(map);
+    // Regroupement des marqueurs proches (lisibilité) ; repli sur une couche simple si le module n'est pas chargé.
+    const layer = (L.markerClusterGroup ? L.markerClusterGroup({ disableClusteringAtZoom: -1, maxClusterRadius: 48, showCoverageOnHover: false, spiderfyOnMaxZoom: false,
+      iconCreateFunction: (cl) => { const n = cl.getChildCount(); return L.divIcon({ className: "mp-cluster", html: `<span>${n}</span>`, iconSize: n > 99 ? [44, 44] : [36, 36] }); } }) : L.layerGroup()).addTo(map);
+    const markers = new Map();
+    let pickMarker = null, regionCircle = null, onPick = null;
+    const pinHtml = (p) => {
+      const c = MC.categories[p.categorie] || MC.categories.autre;
+      const it = p.itemId && getItem(p.itemId);
+      if (it) return { html: art(it, "pin"), size: 40 };
+      if (p.bloc && BIMG[p.bloc.nom]) return { html: blocArt(p.bloc, "pin"), size: 40 };
+      const img = p.icone ? `<img src="${esc(p.icone)}" alt="" onerror="this.remove()">` : "";
+      return { html: `<span class="mp-pin ${p.origine === "admin" ? "adm st-" + esc(p.statut) : ""}" style="--pc:${c.couleur}">${icon(c.icone)}${img}</span>`, size: 28 };
     };
-    cLayer.blocs = L.layerGroup(CONS.blocs.flatMap((b, i) => (b.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("blocs", "block", b.nom, `<div class="pop-bl">${blocArt(b, "sm")}</div>${esc(b.recette)}<br><small>${esc(b.lieu || "")}</small><br><a class="btn small" href="#construction/blocs">Tous les blocs</a>`, "bloc-" + i, BIMG[b.nom] ? blocArt(b, "pin") : null))));
-    cLayer.artisans = L.layerGroup(CONS.survivants.flatMap((s, i) => (s.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("artisans", "users", `${s.nom} (${s.role})`, `<br><small>${esc(s.debloque)}</small>`, "artisan-" + i))));
-    cLayer.bases = L.layerGroup(CONS.emplacements.flatMap((s, i) => (s.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("bases", "home", s.nom, `<br><small>${esc(s.etape)} · ${esc(s.pourquoi)}</small>`, "base-" + i))));
-    Object.entries(cLayer).forEach(([k, l]) => { if (cLayers.has(k)) l.addTo(map); });
-    let regionCircle = null;
+    function draw(list) {
+      layer.clearLayers(); markers.clear();
+      for (const p of list) {
+        const { html, size } = pinHtml(p);
+        const mk = L.marker([p.y, p.x], { icon: L.divIcon({ className: "mp-marker", html, iconSize: [size, size], iconAnchor: [size / 2, size / 2] }), title: p.nom, zIndexOffset: p.origine === "admin" ? 800 : p.origine === "wiki" ? 0 : 400 })
+          .bindPopup(() => pointCard(p), { maxWidth: 320, minWidth: 240 });
+        mk.addTo(layer);
+        markers.set(p.id, mk);
+      }
+    }
+    map.on("click", (e) => {
+      if (!onPick) return;
+      const x = Math.round(Math.min(S, Math.max(0, e.latlng.lng))), y = Math.round(Math.min(S, Math.max(0, e.latlng.lat)));
+      if (pickMarker) pickMarker.remove();
+      pickMarker = L.marker([y, x], { icon: L.divIcon({ className: "mp-marker", html: `<span class="mp-pin pick">${icon("pin")}</span>`, iconSize: [30, 30], iconAnchor: [15, 15] }) }).addTo(map);
+      const cb = onPick; onPick = null; $("#mp-pickbar").hidden = true; box.classList.remove("picking");
+      cb({ x, y });
+    });
     leaflet = {
-      focusCons(id) {
-        const kind = id.split("-")[0], k = kind === "bloc" ? "blocs" : kind === "artisan" ? "artisans" : "bases";
-        if (!cLayers.has(k)) { cLayers.add(k); cLayer[k].addTo(map); const cb = $(`[data-clayer="${k}"]`); if (cb) cb.checked = true; }
-        const ms = cMarkers[id]; if (!ms?.length) return;
-        map.flyTo(ms[0].getLatLng(), 0, { duration: .6 }); setTimeout(() => ms[0].openPopup(), 650);
-      },
-      ctoggle(k, on) { on ? cLayer[k].addTo(map) : cLayer[k].remove(); },
-      map,
-      focusItem(id) {
-        const it = getItem(id); if (!it) return;
-        const ms = itemMarkers[it.id];
-        if (ms?.length) { map.flyTo(ms[0].getLatLng(), 0, { duration: .6 }); setTimeout(() => ms[0].openPopup(), 650); return; }
-        const r = regionOf(it); if (r) this.focusRegion(r.nom, it.id);
-      },
-      focusRegion(name, highlight) {
+      map, draw,
+      focusPoint(id) { const mk = markers.get(id); if (!mk) return false; map.flyTo(mk.getLatLng(), 0, { duration: .6 }); setTimeout(() => (layer.zoomToShowLayer ? layer.zoomToShowLayer(mk, () => mk.openPopup()) : mk.openPopup()), 700); return true; },
+      focusRegion(name) {
         const r = REGIONS.find((x) => x.nom === name); if (!r) return;
         if (regionCircle) regionCircle.remove();
-        regionCircle = L.circle([r.y, r.x], { radius: 1100, color: "#f2913d", weight: 2, fillOpacity: .08, dashArray: "6 6" }).addTo(map).bindTooltip(`${r.nom} (zone approximative)`, { permanent: true, direction: "top" });
+        regionCircle = L.circle([r.y, r.x], { radius: 1100, color: "#f2913d", weight: 2, fillOpacity: .08, dashArray: "6 6" }).addTo(map).bindTooltip(`${r.nom} — zone approximative`, { permanent: true, direction: "top" });
         map.flyTo([r.y, r.x], -2, { duration: .6 });
-        const list = regionItems(r);
-        $("#region-list").innerHTML = list.map((it) => `<button class="map-row ${it.id === highlight ? "hl" : ""}" data-item="${esc(it.id)}">${art(it, "xs")}<span><b>${esc(it.nom)}</b><small>${esc(it.obtention || "")}</small></span></button>`).join("");
       },
-      toggle(g, on) { on ? layer[g].addTo(map) : layer[g].remove(); }
+      pick(cb) { onPick = cb; $("#mp-pickbar").hidden = false; box.classList.add("picking"); },
+      cancelPick() { onPick = null; $("#mp-pickbar").hidden = true; box.classList.remove("picking"); },
+      clearPick() { if (pickMarker) { pickMarker.remove(); pickMarker = null; } }
     };
-    const renderList = (q = "") => {
-      const nq = norm(q);
-      const list = mapItems().filter((it) => !nq || norm(it.nom + " " + it.marqueurs.map((id) => MARKERS[id]?.nom).join(" ")).includes(nq));
-      $("#map-list").innerHTML = list.map((it) => `<button class="map-row" data-mapfocus="${esc(it.id)}">${art(it, "xs")}<span><b>${esc(it.nom)}</b><small>${esc(it.marqueurs.map((id) => MARKERS[id]?.nom).filter(Boolean).join(", "))}</small></span></button>`).join("") || `<p class="small muted">Aucun objet.</p>`;
-      if (nq) {
-        const poi = MAP.marqueurs.find((m) => norm(m.nom).includes(nq));
-        if (!list.length && poi) map.flyTo([poi.y, poi.x], -1, { duration: .5 });
-      }
-    };
-    renderList();
-    $("#map-q").addEventListener("input", (e) => renderList(e.target.value));
-    setTimeout(() => { map.invalidateSize(); if (focus?.item) leaflet.focusItem(focus.item); if (focus?.region) leaflet.focusRegion(focus.region); if (focus?.cons) leaflet.focusCons(focus.cons); }, 80);
+    renderPoints();
+    setTimeout(() => {
+      map.invalidateSize();
+      if (!focus) return;
+      const ensure = (cat) => { if (!mp.cats.has(cat)) { mp.cats.add(cat); renderPoints(); } };
+      if (focus.item) {
+        const it = getItem(focus.item);
+        const p = it && refPoints().find((x) => x.itemId === it.id);
+        if (p) { ensure(p.categorie); leaflet.focusPoint(p.id); }
+        else if (it && regionOf(it)) { leaflet.focusRegion(regionOf(it).nom); toast(`${it.nom} : seule la région est connue (${regionOf(it).nom}).`); }
+      } else if (focus.cons) {
+        const [kind, i] = focus.cons.split("-"), pre = { bloc: "b", artisan: "s", base: "c" }[kind];
+        const p = refPoints().find((x) => x.id.startsWith(`${pre}-${i}-`));
+        if (p) { ensure(p.categorie); leaflet.focusPoint(p.id); }
+      } else if (focus.region) leaflet.focusRegion(focus.region);
+      else if (focus.point) { const p = allPoints().find((x) => x.id === focus.point); if (p) { ensure(p.categorie); leaflet.focusPoint(p.id); } }
+    }, 80);
   }
+
+  function renderPoints() {
+    if (!$("#mp-list")) return;
+    const list = filtered();
+    const counts = {};
+    allPoints().filter(visible).forEach((p) => { counts[p.categorie] = (counts[p.categorie] || 0) + 1; });
+    $$("[data-mpn]").forEach((el) => { el.textContent = counts[el.dataset.mpn] || 0; });
+    $$("[data-mpcat]").forEach((b) => b.setAttribute("aria-pressed", mp.cats.has(b.dataset.mpcat)));
+    $("#mp-count").textContent = `${list.length} point${list.length > 1 ? "s" : ""}`;
+    renderLoad();
+    const shown = list.slice(0, 150);
+    $("#mp-list").innerHTML = shown.map((p) => { const c = MC.categories[p.categorie] || MC.categories.autre;
+      return `<button class="map-row" data-mpfocus="${esc(p.id)}"><span class="mp-ic sm" style="--pc:${c.couleur}">${icon(c.icone)}</span><span><b>${esc(p.nom)}</b><small>${esc([p.sous || c.nom, p.lieu, p.origine === "admin" && p.statut !== "valide" ? MC.statuts[p.statut]?.nom : ""].filter(Boolean).join(" · "))}</small></span></button>`; }).join("")
+      + (list.length > shown.length ? `<p class="small muted">… et ${list.length - shown.length} autres : affinez la recherche.</p>` : "")
+      || `<div class="empty">${icon("search")}<p>Aucun point ne correspond.${mp.cats.size ? "" : " Toutes les catégories sont décochées."}</p></div>`;
+    if (leaflet) leaflet.draw(list);
+  }
+
+  // ── Administration
+  function loginDialog(next) {
+    const R = ADMIN.repo;
+    openDialog(`<div class="dhead"><span class="emblem c-base">${icon("user")}</span><div><h2>Connexion administrateur</h2><p>Réservé aux comptes GitHub ayant le droit d'écriture sur <b>${esc(R.depot)}</b>.</p></div></div>
+      <ol class="tight small">
+        <li>Créez un <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">jeton GitHub « fine-grained »</a> : dépôt <b>${esc(R.depot)}</b> uniquement, permission <b>Contents : Read and write</b>, durée courte.</li>
+        <li>Collez-le ci-dessous. Il reste dans votre navigateur et n'est envoyé qu'à GitHub.</li>
+      </ol>
+      <form id="mp-login" class="mp-form" novalidate>
+        <label class="field">Jeton GitHub<input type="password" name="token" autocomplete="off" spellcheck="false" required></label>
+        <label class="layer small"><input type="checkbox" name="remember"> Rester connecté sur cet appareil</label>
+        <p class="mp-err" id="mp-login-err" role="alert"></p>
+        <div class="btn-row"><button class="btn primary" type="submit">Se connecter</button><button class="btn" type="button" data-close>Annuler</button></div>
+      </form>
+      <p class="small muted">GitHub vérifie le droit d'écriture à chaque enregistrement : masquer ce bouton ne suffirait pas à donner l'accès.</p>`);
+    $("#mp-login").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const f = new FormData(e.target), btn = e.target.querySelector("[type=submit]");
+      btn.disabled = true; $("#mp-login-err").textContent = "Vérification auprès de GitHub…";
+      try { await ADMIN.connect(f.get("token"), !!f.get("remember")); toast(`Connecté : ${ADMIN.session.login}`); adminLoad.etat = "attente"; viewCarte(); if (next) next(); }
+      catch (err) { $("#mp-login-err").textContent = err.message; btn.disabled = false; }
+    });
+  }
+  const ZONES_FORM = () => [...REGIONS.map((r) => r.nom), "Cinder's Cradle"];
+  function pointForm(existing, preset) {
+    const p = existing || { nom: "", description: "", categorie: "", rarete: "", precision: "exacte", zone: "", source: {}, statut: "en_attente", ...(preset || {}) };
+    const pos = existing ? existing.position : preset?.position || null;
+    openDialog(`<div class="dhead"><span class="emblem c-base">${icon(existing ? "edit" : "pin")}</span><div><h2>${existing ? "Modifier l'élément" : "Ajouter un élément"}</h2><p>Enregistré dans <code>${esc(ADMIN.repo.fichier)}</code> par un commit GitHub.</p></div></div>
+      <form id="mp-form" class="mp-form" novalidate>
+        <label class="field">Nom *<input name="nom" maxlength="80" required value="${esc(p.nom)}"></label>
+        <label class="field">Description<textarea name="description" rows="3" maxlength="1000">${esc(p.description || "")}</textarea></label>
+        <div class="mp-row">
+          <label class="field">Catégorie *<select name="categorie" required><option value="">—</option>${MC.categoriesAjout.map((k) => `<option value="${k}" ${p.categorie === k ? "selected" : ""}>${esc(MC.categories[k].nom)}</option>`).join("")}</select></label>
+          <label class="field">Rareté<select name="rarete"><option value="">Non applicable</option>${MC.raretes.map((r) => `<option ${p.rarete === r ? "selected" : ""}>${esc(r)}</option>`).join("")}</select></label>
+        </div>
+        <fieldset class="mp-pos"><legend>Emplacement *</legend>
+          <div class="mp-row">
+            <label class="field">X (0–${MC.taille})<input name="x" type="number" min="0" max="${MC.taille}" step="1" value="${pos ? pos.x : ""}"></label>
+            <label class="field">Y (0–${MC.taille})<input name="y" type="number" min="0" max="${MC.taille}" step="1" value="${pos ? pos.y : ""}"></label>
+          </div>
+          <button class="btn small" type="button" data-mppick>${icon("pin")}Choisir sur la carte</button>
+          <div class="mp-row">
+            <label class="field">Précision *<select name="precision">${Object.entries(MC.precisions).map(([k, v]) => `<option value="${k}" ${p.precision === k ? "selected" : ""}>${esc(v.nom)}</option>`).join("")}</select></label>
+            <label class="field">Zone<input name="zone" list="mp-zones" maxlength="80" value="${esc(p.zone || "")}"><datalist id="mp-zones">${ZONES_FORM().map((z) => `<option value="${esc(z)}">`).join("")}</datalist></label>
+          </div>
+        </fieldset>
+        <label class="field">Source ou preuve<input name="source_texte" maxlength="300" placeholder="ex. Relevé en jeu, capture du 21/10…" value="${esc(p.source?.texte || "")}"></label>
+        <label class="field">Lien de la source (https://…)<input name="source_url" type="url" maxlength="500" value="${esc(p.source?.url || "")}"></label>
+        <label class="field">Auteur<input value="${esc(existing ? existing.auteur : ADMIN.session.login)}" disabled></label>
+        ${existing ? "" : `<label class="layer small"><input type="checkbox" name="valider"> Valider tout de suite (sinon : « En attente », visible des administrateurs seulement)</label>`}
+        <p class="mp-err" id="mp-form-err" role="alert"></p>
+        <div class="btn-row"><button class="btn primary" type="submit">${icon("save")}Enregistrer</button><button class="btn" type="button" data-close>Annuler</button></div>
+      </form>`);
+    const form = $("#mp-form");
+    form.querySelector("[data-mppick]").addEventListener("click", () => {
+      const keep = readForm(form);
+      $("#dlg").close();
+      leaflet?.pick((xy) => pointForm(existing ? { ...existing, ...keep.values, position: xy } : null, existing ? null : { ...keep.values, position: xy }));
+    });
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const { values } = readForm(form);
+      const now = new Date().toISOString();
+      const pt = existing
+        ? { ...existing, ...values, modifie: now, modifiePar: ADMIN.session.login }
+        : { id: ADMIN.newId(), ...values, auteur: ADMIN.session.login, cree: now, statut: form.valider?.checked ? "valide" : "en_attente", extra: {} };
+      if (!pt.rarete) delete pt.rarete;
+      if (!pt.zone) delete pt.zone;
+      const errs = D.validateMapPoint(pt);
+      if (errs.length) { $("#mp-form-err").textContent = "À corriger : " + errs.join(" ; ") + "."; return; }
+      const btn = form.querySelector("[type=submit]"); btn.disabled = true; $("#mp-form-err").textContent = "Enregistrement sur GitHub…";
+      try {
+        const res = await ADMIN.save((data) => { const i = data.points.findIndex((x) => x.id === pt.id); if (i >= 0) data.points[i] = pt; else data.points.push(pt); }, `Carte : ${existing ? "modification" : "ajout"} « ${pt.nom} »`);
+        adminPoints = res.data.points; $("#dlg").close(); leaflet?.clearPick();
+        if (pt.statut !== "valide") mp.adminView = true;
+        mp.cats.add(pt.categorie); viewCarte({ point: pt.id });
+        toast(`Enregistré (commit ${res.commit}). Visible pour tous après la mise à jour du site (1 à 2 min)${pt.statut === "valide" ? "" : ", une fois validé"}.`);
+      } catch (err) { $("#mp-form-err").textContent = err.message; btn.disabled = false; }
+    });
+  }
+  function readForm(form) {
+    const f = new FormData(form);
+    const num = (v) => (v === "" || v == null ? NaN : Number(v));
+    const surl = String(f.get("source_url") || "").trim(), stxt = String(f.get("source_texte") || "").trim();
+    return { values: {
+      nom: String(f.get("nom") || "").trim(), description: String(f.get("description") || "").trim(), categorie: f.get("categorie") || "", rarete: f.get("rarete") || "",
+      precision: f.get("precision") || "exacte", zone: String(f.get("zone") || "").trim(), position: { x: num(f.get("x")), y: num(f.get("y")) },
+      source: (surl || stxt) ? { ...(stxt ? { texte: stxt } : {}), ...(surl ? { url: surl } : {}) } : undefined
+    } };
+  }
+  async function setStatus(id, statut) {
+    const p = adminPoints.find((x) => x.id === id); if (!p) return;
+    try {
+      const res = await ADMIN.save((data) => { const x = data.points.find((q) => q.id === id); if (!x) throw new Error("Élément introuvable (supprimé entre-temps ?)."); x.statut = statut; x.modifie = new Date().toISOString(); x.modifiePar = ADMIN.session.login; }, `Carte : « ${p.nom} » → ${MC.statuts[statut].nom.toLowerCase()}`);
+      adminPoints = res.data.points; renderPoints(); toast(`« ${p.nom} » : ${MC.statuts[statut].nom} (commit ${res.commit}).`);
+    } catch (e) { toast(e.message); }
+  }
+  function deleteDialog(id) {
+    const p = adminPoints.find((x) => x.id === id); if (!p) return;
+    openDialog(`<div class="dhead"><span class="emblem c-war">${icon("trash")}</span><div><h2>Supprimer cet élément ?</h2><p>« ${esc(p.nom)} », ajouté par ${esc(p.auteur)} le ${fmtDate(p.cree.slice(0, 10))}.</p></div></div>
+      <p>La suppression est enregistrée par un commit : l'élément disparaît du site, mais reste récupérable dans l'historique du dépôt. Pour le cacher sans le supprimer, utilisez plutôt « Masquer ».</p>
+      <p class="mp-err" id="mp-del-err" role="alert"></p>
+      <div class="btn-row"><button class="btn danger" data-mpdelok="${esc(id)}">${icon("trash")}Supprimer définitivement</button><button class="btn" data-close>Annuler</button></div>`);
+  }
+  async function doDelete(id) {
+    const p = adminPoints.find((x) => x.id === id); if (!p) return;
+    $("#mp-del-err").textContent = "Suppression sur GitHub…";
+    try {
+      const res = await ADMIN.save((data) => { data.points = data.points.filter((x) => x.id !== id); }, `Carte : suppression « ${p.nom} »`);
+      adminPoints = res.data.points; $("#dlg").close(); renderPoints(); toast(`Supprimé (commit ${res.commit}).`);
+    } catch (e) { $("#mp-del-err").textContent = e.message; }
+  }
+  function handleMapClick(d) {
+    if (d.mpcat) { mp.cats.has(d.mpcat) ? mp.cats.delete(d.mpcat) : mp.cats.add(d.mpcat); store.set("ens.mapCats2", [...mp.cats]); renderPoints(); return true; }
+    if (d.mpall !== undefined) { mp.cats = new Set(d.mpall === "1" ? Object.keys(MC.categories) : []); store.set("ens.mapCats2", [...mp.cats]); renderPoints(); return true; }
+    if (d.mpfocus) { leaflet?.focusPoint(d.mpfocus); if (innerWidth < 720) $("#leaflet")?.scrollIntoView({ behavior: "smooth", block: "center" }); return true; }
+    if (d.mpadd !== undefined) { ADMIN?.session ? pointForm(null) : loginDialog(() => pointForm(null)); return true; }
+    if (d.mplogout !== undefined) { ADMIN.logout(); mp.adminView = false; adminLoad.etat = "attente"; viewCarte(); toast("Déconnecté."); return true; }
+    if (d.mppickcancel !== undefined) { leaflet?.cancelPick(); return true; }
+    if (d.mpedit) { const p = adminPoints.find((x) => x.id === d.mpedit); if (p) pointForm(p); return true; }
+    if (d.mpstatus) { const [id, st] = d.mpstatus.split(":"); setStatus(id, st); return true; }
+    if (d.mpdel) { deleteDialog(d.mpdel); return true; }
+    if (d.mpdelok) { doDelete(d.mpdelok); return true; }
+    return false;
+  }
+  // Reprise de session administrateur (jeton déjà enregistré dans ce navigateur)
+  if (ADMIN?.hasToken) ADMIN.restore().then((s) => { if (s && location.hash.startsWith("#carte")) { adminLoad.etat = "attente"; viewCarte(); } });
 
   // ════════════ CONSTRUCTION ════════════
   const cons = { cat: "", mode: "", q: "" };
@@ -938,7 +1161,7 @@
     if (leaflet) { leaflet.map.remove(); leaflet = null; }
     if (view === "build") viewBuild(h.split("/")[1]);
     else if (view === "planner") viewPlanner(location.hash.split("=")[1]);
-    else if (view === "carte") { const [, kind, val] = h.split("/"); if (kind) mapMode = "objets"; viewCarte(kind === "item" ? { item: val } : kind === "region" ? { region: val } : kind === "cons" ? { cons: val } : null); }
+    else if (view === "carte") { const [, kind, val] = h.split("/"); viewCarte(kind === "item" ? { item: val } : kind === "region" ? { region: val } : kind === "cons" ? { cons: val } : kind === "point" ? { point: val } : null); }
     else if (view === "construction") viewConstruction(h.split("/")[1]);
     else ({ builds: viewBuilds, equipements: viewEquipements, competences: viewCompetences, comparateur: viewComparateur, maj: viewMaj }[view] || viewBuilds)();
     window.scrollTo(0, 0);
@@ -946,7 +1169,9 @@
 
   // ── Événements (délégation)
   document.addEventListener("click", (e) => {
-    const t = e.target.closest("[data-item],[data-skill],[data-slot],[data-quiz],[data-quiz-reset],[data-stage],[data-cat],[data-sub],[data-skb],[data-tree],[data-share],[data-cmp],[data-cmp-toggle],[data-cmp-remove],[data-del-mine],[data-help],[data-close],[data-mapmode],[data-mapfocus],[data-region],[data-ctab],[data-bcat],[data-bmode]");
+    const t = e.target.closest("[data-item],[data-skill],[data-slot],[data-quiz],[data-quiz-reset],[data-stage],[data-cat],[data-sub],[data-skb],[data-tree],[data-share],[data-cmp],[data-cmp-toggle],[data-cmp-remove],[data-del-mine],[data-help],[data-close],[data-ctab],[data-bcat],[data-bmode],[data-mpcat],[data-mpall],[data-mpfocus],[data-mpadd],[data-mplogout],[data-mppickcancel],[data-mpedit],[data-mpstatus],[data-mpdel],[data-mpdelok]");
+    if (!t) return;
+    if (handleMapClick(t.dataset)) return;
     if (!t) return;
     const d = t.dataset;
     if (d.item) itemDetail(d.item);
@@ -966,21 +1191,9 @@
     else if (d.delMine) { const mine = store.get("ens.myBuilds", []); mine.splice(Number(d.delMine), 1); store.set("ens.myBuilds", mine); viewBuilds(); }
     else if (d.help !== undefined) helpDialog();
     else if (d.close !== undefined) $("#dlg").close();
-    else if (d.mapmode) { mapMode = d.mapmode; if (leaflet) { leaflet.map.remove(); leaflet = null; } viewCarte(); }
-    else if (d.mapfocus) leaflet?.focusItem(d.mapfocus);
-    else if (d.region) leaflet?.focusRegion(d.region);
     else if (d.ctab) { location.hash = "#construction/" + d.ctab; }
     else if (d.bcat !== undefined) { cons.cat = d.bcat; renderBlocs(); }
     else if (d.bmode !== undefined) { cons.mode = d.bmode; renderBlocs(); }
-  });
-  document.addEventListener("change", (e) => {
-    const ck = e.target.dataset?.clayer;
-    if (ck) { e.target.checked ? cLayers.add(ck) : cLayers.delete(ck); store.set("ens.cLayers", [...cLayers]); leaflet?.ctoggle(ck, e.target.checked); return; }
-    const g = e.target.dataset?.layer;
-    if (!g) return;
-    e.target.checked ? mapLayers.add(g) : mapLayers.delete(g);
-    store.set("ens.mapLayers", [...mapLayers]);
-    leaflet?.toggle(g, e.target.checked);
   });
   $("#help-btn").addEventListener("click", helpDialog);
   $("#dlg").addEventListener("click", (e) => { if (e.target.id === "dlg") e.target.close(); });

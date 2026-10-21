@@ -12,7 +12,7 @@ const curatedCtx = { window: {} };
 vm.createContext(curatedCtx);
 vm.runInContext(readFileSync(join(root, "data", "items.js"), "utf8"), curatedCtx);
 const curatedItems = curatedCtx.window.ENS.items;
-for (const f of ["sources", "items", "skills", "builds", "builds-1.0", "versions", "catalog", "images", "map", "progression", "tronc-commun", "construction", "blocs-images", "merge"]) {
+for (const f of ["sources", "items", "skills", "builds", "builds-1.0", "versions", "catalog", "images", "map", "progression", "tronc-commun", "construction", "blocs-images", "map-config", "merge"]) {
   vm.runInContext(readFileSync(join(root, "data", f + ".js"), "utf8"), ctx, { filename: f + ".js" });
 }
 const D = ctx.window.ENS;
@@ -79,6 +79,20 @@ if (D.construction) {
   for (const [nom, im] of Object.entries(D.blocsImages || {})) { if (!C.blocs.some((b) => b.nom === nom)) errors.push(`Images de blocs : bloc inconnu « ${nom} »`); if (!existsSync(join(root, im.fichier))) errors.push(`Images de blocs : fichier manquant ${im.fichier}`); }
   console.log(`Construction : ${C.blocs.length} blocs (${C.blocs.filter((b) => (b.marqueurs || []).length).length} épinglés), ${C.batiments.length} bâtiments, ${C.emplacements.length} emplacements.`);
 }
+// Points de la carte ajoutés par les administrateurs (data/map-points.json)
+try {
+  const mp = JSON.parse(readFileSync(join(root, "data", "map-points.json"), "utf8"));
+  if (mp.version !== 1 || !Array.isArray(mp.points)) errors.push("map-points.json : structure attendue { version: 1, points: [] }");
+  const seen = new Set();
+  for (const p of mp.points || []) {
+    const errs = D.validateMapPoint(p);
+    if (errs.length) errors.push(`map-points.json « ${p?.nom || p?.id} » : ${errs.join(", ")}`);
+    if (seen.has(p.id)) errors.push(`map-points.json : identifiant en double « ${p.id} »`);
+    seen.add(p.id);
+  }
+  for (const [g, cat] of Object.entries(D.mapConfig.groupesWiki)) if (!D.mapConfig.categories[cat]) errors.push(`map-config : catégorie inconnue « ${cat} » pour ${g}`);
+  console.log(`Carte : ${(mp.points || []).length} point(s) ajouté(s) par les administrateurs.`);
+} catch (e) { errors.push("map-points.json illisible : " + e.message); }
 const noImg = D.items.filter((i) => !D.images[i.id] && !D.images[i.catalogId]).length;
 console.log(`Objets sans image (icône générée) : ${noImg}`);
 const statCount = D.items.reduce((a, i) => ((a[i.statut] = (a[i.statut] || 0) + 1), a), {});

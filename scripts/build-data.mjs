@@ -258,14 +258,16 @@ const catalog = [...items, ...sets].sort((a, b) => a.nom.localeCompare(b.nom));
 // ── Carte : tuiles + marqueurs utiles + régions (repères Ancient Spire)
 const bg = JSON.parse(M.pages["Map:Embervale/Background"].text);
 const tiles = bg.background.tiles.map((t) => ({ f: t.image.replace(/\.jpg$/, ""), x: t.position[0], y: t.position[1], url: M.files[t.image.replace(/_/g, " ")]?.url }));
-const KEEP = ["Ancient_Spire", "Flame_Shrine", "Elixir_Well", "Shroud_Root", "Hollow_Halls", "Shroud_Lair", "Sun_Temple", "Night_Sanctum", "Ancient_Vault", "Enemy_Camp", "Hidden_Temple", "Tomb", "Village", "Cave_Passage", "Gem_Forge", "Balefire"];
+// Tous les types de lieux de la carte principale et des objets à collectionner (les notes de lore sont exclues).
+const KEEP = [...new Set(["Map:Embervale/Main", "Map:Embervale/Collectibles2"].flatMap((p) => { try { return Object.keys(JSON.parse(M.pages[p].text).markers || {}); } catch { return []; } }))];
+const groupPage = Object.fromEntries(["Map:Embervale/Main", "Map:Embervale/Collectibles2"].flatMap((p) => { try { return Object.keys(JSON.parse(M.pages[p].text).markers || {}).map((g) => [g, p.split("/")[1]]); } catch { return []; } }));
 const usedIds = new Set(catalog.flatMap((i) => i.marqueurs || []));
 // Lieux cités par l'onglet Construction (data/construction.js) : blocs, survivants, emplacements de base.
 try { for (const m of readFileSync(join(root, "data", "construction.js"), "utf8").matchAll(/marqueurs: \[([^\]]*)\]/g)) for (const id of m[1].match(/"([^"]+)"/g) || []) usedIds.add(id.slice(1, -1)); } catch { /* pas d'onglet construction */ }
 const mapMarkers = Object.values(markers).filter((m) => (KEEP.includes(m.g) || usedIds.has(m.id)) && m.x >= 0 && m.y >= 0 && m.x <= 10240 && m.y <= 10240)
-  .map(({ id, g, nom, x, y, desc }) => ({ id, g, nom, x, y, desc: desc || undefined }));
+  .map(({ id, g, nom, x, y, desc, page }) => ({ id, g, nom, x, y, desc: desc || undefined, src: page === "Main" ? undefined : page }));
 const groups = JSON.parse(M.pages["Map:Embervale/Groups"].text).groups;
-const groupInfo = Object.fromEntries(KEEP.map((g) => [g, { nom: groups[g]?.name || g.replace(/_/g, " "), icone: groups[g]?.icon && M.files[groups[g].icon]?.url ? "images/map/" + slug(groups[g].icon.replace(/\.png$/, "")) + ".png" : null, iconeUrl: M.files[groups[g]?.icon]?.url || null }]));
+const groupInfo = Object.fromEntries(KEEP.map((g) => [g, { page: groupPage[g], nom: groups[g]?.name || g.replace(/_/g, " "), icone: groups[g]?.icon && M.files[groups[g].icon]?.url ? "images/map/" + slug(groups[g].icon.replace(/\.png$/, "")) + ".png" : null, iconeUrl: M.files[groups[g]?.icon]?.url || null }]));
 const regions = Object.values(markers).filter((m) => m.g === "Ancient_Spire").map((m) => ({ nom: m.nom.replace(/^Ancient Spire - /, ""), x: m.x, y: m.y }));
 const zones = BIOMES.map((b) => ({ nom: b, niveau: REGION_LV[b], source: REGION_SRC[b], maj: M.pages[b]?.ts?.slice(0, 10) }));
 const mapData = {

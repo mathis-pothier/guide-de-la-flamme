@@ -35,6 +35,11 @@ Guide de fan, non officiel, en français. Site statique, sans dépendance ni com
 | `recherche.html`, `docs/recherche/*.md` | Notes de recherche Enshrouded 1.0 (page à part, non liée au menu) ; `node scripts/build-recherche.mjs` régénère `docs/recherche/contenu.js` après modification | **recherche** |
 | `scripts/fetch-block-images.mjs` | Images des blocs : icône du wiki officiel, sinon capture de l'établi (wiki Fandom) recadrée → `images/blocs/` + `data/blocs-images.js` | outil |
 | `scripts/fetch-images.mjs` | Copie locale des images, tuiles et icônes de carte → `images/` + `data/images.js` | outil |
+| `data/map-config.js` | Carte : catégories, précisions, raretés, statuts, dépôt de stockage, validation d'un point (partagée site + `validate.mjs`) | configuration |
+| `data/map-points.json` | Points ajoutés par les administrateurs depuis l'onglet Carte (vide au départ, aucune donnée de démonstration) | **données** |
+| `admin.js` | Connexion administrateur et enregistrement des points par l'API GitHub | — |
+| `scripts/mock-github.mjs` | Faux serveur de l'API GitHub pour tester l'administration en local (jetons fictifs, données en mémoire) | outil de test |
+| `.github/workflows/verification.yml` | Lance `validate.mjs` à chaque push et pull request (bloque un `map-points.json` mal formé) | CI |
 
 Chaque objet et chaque compétence porte un **statut** (vérifié 1.0, pré-1.0, conflit, cité par un guide…), ses **sources**
 et sa **date de vérification**. Les builds référencent les objets et compétences par identifiant : les fiches de builds
@@ -47,9 +52,60 @@ affichent donc toujours la fiabilité des données sous-jacentes.
 - **Équipements** : recherche (nom, atout, lieu), filtres catégorie / style / rareté / fiabilité / niveau, tri, fiche détaillée.
 - **Compétences** : recommandations générales, coop et par build ; liste filtrable avec coûts, conflits et sources.
 - **Construction** : 8 idées de bâtiments pas à pas (base en croix, maison 3×5, ferme, coffres, atelier, confort…), les 61 blocs du wiki avec recette et lieu de déblocage, les emplacements de base conseillés, l'autel et le confort, les artisans à sauver et des tutoriels vidéo (`data/construction.js`).
-- **Carte** : carte du wiki (rendu du jeu) avec les objets épinglés à leur emplacement précis, recherche, calques de lieux (Ancient Spire, Elixir Well, Shroud Root…), objets par région ; carte 1.0 complète intégrée (AllThings.How) et liens vers th.gl / Map Genie. Leaflet est chargé depuis cdnjs (connexion nécessaire pour la carte).
+- **Carte** : carte dynamique unique (Leaflet) : lieux du wiki, objets, blocs, survivants, emplacements de base et ajouts des
+  administrateurs ; filtres par catégorie et rareté, recherche, regroupement des marqueurs, légende, fiche par point (nom,
+  catégorie, description, rareté, source, fiabilité de la position, date de vérification). Voir [Carte dynamique](#carte-dynamique).
 - **Comparateur** : jusqu'à 4 objets côte à côte, meilleure valeur surlignée.
 - **Mises à jour & sources** : version, couverture des données, historique des patchs, registre des sources.
+
+## Carte dynamique
+
+### Sources cartographiques
+
+| Source | Usage ici | Pourquoi |
+|---|---|---|
+| Carte du wiki (DataMaps de enshrouded.wiki.gg, `Map:Embervale`) | Fond (64 tuiles) + 570 marqueurs de lieux | Seul fond vierge téléchargeable ; rendu © Keen Games, marqueurs sous la licence du wiki (CC BY-SA 4.0 annoncée, **page Copyrights à revérifier** : le wiki était en maintenance lors du relevé du 20/10/2026) |
+| Pages d'objets, de blocs et de survivants du wiki, guides cités | Placement des objets « dans ce lieu » | Lieu cité par la source, rattaché au marqueur du lieu |
+| The Hidden Gaming Lair (th.gl), Map Genie, AllThings.How | **Liens seulement** | Cartes 1.0 complètes, mais sans licence de réutilisation (données et tuiles propriétaires) : ni intégration ni copie |
+
+### Limites de précision
+
+- Le fond date d'avant la 1.0 (rendu de nov. 2025) : **Cinder's Cradle n'y figure pas**. Aucune carte 1.0 vierge sous licence
+  réutilisable n'a été trouvée ; le fond pourra être remplacé dans `data/map.js` (`tuiles`, `taille`) quand le wiki la publiera.
+- Chaque point indique sa fiabilité : **Position exacte** (coordonnée publiée), **Dans ce lieu** (l'objet est dans le lieu, pas
+  forcément au point exact), **Approximative** (estimation, à vérifier en jeu), **Zone seulement** (seule la région est connue).
+- Les objets, blocs et survivants dont la source ne cite aucun lieu présent sur la carte n'y figurent pas (ils restent dans leurs onglets).
+
+### Ajouter, modifier, valider, masquer ou supprimer un élément (administrateurs)
+
+La protection est faite **côté serveur par GitHub** : les ajouts sont enregistrés dans `data/map-points.json` par l'API GitHub,
+qui n'accepte l'écriture que d'un compte ayant le **droit d'écriture sur le dépôt**. Masquer le bouton ne suffirait pas ; ici
+le bouton est visible de tous mais toute écriture sans ce droit est refusée par GitHub (401/403). Le code ne contient aucun secret.
+
+1. **Donner le droit** : être propriétaire du dépôt, ou être ajouté comme collaborateur (*Settings → Collaborators*, rôle Write).
+2. **Créer son jeton** (chaque administrateur le sien) : GitHub → *Settings → Developer settings → Personal access tokens →
+   Fine-grained tokens → Generate new token* ; *Repository access* : **Only select repositories** → `guide-de-la-flamme` ;
+   *Permissions → Repository permissions → Contents* : **Read and write** ; durée courte (30 à 90 jours).
+3. Sur le site, onglet **Carte** → **Ajouter un élément** → coller le jeton. Il reste dans le navigateur (onglet en cours, ou
+   l'appareil si « Rester connecté » est coché) et n'est envoyé qu'à api.github.com. **Se déconnecter** l'efface.
+4. Remplir la fiche : nom, catégorie, description, rareté, position (cliquer sur la carte ou saisir x/y entre 0 et 10240),
+   zone, précision, source (texte + lien https). L'auteur et la date sont ajoutés automatiquement.
+5. Le point est créé **En attente** (visible des administrateurs seulement, case « Voir aussi les ajouts en attente et masqués »).
+   Un administrateur le **Valide** (visible de tous), le **Masque** (conservé, invisible) ou le **Supprime** (avec confirmation).
+6. Chaque action est un commit sur `main` (« Carte : … — Par <compte> ») : historique et retour arrière dans Git.
+   Les visiteurs voient le changement après la republication de GitHub Pages (1 à 2 minutes).
+
+Règles : n'ajouter que des éléments vérifiés en jeu ou sourcés ; tout exemple de test doit être nommé « [TEST FICTIF] … » et
+supprimé ensuite. Les champs sont contrôlés avant l'envoi (`window.ENS.validateMapPoint`) et à chaque push par la CI
+`verification.yml`. Ajouter une catégorie : une entrée dans `categories` de `data/map-config.js`.
+
+**Si une écriture échoue** : « Jeton refusé » → jeton expiré ou mal copié ; « pas le droit d'écriture » → le compte n'est pas
+collaborateur ou le jeton ne cible pas ce dépôt avec Contents en écriture ; « modifié en même temps » → réessayer.
+
+**Tester sans toucher au dépôt** : `node scripts/serve.mjs 8090` et `node scripts/mock-github.mjs 8099`, ouvrir
+http://localhost:8090, puis dans la console du navigateur `localStorage.setItem("ens.devApi", "http://localhost:8099")`
+(adresse acceptée uniquement sur localhost). Jetons fictifs : `test_admin_token_0123456789abcd` (écriture) et
+`test_reader_token_0123456789abcd` (refusé). Les données restent en mémoire. Ensuite : `localStorage.removeItem("ens.devApi")`.
 
 ## Publier une modification
 
@@ -93,4 +149,4 @@ en panne, la collecte échoue sans rien modifier et la suivante prend le relais.
   Les fichiers `data/catalog.js`, `data/map.js` et `.collect/` en dérivent et restent sous cette licence.
 - **Autres sources** (PinDrop, KeenGamer, AoEAH, Hack The Minotaur…) : citées et liées objet par objet dans le site (onglet *Sources*).
 - **Icônes de secours** : dessinées pour ce site, en partie d'après [Lucide](https://lucide.dev) (licence ISC).
-- **Carte** : [Leaflet](https://leafletjs.com) (BSD-2-Clause), chargé depuis cdnjs.
+- **Carte** : [Leaflet](https://leafletjs.com) (BSD-2-Clause) et [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) (MIT), chargés depuis cdnjs.
