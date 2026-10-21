@@ -60,7 +60,16 @@ couleur selon l'élément, initiales du nom.
 
 ## Rafraîchir le catalogue depuis le wiki
 
-1. `node scripts/serve.mjs 8081 --collect` puis ouvrir http://localhost:8081/scripts/collect.html (attendre « TERMINÉ ») ;
+**Automatique :** la GitHub Action `.github/workflows/collecte-wiki.yml` relance la collecte **le lundi et le jeudi** (5 h UTC).
+Si le catalogue a changé, elle ouvre une pull request « Collecte du wiki — date (N changements) » qui liste les objets ajoutés,
+retirés et modifiés. Il suffit de la relire puis de la fusionner : GitHub Pages republie le site tout seul. Si le wiki est
+en panne, la collecte échoue sans rien modifier et la suivante prend le relais. Lancement manuel : onglet **Actions** →
+**Collecte du wiki** → **Run workflow**.
+
+**À la main :**
+
+1. `node scripts/collect.mjs` (ou, si Node n'a pas accès au réseau : `node scripts/serve.mjs 8081 --collect` puis ouvrir
+   http://localhost:8081/scripts/collect.html et attendre « TERMINÉ ») ;
 2. `node scripts/build-data.mjs` ;
 3. `node scripts/fetch-images.mjs` (ne télécharge que les nouvelles images) ;
 4. `node scripts/validate.mjs`.

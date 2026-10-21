@@ -1,0 +1,64 @@
+# Collecte automatique du wiki, deux fois par semaine.
+# Ouvre (ou met à jour) une pull request « collecte-wiki » quand le catalogue change : rien n'est publié sans validation.
+name: Collecte du wiki
+
+on:
+  schedule:
+    - cron: "0 5 * * 1,4" # lundi et jeudi à 5 h UTC (6 h ou 7 h à Paris)
+  workflow_dispatch: # bouton « Run workflow » dans l'onglet Actions
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: collecte-wiki
+  cancel-in-progress: false
+
+jobs:
+  collecte:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Garder l'ancien catalogue pour comparaison
+        run: cp data/catalog.js "$RUNNER_TEMP/old-catalog.js"
+
+      - name: Collecter le wiki (API)
+        run: node scripts/collect.mjs
+
+      - name: Reconstruire le catalogue et la carte
+        run: node scripts/build-data.mjs
+
+      - name: Télécharger les nouvelles images
+        run: node scripts/fetch-images.mjs
+
+      - name: Vérifier la cohérence des données
+        run: node scripts/validate.mjs
+
+      - name: Résumer les changements
+        id: diff
+        run: node scripts/diff-catalog.mjs "$RUNNER_TEMP/old-catalog.js" data/catalog.js "$RUNNER_TEMP/pr.md"
+
+      - name: Date du jour
+        id: date
+        run: echo "jour=$(date -u +%d/%m/%Y)" >> "$GITHUB_OUTPUT"
+
+      - name: Ouvrir la pull request
+        if: steps.diff.outputs.changes != '0'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: collecte-wiki
+          delete-branch: true
+          commit-message: "Collecte automatique du wiki (${{ steps.date.outputs.jour }})"
+          title: "Collecte du wiki — ${{ steps.date.outputs.jour }} (${{ steps.diff.outputs.changes }} changements)"
+          body-path: ${{ runner.temp }}/pr.md
+
+      - name: Aucun changement
+        if: steps.diff.outputs.changes == '0'
+        run: echo "Catalogue identique à la dernière collecte, pas de pull request."

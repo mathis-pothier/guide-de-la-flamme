@@ -26,6 +26,8 @@ qui ouvre une issue si une annonce ⚑ apparaît). Elle ne modifie aucune donné
 
 ## 3. Rafraîchir le catalogue du wiki
 
+La collecte tourne automatiquement deux fois par semaine (GitHub Action « Collecte du wiki ») et propose ses changements dans une pull request : relisez le résumé, puis fusionnez.
+
 Voir « Rafraîchir le catalogue depuis le wiki » dans le README. Le catalogue (`data/catalog.js`) est **généré** : ne jamais le modifier à la main.
 Les pages modifiées après la date de sortie 1.0 reçoivent le statut « Wiki après 1.0 » (`w10`) ; changez `RELEASE_10` dans `scripts/build-data.mjs` si une nouvelle version majeure sort.
 Après un patch, relire aussi `data/builds-1.0.js` (conseils des guides).
