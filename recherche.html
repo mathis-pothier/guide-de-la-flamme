@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Recherche Enshrouded 1.0</title>
+  <meta name="description" content="Notes de recherche sourcées sur Enshrouded 1.0 : mécaniques, progression, classes, donjons, carte. Document de travail du Guide de la Flamme.">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .rch-head { padding: 18px 0 8px; border-bottom: 1px solid var(--line); }
+    .rch-head a.back { font-size: .9rem; text-decoration: none; }
+    .rch-badge { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 99px;
+      background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); margin-left: 6px; vertical-align: middle; }
+    .rch-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 24px; padding: 20px 0 60px; }
+    .rch-nav { position: sticky; top: 12px; align-self: start; display: flex; flex-direction: column; gap: 2px; }
+    .rch-nav a { display: block; padding: 8px 10px; border-radius: 10px; color: var(--text); text-decoration: none; font-size: .92rem; }
+    .rch-nav a:hover { background: var(--card-2); }
+    .rch-nav a[aria-current="page"] { background: var(--card); color: var(--ember-2); font-weight: 600; box-shadow: inset 3px 0 0 var(--ember); }
+    .rch-doc { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 26px 26px; min-width: 0; }
+    .rch-doc h1 { margin-top: 1.2rem; }
+    .rch-doc h2 { border-top: 1px solid var(--line); padding-top: 1.1rem; }
+    .rch-doc p, .rch-doc li { max-width: 78ch; }
+    .rch-doc li { margin: .25rem 0; }
+    .rch-doc code { background: var(--card-2); border: 1px solid var(--line); border-radius: 6px; padding: 0 5px; font-size: .86em; }
+    .rch-doc .src { color: var(--info); font-size: .8em; white-space: nowrap; }
+    .rch-doc .tag10 { color: var(--ok); font-weight: 600; }
+    .rch-doc .tagpre { color: var(--warn); font-weight: 600; }
+    .rch-doc .diverge { color: var(--bad); font-weight: 600; }
+    .rch-table { overflow-x: auto; margin: .8rem 0 1.2rem; border: 1px solid var(--line); border-radius: 10px; }
+    .rch-table table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+    .rch-table th, .rch-table td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .rch-table th { background: var(--card-2); font-weight: 600; white-space: nowrap; }
+    .rch-table tr:last-child td { border-bottom: 0; }
+    .rch-pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--line); font-size: .9rem; }
+    @media (max-width: 820px) {
+      .rch-layout { grid-template-columns: 1fr; gap: 12px; }
+      .rch-nav { position: static; flex-direction: row; overflow-x: auto; gap: 6px; padding-bottom: 4px; }
+      .rch-nav a { white-space: nowrap; background: var(--card-2); }
+      .rch-doc { padding: 4px 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap rch-head">
+    <a class="back" href="index.html">← Retour au Guide de la Flamme</a>
+    <h1>Recherche Enshrouded 1.0 <span class="rch-badge">Document de travail</span></h1>
+    <p class="lead">Notes sourcées qui serviront à écrire les futurs guides du site. Les infos marquées pré-1.0 ou en divergence sont à vérifier en jeu.</p>
+  </header>
+  <div class="wrap rch-layout">
+    <nav class="rch-nav" id="nav" aria-label="Sommaire de la recherche"></nav>
+    <main class="rch-doc" id="doc"><p class="muted">Chargement…</p></main>
+  </div>
+  <script src="docs/recherche/contenu.js"></script>
+  <script>
+  (function () {
+    var pages = window.RECHERCHE || [];
+    var esc = function (s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+    var slug = function (f) { return f.replace(/\.md$/, "").toLowerCase(); };
+
+    // Mise en forme d'une ligne : code, gras, liens, renvois de sources, étiquettes.
+    function inline(s) {
+      var codes = [];
+      s = s.replace(/`([^`]+)`/g, function (_, c) { codes.push(c); return "\u0000" + (codes.length - 1) + "\u0000"; });
+      s = esc(s)
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, t, u) {
+          if (/^[\w-]+\.md$/.test(u)) return '<a href="#' + slug(u) + '">' + t + "</a>";
+          var ext = /^https?:/.test(u);
+          return '<a href="' + u + '"' + (ext ? ' target="_blank" rel="noopener"' : "") + ">" + t + "</a>";
+        })
+        .replace(/\[1\.0\]/g, '<span class="tag10">[1.0]</span>')
+        .replace(/\[pré-1\.0[^\]]*\]/g, function (m) { return '<span class="tagpre">' + m + "</span>"; })
+        .replace(/⚠ Divergence/g, '<span class="diverge">⚠ Divergence</span>');
+      return s.replace(/\u0000(\d+)\u0000/g, function (_, i) {
+        var c = codes[+i];
+        return /^\[?[a-z0-9-]+\]?$/.test(c) && c.charAt(0) === "["
+          ? '<span class="src">' + esc(c) + "</span>" : "<code>" + esc(c) + "</code>";
+      });
+    }
+
+    // Convertisseur Markdown minimal : titres, paragraphes, listes, tableaux.
+    function render(md) {
+      var lines = md.split("\n"), out = [], i = 0;
+      while (i < lines.length) {
+        var l = lines[i];
+        if (!l.trim()) { i++; continue; }
+        var h = l.match(/^(#{1,3}) (.+)/);
+        if (h) { out.push("<h" + h[1].length + ">" + inline(h[2]) + "</h" + h[1].length + ">"); i++; continue; }
+        if (/^\|/.test(l)) {
+          var rows = [];
+          while (i < lines.length && /^\|/.test(lines[i])) { rows.push(lines[i]); i++; }
+          var cells = function (r) { return r.replace(/^\||\|$/g, "").split("|").map(function (c) { return inline(c.trim()); }); };
+          var html = "<thead><tr>" + cells(rows[0]).map(function (c) { return "<th>" + c + "</th>"; }).join("") + "</tr></thead><tbody>";
+          rows.slice(2).forEach(function (r) { html += "<tr>" + cells(r).map(function (c) { return "<td>" + c + "</td>"; }).join("") + "</tr>"; });
+          out.push('<div class="rch-table"><table>' + html + "</tbody></table></div>");
+          continue;
+        }
+        if (/^\s*([-*]|\d+\.) /.test(l)) {
+          var ordered = /^\s*\d+\. /.test(l), stack = [], buf = "";
+          var open = function (o) { stack.push(o); buf += o ? "<ol>" : "<ul>"; };
+          var base = l.match(/^\s*/)[0].length;
+          open(ordered);
+          var depth = function (s) { return Math.floor((s.match(/^\s*/)[0].length - base) / 2); };
+          while (i < lines.length && /^\s*([-*]|\d+\.) /.test(lines[i])) {
+            var d = depth(lines[i]);
+            while (stack.length - 1 < d) { buf = buf.replace(/<\/li>$/, ""); open(/^\s*\d+\. /.test(lines[i])); }
+            while (stack.length - 1 > d) { buf += (stack.pop() ? "</ol>" : "</ul>") + "</li>"; }
+            var item = lines[i].replace(/^\s*([-*]|\d+\.) /, ""); i++;
+            // Lignes de continuation : indentées, sans puce.
+            while (i < lines.length && /^\s+\S/.test(lines[i]) && !/^\s*([-*]|\d+\.) /.test(lines[i])) { item += " " + lines[i].trim(); i++; }
+            buf += "<li>" + inline(item) + "</li>";
+          }
+          while (stack.length) { buf += stack.pop() ? "</ol>" : "</ul>"; if (stack.length) buf += "</li>"; }
+          out.push(buf);
+          continue;
+        }
+        var para = [];
+        while (i < lines.length && lines[i].trim() && !/^(#|\||\s*([-*]|\d+\.) )/.test(lines[i])) { para.push(lines[i]); i++; }
+        out.push("<p>" + inline(para.join(" ")) + "</p>");
+      }
+      return out.join("\n");
+    }
+
+    var nav = document.getElementById("nav"), doc = document.getElementById("doc");
+    if (!pages.length) { doc.innerHTML = '<p class="muted">Contenu introuvable : lancer <code>node scripts/build-recherche.mjs</code>.</p>'; return; }
+    nav.innerHTML = pages.map(function (p, n) {
+      return '<a href="#' + slug(p.fichier) + '">' + (n ? n + ". " : "") + esc(p.fichier === "README.md" ? "Sommaire" : p.titre) + "</a>";
+    }).join("");
+
+    function show() {
+      var id = (location.hash || "#readme").slice(1), n = 0;
+      pages.forEach(function (p, k) { if (slug(p.fichier) === id) n = k; });
+      var p = pages[n], prev = pages[n - 1], next = pages[n + 1];
+      doc.innerHTML = render(p.md) + '<div class="rch-pager"><span>' +
+        (prev ? '<a href="#' + slug(prev.fichier) + '">← ' + esc(prev.titre) + "</a>" : "") + "</span><span>" +
+        (next ? '<a href="#' + slug(next.fichier) + '">' + esc(next.titre) + " →</a>" : "") + "</span></div>";
+      [].forEach.call(nav.children, function (a, k) { k === n ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"); });
+      document.title = (n ? p.titre + " · " : "") + "Recherche Enshrouded 1.0";
+      window.scrollTo(0, 0);
+    }
+    window.addEventListener("hashchange", show);
+    show();
+  })();
+  </script>
+</body>
+</html>
