@@ -32,6 +32,7 @@ Guide de fan, non officiel, en français. Site statique, sans dépendance ni com
 | `data/merge.js` | Fusion objets vérifiés + catalogue du wiki | — |
 | `scripts/collect.html` | Collecte du wiki depuis le navigateur (avec `node scripts/serve.mjs 8081 --collect`) | outil |
 | `scripts/build-data.mjs` | Transforme la collecte en catalogue et carte | outil |
+| `recherche.html`, `docs/recherche/*.md` | Notes de recherche Enshrouded 1.0 (page à part, non liée au menu) ; `node scripts/build-recherche.mjs` régénère `docs/recherche/contenu.js` après modification | **recherche** |
 | `scripts/fetch-images.mjs` | Copie locale des images, tuiles et icônes de carte → `images/` + `data/images.js` | outil |
 
 Chaque objet et chaque compétence porte un **statut** (vérifié 1.0, pré-1.0, conflit, cité par un guide…), ses **sources**
