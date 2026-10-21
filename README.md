@@ -35,6 +35,7 @@ Guide de fan, non officiel, en français. Site statique, sans dépendance ni com
 | `scripts/build-data.mjs` | Transforme la collecte en catalogue et carte | outil |
 | `recherche.html`, `docs/recherche/*.md` | Notes de recherche Enshrouded 1.0 (page à part, non liée au menu) ; `node scripts/build-recherche.mjs` régénère `docs/recherche/contenu.js` après modification | **recherche** |
 | `scripts/fetch-block-images.mjs` | Images des blocs : icône du wiki officiel, sinon capture de l'établi (wiki Fandom) recadrée → `images/blocs/` + `data/blocs-images.js` | outil |
+| `scripts/guide-images.py` | Visuels des guides → `images/guides/` : fonds de carte découpés dans les tuiles du wiki (les épingles sont placées par `app.js` d'après `data/map.js`) et rendus de sets en WebP. `python3 scripts/guide-images.py` (Pillow) | outil |
 | `scripts/fetch-images.mjs` | Copie locale des images, tuiles et icônes de carte → `images/` + `data/images.js` | outil |
 
 Chaque objet et chaque compétence porte un **statut** (vérifié 1.0, pré-1.0, conflit, cité par un guide…), ses **sources**
@@ -93,6 +94,7 @@ en panne, la collecte échoue sans rien modifier et la suivante prend le relais.
 - **Données du wiki** (catalogue d'objets, marqueurs de carte, niveaux de zones) : [enshrouded.wiki.gg](https://enshrouded.wiki.gg),
   contenu sous licence Creative Commons BY-SA 4.0 (licence par défaut des wikis wiki.gg — vérifier la page *Copyrights* du wiki).
   Les fichiers `data/catalog.js`, `data/map.js` et `.collect/` en dérivent et restent sous cette licence.
+- **Visuels des guides** (`images/guides/`) : uniquement dérivés des images ci-dessus (rendus de carte et de sets © Keen Games via le wiki), avec le crédit affiché sous chaque image. Aucune image d'autres sites de guides ni de vidéos.
 - **Autres sources** (PinDrop, KeenGamer, AoEAH, Hack The Minotaur…) : citées et liées objet par objet dans le site (onglet *Sources*).
 - **Icônes de secours** : dessinées pour ce site, en partie d'après [Lucide](https://lucide.dev) (licence ISC).
 - **Carte** : [Leaflet](https://leafletjs.com) (BSD-2-Clause), chargé depuis cdnjs.

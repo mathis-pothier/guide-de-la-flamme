@@ -2,6 +2,9 @@
 // (docs/recherche/*.md et docs/recherche/videos/*.md). Aucun texte de source n'est recopié.
 // Blocs d'une section : { p } paragraphe, { ul } liste, { ol } étapes, { table: { tete, lignes } },
 // { astuce }, { attention }, { verifier } (info à confirmer en jeu). **gras** et [lien](#vue) sont permis dans les textes.
+// Visuels : { carte: { fond, points: [[id du marqueur de data/map.js, légende]], groupes, regions, legende } },
+// { objets: { ids: [objets du catalogue], legende } }, { figure: { src, alt, legende, cls } }. `vignette` = objet affiché sur la carte du guide.
+// Images uniquement reprises du jeu via le wiki (crédit affiché) ; fonds de carte fabriqués par scripts/guide-images.py.
 // `sources` = identifiants de window.ENS.guides.sources ou de data/sources.js.
 window.ENS = window.ENS || {};
 window.ENS.guides = {
@@ -93,6 +96,12 @@ window.ENS.guides = {
     "v-caffeinated-style": { nom: "Vidéo — Caffeinated Replays, style de construction", url: "https://www.youtube.com/watch?v=uvCvTd2eLas" }
   },
 
+  // Fonds de carte (scripts/guide-images.py) : bornes en coordonnées de la carte du wiki, y vers le haut.
+  cartes: {
+    monde: { fichier: "images/guides/carte-monde.webp", bornes: [0, 0, 10240, 10240] },
+    springlands: { fichier: "images/guides/carte-springlands.webp", bornes: [2300, 900, 5100, 3100] }
+  },
+
   liste: [
     // ═══════════════ BIEN DÉBUTER ═══════════════
     {
@@ -119,7 +128,21 @@ window.ENS.guides = {
             "**Faites votre premier Elixir Well** (puits d'élixir) : points de compétence et Shroud Cores pour agrandir la zone de l'autel.",
             "**Renforcez la Flamme** dès que vous avez les matériaux : c'est elle qui ouvre les régions suivantes. Voir [La Flamme pas à pas](#guides/flamme-paliers).",
             "**Gardez toujours un autel de rechange** dans votre sac pour avancer par relais."
-          ] }
+          ] },
+          { carte: { fond: "springlands", alt: "Carte du sud de Springlands avec le caveau de départ, la Spire et les caveaux des artisans",
+            legende: "Le coin de départ : la Spire au centre, les caveaux des artisans tout autour, et deux bonnes maisons pour une première base.",
+            points: [
+              ["CinderVault", "Cinder Vault, le caveau du réveil"],
+              ["AncientSpire-Springlands", "Ancient Spire de Springlands"],
+              ["AncientVault-Blacksmith", "Caveau du forgeron"],
+              ["AncientVault-Alchemist", "Caveau de l'alchimiste"],
+              ["AncientVault-Hunter", "Caveau de la chasseuse"],
+              ["AncientVault-Carpenter", "Caveau du charpentier"],
+              ["AncientVault-Farmer", "Caveau de la fermière"],
+              ["HarvestHomestead", "Harvest Homestead (base toute faite)"],
+              ["Longkeep", "Longkeep (maison ouverte)"]
+            ] } },
+          { verifier: "Emplacements du wiki relevés avant la 1.0, qui a remanié le début de partie (le forgeron se réveille désormais au Cinder Vault)." }
         ] },
         { titre: "Les réflexes à prendre tout de suite", blocs: [
           { ul: [
@@ -278,7 +301,9 @@ window.ENS.guides = {
             ["6", "Veilwater Basin", "37–45", "8 (9 ouvre le reste)", "Hydrak'Dal", "6 / 3"],
             ["7", "Cinder's Cradle (1.0)", "46–50", "10 (11 ouvre le reste)", "Vorgoth (final), constructs", "9 ou 12 / 0"]
           ] } },
-          { verifier: "Racines de Cinder's Cradle : 9 selon PinDrop, 12 selon le résumé du changelog officiel. À compter en jeu." }
+          { verifier: "Racines de Cinder's Cradle : 9 selon PinDrop, 12 selon le résumé du changelog officiel. À compter en jeu." },
+          { carte: { fond: "monde", alt: "Carte d'Embervale avec le nom et le niveau de chaque région", regions: true, regionsHaut: ["Blackmire", "Low Meadows"], groupes: ["Ancient_Spire"],
+            legende: "Les régions et leur niveau d'ennemis, avec les Ancient Spires (voyage rapide). Cinder's Cradle, au nord, n'apparaît pas encore sur ce fond de carte." } }
         ] },
         { titre: "Conseils de passage", blocs: [
           { ul: [
@@ -343,7 +368,9 @@ window.ENS.guides = {
             "Une racine se coupe à la hache après avoir éliminé ses gardes ; une racine faite porte une coche sur la carte.",
             "Astuce de puits : planer directement jusqu'à l'entrée, nettoyer, puis couper la racine du fond.",
             "En 1.0, de nouvelles racines ont été ajoutées en bordure de Springlands, Blackmire et Kindlewastes, et un obélisque de fin de jeu révèle celles qu'on a manquées."
-          ] }
+          ] },
+          { carte: { fond: "monde", alt: "Carte des Shroud Roots et des Elixir Wells", groupes: ["Shroud_Root", "Elixir_Well"],
+            legende: "Racines et puits connus du wiki avant la 1.0 : les racines ajoutées en 1.0 et celles de Cinder's Cradle n'y sont pas encore. Les puits sont cerclés d'orange ; survolez une icône pour son nom." } }
         ] },
         { titre: "Gagner de l'XP vite", blocs: [
           { ul: [
@@ -408,7 +435,7 @@ window.ENS.guides = {
       sources: ["pd-bosses", "v-justsoup", "v-uniques", "v-chiselchip-spdr", "v-heather-dragon", "guided-changelog"]
     },
     {
-      id: "wispwyvern", cat: "boss", icone: "bolt", titre: "Fell Wispwyvern, le dragon de Revelwood",
+      id: "wispwyvern", vignette: "commanders-ring", cat: "boss", icone: "bolt", titre: "Fell Wispwyvern, le dragon de Revelwood",
       resume: "Le premier vrai mur de la partie : préparation, cycle d'attaques et méthode à l'arc pour obtenir le trophée de la Flamme 4.",
       niveau: "Niveaux 11 à 15", version: "pré-1.0, revu en 1.0",
       sections: [
@@ -437,6 +464,7 @@ window.ENS.guides = {
             "Sa tête : trophée du palier de Flamme 3 → 4.",
             "Le **Commander's Ring**, et un tableau décoratif (bon pour le confort) à récupérer près de la Pike après le combat."
           ] },
+          { objets: { ids: ["commanders-ring"] } },
           { verifier: "Méthodes décrites avant la 1.0 ; le Fell Dragon Youngling d'Albaneve a été retravaillé en 1.0 (point faible dans le dos, phase au sol), le Wispwyvern peut-être aussi." }
         ] }
       ],
@@ -562,7 +590,7 @@ window.ENS.guides = {
       sources: ["v-sirjay", "v-legacy", "v-kitsune", "htm-mistakes", "v-chiselchip-mage"]
     },
     {
-      id: "debuter-mage", cat: "builds", icone: "wand", titre: "Bien démarrer en mage",
+      id: "debuter-mage", vignette: "wand", cat: "builds", icone: "wand", titre: "Bien démarrer en mage",
       resume: "Baguette ou bâton, premier chemin dans l'arbre et pièges à éviter quand on joue la magie.",
       niveau: "Niveaux 5 à 30", version: "1.0",
       sections: [
@@ -571,7 +599,8 @@ window.ENS.guides = {
             ["Ressource", "Pas de mana, seulement de l'usure", "Mana (ou charges de sort)"],
             ["Points forts", "Tir chargé perçant qui fait chanceler, attaque aérienne de zone, esquive offensive (1.0)", "Vrais sorts, plus de portée, sorts éternels améliorables en 1.0"],
             ["Quand", "Dès le début", "Après avoir réveillé l'alchimiste"]
-          ] } }
+          ] } },
+          { objets: { ids: ["wand", "apprentice-wand"], legende: "La baguette de base se fabrique avec des os dès les premières minutes." } }
         ] },
         { titre: "Un premier chemin à la baguette", blocs: [
           { ol: [
@@ -590,7 +619,9 @@ window.ENS.guides = {
             "**Blink**, puis ses variantes défensives et offensives.",
             "Prenez tous les nœuds d'Intelligence que vous croisez."
           ] },
-          { astuce: "La presse trouve la magie « faible en ressenti » alors qu'elle est efficace en chiffres : ne jugez pas un sort à son effet visuel." }
+          { astuce: "La presse trouve la magie « faible en ressenti » alors qu'elle est efficace en chiffres : ne jugez pas un sort à son effet visuel." },
+          { figure: { src: "images/guides/set-mage.webp", cls: "portrait", alt: "Personnage vu de face et de dos portant le set Mage : chapeau pointu, tunique verte, gants et bottes de cuir",
+            legende: "Le **Mage Set** (niveau 13), son rendu en jeu d'après le wiki. Le détail des pièces est dans le [catalogue](#equipements)." } }
         ] },
         { titre: "Plus loin", blocs: [
           { p: "Pour les versions complètes (Mage de bataille, Sorcier, Invocateur, Soigneur) avec l'équipement de chaque étape, voir l'onglet [Builds](#builds)." }
@@ -641,7 +672,7 @@ window.ENS.guides = {
       sources: ["games-gg-chests", "htm-mistakes", "v-spyro-runes", "v-unyphi", "v-hishers-route", "v-total-route"]
     },
     {
-      id: "equipement-fin", cat: "equipement", icone: "armor", titre: "L'équipement de fin de partie (1.0)",
+      id: "equipement-fin", vignette: "set-flame-arcanist", cat: "equipement", icone: "armor", titre: "L'équipement de fin de partie (1.0)",
       resume: "Les nouveaux sets de la 1.0, qui les fabrique, l'autel d'infusion et le set de Vorgoth.",
       niveau: "Niveaux 45 à 50", version: "1.0",
       sections: [
@@ -659,6 +690,7 @@ window.ENS.guides = {
             ["Chasseuse", "Ashwind Strider, Sky Specter", "Archer, assassin"],
             ["Loraine Crim", "Soulbound (Vorgoth)", "Tous, matériaux du boss final"]
           ] } },
+          { objets: { ids: ["set-lifelock", "set-flame-arcanist", "set-crestflame", "set-emerguard", "set-ashwind-strider", "set-sky-specter", "set-vorgoths-soulbound"], legende: "Les sets de la 1.0 tels qu'ils figurent dans notre catalogue." } },
           { verifier: "Noms de sets et répartition d'après une seule vidéo ; orthographe à confirmer en jeu." }
         ] },
         { titre: "À trouver dans le monde", blocs: [
@@ -674,7 +706,7 @@ window.ENS.guides = {
       sources: ["v-04am-sets", "v-04am-artificer", "ens-tools-10", "allthings-ending"]
     },
     {
-      id: "objets-tot", cat: "equipement", icone: "ring", titre: "Objets forts à récupérer tôt",
+      id: "objets-tot", vignette: "gemini-ring", cat: "equipement", icone: "ring", titre: "Objets forts à récupérer tôt",
       resume: "Anneaux, armes et boucliers à emplacement fixe qui changent le début de partie.",
       niveau: "Niveaux 1 à 25", version: "pré-1.0, à revérifier",
       sections: [
@@ -685,7 +717,8 @@ window.ENS.guides = {
             "**Wanderer's Boots** : sur un squelette près de l'obélisque au sud-ouest de la Spire.",
             "**Pike's Mead Bulwark** : bouclier toujours légendaire, au fond des Mistbury Catacombs. Voir [l'énigme](#guides/enigmes).",
             "Un coffre caché sous le troisième pilier du pont de Braelyn (grappin + pioche)."
-          ] }
+          ] },
+          { objets: { ids: ["sigil-ring-of-the-elder-guard", "gemini-ring", "pikemeads-bulwark"] } }
         ] },
         { titre: "Revelwood", blocs: [
           { ul: [
@@ -693,13 +726,15 @@ window.ENS.guides = {
             "**Commander's Ring** : récompense du Fell Wispwyvern.",
             "**Ring of Rapacity** sous des gravats à Willow Crush, et le bouclier **Riptide** dans un coffre de Grindteeth Grotto (sud-ouest de la Spire).",
             "Un anneau qui ajoute du temps de Shroud, dans le secteur d'une cabane de chasseur au sud-est de la Spire."
-          ] }
+          ] },
+          { objets: { ids: ["fell-commander-bow", "commanders-ring", "ring-of-rapacity", "riptide"] } }
         ] },
         { titre: "Plus loin", blocs: [
           { ul: [
             "**Ghost Glider** (planeur légendaire) : coffre d'or en haut du Scatterbone Sun Temple, au sud de la Spire de Kindlewastes.",
             "**Guard of the North** : épée du château de Cromville (Veilwater)."
           ] },
+          { objets: { ids: ["guard-of-the-north-sword"] } },
           { verifier: "Liste issue de vidéos d'avant la 1.0 : les emplacements et la rareté ont pu changer avec la refonte du début de partie." }
         ] }
       ],
@@ -724,7 +759,18 @@ window.ENS.guides = {
             ["Collectionneur", "Aiden Crowley", "Hollow Halls, par une quête de l'alchimiste"],
             ["Nouveau 1.0", "Loraine Crim", "Cinder's Ascent, Cinder's Cradle"]
           ] } },
-          { p: "Chacun débloque une station et des recettes. Le charpentier est indispensable pour le planeur et le grappin améliorés." }
+          { p: "Chacun débloque une station et des recettes. Le charpentier est indispensable pour le planeur et le grappin améliorés." },
+          { carte: { fond: "springlands", alt: "Carte des caveaux des cinq premiers artisans autour de la Spire de Springlands",
+            legende: "Les caveaux des cinq premiers artisans, autour de la Spire de Springlands.",
+            points: [
+              ["CinderVault", "Cinder Vault (forgeron en 1.0)"],
+              ["AncientVault-Alchemist", "Alchimiste"],
+              ["AncientVault-Farmer", "Fermière"],
+              ["AncientVault-Hunter", "Chasseuse"],
+              ["AncientVault-Carpenter", "Charpentier"],
+              ["AncientVault-Blacksmith", "Ancien caveau du forgeron (avant 1.0)"],
+              ["AncientSpire-Springlands", "Spire de Springlands"]
+            ] } }
         ] },
         { titre: "Installer un survivant", blocs: [
           { ol: [
@@ -765,6 +811,18 @@ window.ENS.guides = {
             "Après la grille ouverte au crochet, à gauche : un bouton à activer **à la main**."
           ] },
           { astuce: "On peut aussi entrer par le toit." }
+        ] },
+        { titre: "Où sont ces salles", blocs: [
+          { carte: { fond: "monde", alt: "Carte des catacombes, caveaux, temples et Spire décrits dans ce guide",
+            legende: "Les lieux de ce guide. Le wiki ne distingue pas le Scatterbone Sun Temple des autres : c'est celui au sud de la Spire de Kindlewastes.",
+            groupes: ["Sun_Temple"],
+            points: [
+              ["MistburyCatacombs", "Mistbury Catacombs"],
+              ["AncientVault-Hunter", "Caveau de la Chasseuse"],
+              ["AncientVault-Farmer", "Caveau de la Fermière"],
+              ["AncientSpire-Kindlewastes", "Spire de Kindlewastes (repère pour Scatterbone)"],
+              ["AncientSpire-VeilwaterBasin", "Spire de Veilwater Basin"]
+            ] } }
         ] },
         { titre: "Scatterbone Sun Temple", blocs: [
           { p: "Coin sud-est de la carte, au sud de la Spire de Kindlewastes." },
@@ -813,7 +871,17 @@ window.ENS.guides = {
             "Grands donjons de morts-vivants (Hollow), **à finir en une seule session** : les quitter les réinitialise. Comptez 1 à 3 heures.",
             "Débloqués par la quête de l'alchimiste ; ordre : Springlands → Revelwood → Nomad Highlands → Kindlewastes, **puis Albaneve Summits et Veilwater Basin en 1.0**.",
             "La **clé** de chaque Hall se fabrique chez le Collectionneur (Aiden Crowley) avec l'Ectoplasm et les Giant Bones du Hall précédent."
-          ] }
+          ] },
+          { carte: { fond: "monde", alt: "Carte des six Hollow Halls, numérotés dans l'ordre conseillé",
+            legende: "Les six Hollow Halls, dans l'ordre où on les fait.",
+            points: [
+              ["HollowHalls-Springlands", "Springlands"],
+              ["HollowHalls-Revelwood", "Revelwood"],
+              ["HollowHalls-NomadHighlands", "Nomad Highlands"],
+              ["HollowHalls-Kindlewastes", "Kindlewastes"],
+              ["HollowHalls-AlbaneveSummits", "Albaneve Summits (1.0)"],
+              ["HollowHalls-VeilwaterBasin", "Veilwater Basin (1.0)"]
+            ] } }
         ] },
         { titre: "Les barrières turquoise", blocs: [
           { p: "Les portes sont fermées par des barrières qui tombent quand on ramasse des **runes**, soit flottantes, soit portées par des ennemis. Si vous êtes bloqué : regardez en hauteur." }

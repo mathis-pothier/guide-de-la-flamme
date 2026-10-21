@@ -896,16 +896,52 @@
   const gsrc = (id) => G.sources[id] || SOURCES[id];
   // **gras** et [lien](#vue) autorisés dans les textes des guides
   const gtext = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\[([^\]]+)\]\((#[\w/-]+)\)/g, '<a href="$2">$1</a>');
+  // Visuels des guides : crédits affichés sous chaque image
+  const CREDIT_WIKI = `Image © Keen Games, via <a href="https://enshrouded.wiki.gg" target="_blank" rel="noopener">enshrouded.wiki.gg</a>`;
+  const gcredit = (c) => `<small class="g-credit">${c}</small>`;
+  // Carte : fond découpé (images/guides) + épingles placées d'après data/map.js (bornes = coordonnées de carte, y vers le haut)
+  function gcarte(c) {
+    const fond = (G.cartes || {})[c.fond], M = MAP;
+    if (!fond || !M) return "";
+    const [x0, y0, x1, y1] = fond.bornes;
+    const pos = (x, y) => `left:${((x - x0) / (x1 - x0) * 100).toFixed(2)}%;top:${((y1 - y) / (y1 - y0) * 100).toFixed(2)}%`;
+    const mk = Object.fromEntries(M.marqueurs.map((m) => [m.id, m]));
+    const pts = (c.points || []).map(([id, l]) => mk[id] && { m: mk[id], l }).filter(Boolean);
+    const grp = (c.groupes || []).filter((g) => M.groupes[g]);
+    // deux groupes avec la même icône (Shroud Root / Elixir Well sur le wiki) : le second est cerclé
+    const alt = (g) => grp.slice(0, grp.indexOf(g)).some((h) => M.groupes[h].icone === M.groupes[g].icone) ? " alt" : "";
+    const html = [
+      ...(c.regions ? M.regions.map((r) => { const z = M.zones.find((z) => z.nom === r.nom); return `<span class="g-reg${(c.regionsHaut || []).includes(r.nom) ? " up" : ""}" style="${pos(r.x, r.y)}">${esc(r.nom)}${z ? `<small>niv. ${esc(z.niveau)}</small>` : ""}</span>`; }) : []),
+      ...grp.flatMap((g) => M.marqueurs.filter((m) => m.g === g).map((m) => `<span class="g-ico${alt(g)}" style="${pos(m.x, m.y)}" title="${esc(m.nom)}"><img src="${esc(M.groupes[g].icone)}" alt=""></span>`)),
+      ...pts.map((p, k) => `<span class="g-pin" style="${pos(p.m.x, p.m.y)}" title="${esc(p.l)}">${k + 1}</span>`)
+    ].join("");
+    return `<figure class="g-fig g-map">
+      <div class="g-map-box" style="aspect-ratio:${x1 - x0}/${y1 - y0}"><img src="${esc(fond.fichier)}" alt="${esc(c.alt || "Carte d'Embervale")}" decoding="async">${html}</div>
+      <figcaption>${c.legende ? `<p>${gtext(c.legende)}</p>` : ""}
+        ${grp.length ? `<ul class="g-keys">${grp.map((g) => `<li><span class="g-ico${alt(g)}"><img src="${esc(M.groupes[g].icone)}" alt=""></span>${esc(M.groupes[g].nom)} <span class="muted">(${M.marqueurs.filter((m) => m.g === g).length})</span></li>`).join("")}</ul>` : ""}
+        ${pts.length ? `<ol class="g-pins">${pts.map((p) => `<li>${gtext(p.l)}</li>`).join("")}</ol>` : ""}
+        ${gcredit(`Fond : carte du jeu © Keen Games, rendu de <a href="${esc(M.source)}" target="_blank" rel="noopener">enshrouded.wiki.gg</a> (${fmtDate(M.fondDate, true)}, sans Cinder's Cradle). Emplacements : wiki, CC BY-SA 4.0. <a href="#carte">Carte interactive</a>`)}</figcaption>
+    </figure>`;
+  }
+  // Rangée d'objets du catalogue : chaque vignette ouvre la fiche
+  const gobjets = (o) => { const its = o.ids.map(getItem).filter(Boolean); return its.length ? `<figure class="g-fig g-objs">
+      <div class="g-obj-row">${its.map((it) => `<button class="g-obj" data-item="${esc(it.id)}">${art(it, "lg")}<span>${esc(it.nom)}</span></button>`).join("")}</div>
+      <figcaption>${o.legende ? `<p>${gtext(o.legende)}</p>` : ""}${gcredit(`${CREDIT_WIKI}. Touchez un objet pour voir sa fiche.`)}</figcaption></figure>` : ""; };
+  const gfigure = (f) => `<figure class="g-fig ${f.cls || ""}"><img src="${esc(f.src)}" alt="${esc(f.alt)}" loading="lazy" decoding="async">
+      <figcaption>${f.legende ? `<p>${gtext(f.legende)}</p>` : ""}${gcredit(f.credit || CREDIT_WIKI)}</figcaption></figure>`;
   const gbloc = (b) => b.p ? `<p>${gtext(b.p)}</p>`
     : b.ul ? `<ul class="tight">${b.ul.map((x) => `<li>${gtext(x)}</li>`).join("")}</ul>`
     : b.ol ? `<ol class="g-steps">${b.ol.map((x) => `<li>${gtext(x)}</li>`).join("")}</ol>`
     : b.table ? `<div class="table-wrap"><table${b.table.tete.length > 3 ? ' class="g-wide"' : ""}><thead><tr>${b.table.tete.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${b.table.lignes.map((r) => `<tr>${r.map((v, k) => `<td>${k ? gtext(v) : `<b>${gtext(v)}</b>`}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`
     : b.astuce ? `<div class="g-note tip">${icon("star")}<p><b>Astuce.</b> ${gtext(b.astuce)}</p></div>`
     : b.attention ? `<div class="g-note warn">${icon("alert")}<p>${gtext(b.attention)}</p></div>`
-    : b.verifier ? `<div class="g-note check">${icon("help")}<p><b>À vérifier en jeu.</b> ${gtext(b.verifier)}</p></div>` : "";
+    : b.verifier ? `<div class="g-note check">${icon("help")}<p><b>À vérifier en jeu.</b> ${gtext(b.verifier)}</p></div>`
+    : b.carte ? gcarte(b.carte)
+    : b.objets ? gobjets(b.objets)
+    : b.figure ? gfigure(b.figure) : "";
   const nVerif = (g) => g.sections.reduce((n, s) => n + s.blocs.filter((b) => b.verifier).length, 0);
   const gcard = (g) => { const c = GCAT[g.cat] || {}; return `<a class="bld g-card" href="#guides/${esc(g.id)}">
-      <div class="bld-top"><span class="emblem ${c.cls || ""}">${icon(g.icone)}</span><div><h3>${esc(g.titre)}</h3>
+      <div class="bld-top">${g.vignette && getItem(g.vignette) ? art(getItem(g.vignette), "sm") : `<span class="emblem ${c.cls || ""}">${icon(g.icone)}</span>`}<div><h3>${esc(g.titre)}</h3>
         <div class="tags"><span class="tag hot">${esc(g.niveau)}</span><span class="tag">${esc(g.version)}</span>${g.spoiler ? `<span class="tag ed">${icon("alert")}Spoilers</span>` : ""}</div></div></div>
       <p>${esc(g.resume)}</p></a>`; };
   function viewGuides(id) {
