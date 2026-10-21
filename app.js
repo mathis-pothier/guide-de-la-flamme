@@ -3,6 +3,8 @@
 (() => {
   "use strict";
   const D = window.ENS, ICONS = window.ENS_ICONS;
+  // Extensions facultatives (page refonte.html) : vues en plus, vue d'accueil, rappel après chaque navigation.
+  const EXT = window.ENS_EXT || {};
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const app = $("#app");
@@ -1112,6 +1114,105 @@
     $("#cmp-clear")?.addEventListener("click", () => { compare = []; saveCompare(); viewComparateur(); });
   }
 
+  // ════════════ GUIDES ════════════
+  const G = D.guides || { categories: [], liste: [], sources: {} };
+  const GCAT = byId(G.categories);
+  let gcat = "";
+  const gsrc = (id) => G.sources[id] || SOURCES[id];
+  // **gras** et [lien](#vue) autorisés dans les textes des guides
+  const gtext = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\[([^\]]+)\]\((#[\w/-]+)\)/g, '<a href="$2">$1</a>');
+  // Visuels des guides : crédits affichés sous chaque image
+  const CREDIT_WIKI = `Image © Keen Games, via <a href="https://enshrouded.wiki.gg" target="_blank" rel="noopener">enshrouded.wiki.gg</a>`;
+  const gcredit = (c) => `<small class="g-credit">${c}</small>`;
+  // Carte : fond découpé (images/guides) + épingles placées d'après data/map.js (bornes = coordonnées de carte, y vers le haut)
+  function gcarte(c) {
+    const fond = (G.cartes || {})[c.fond], M = MAP;
+    if (!fond || !M) return "";
+    const [x0, y0, x1, y1] = fond.bornes;
+    const pos = (x, y) => `left:${((x - x0) / (x1 - x0) * 100).toFixed(2)}%;top:${((y1 - y) / (y1 - y0) * 100).toFixed(2)}%`;
+    const mk = Object.fromEntries(M.marqueurs.map((m) => [m.id, m]));
+    const pts = (c.points || []).map(([id, l]) => mk[id] && { m: mk[id], l }).filter(Boolean);
+    const grp = (c.groupes || []).filter((g) => M.groupes[g]);
+    // deux groupes avec la même icône (Shroud Root / Elixir Well sur le wiki) : le second est cerclé
+    const alt = (g) => grp.slice(0, grp.indexOf(g)).some((h) => M.groupes[h].icone === M.groupes[g].icone) ? " alt" : "";
+    const html = [
+      ...(c.regions ? M.regions.map((r) => { const z = M.zones.find((z) => z.nom === r.nom); return `<span class="g-reg${(c.regionsHaut || []).includes(r.nom) ? " up" : ""}" style="${pos(r.x, r.y)}">${esc(r.nom)}${z ? `<small>niv. ${esc(z.niveau)}</small>` : ""}</span>`; }) : []),
+      ...grp.flatMap((g) => M.marqueurs.filter((m) => m.g === g).map((m) => `<span class="g-ico${alt(g)}" style="${pos(m.x, m.y)}" title="${esc(m.nom)}"><img src="${esc(M.groupes[g].icone)}" alt=""></span>`)),
+      ...pts.map((p, k) => `<span class="g-pin" style="${pos(p.m.x, p.m.y)}" title="${esc(p.l)}">${k + 1}</span>`)
+    ].join("");
+    return `<figure class="g-fig g-map">
+      <div class="g-map-box" style="aspect-ratio:${x1 - x0}/${y1 - y0}"><img src="${esc(fond.fichier)}" alt="${esc(c.alt || "Carte d'Embervale")}" decoding="async">${html}</div>
+      <figcaption>${c.legende ? `<p>${gtext(c.legende)}</p>` : ""}
+        ${grp.length ? `<ul class="g-keys">${grp.map((g) => `<li><span class="g-ico${alt(g)}"><img src="${esc(M.groupes[g].icone)}" alt=""></span>${esc(M.groupes[g].nom)} <span class="muted">(${M.marqueurs.filter((m) => m.g === g).length})</span></li>`).join("")}</ul>` : ""}
+        ${pts.length ? `<ol class="g-pins">${pts.map((p) => `<li>${gtext(p.l)}</li>`).join("")}</ol>` : ""}
+        ${gcredit(`Fond : carte du jeu © Keen Games, rendu de <a href="${esc(M.source)}" target="_blank" rel="noopener">enshrouded.wiki.gg</a> (${fmtDate(M.fondDate, true)}, sans Cinder's Cradle). Emplacements : wiki, CC BY-SA 4.0. <a href="#carte">Carte interactive</a>`)}</figcaption>
+    </figure>`;
+  }
+  // Rangée d'objets du catalogue : chaque vignette ouvre la fiche
+  const gobjets = (o) => { const its = o.ids.map(getItem).filter(Boolean); return its.length ? `<figure class="g-fig g-objs">
+      <div class="g-obj-row">${its.map((it) => `<button class="g-obj" data-item="${esc(it.id)}">${art(it, "lg")}<span>${esc(it.nom)}</span></button>`).join("")}</div>
+      <figcaption>${o.legende ? `<p>${gtext(o.legende)}</p>` : ""}${gcredit(`${CREDIT_WIKI}. Touchez un objet pour voir sa fiche.`)}</figcaption></figure>` : ""; };
+  const gfigure = (f) => `<figure class="g-fig ${f.cls || ""}"><img src="${esc(f.src)}" alt="${esc(f.alt)}" loading="lazy" decoding="async">
+      <figcaption>${f.legende ? `<p>${gtext(f.legende)}</p>` : ""}${gcredit(f.credit || CREDIT_WIKI)}</figcaption></figure>`;
+  const gbloc = (b) => b.p ? `<p>${gtext(b.p)}</p>`
+    : b.ul ? `<ul class="tight">${b.ul.map((x) => `<li>${gtext(x)}</li>`).join("")}</ul>`
+    : b.ol ? `<ol class="g-steps">${b.ol.map((x) => `<li>${gtext(x)}</li>`).join("")}</ol>`
+    : b.table ? `<div class="table-wrap"><table${b.table.tete.length > 3 ? ' class="g-wide"' : ""}><thead><tr>${b.table.tete.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${b.table.lignes.map((r) => `<tr>${r.map((v, k) => `<td>${k ? gtext(v) : `<b>${gtext(v)}</b>`}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`
+    : b.astuce ? `<div class="g-note tip">${icon("star")}<p><b>Astuce.</b> ${gtext(b.astuce)}</p></div>`
+    : b.attention ? `<div class="g-note warn">${icon("alert")}<p>${gtext(b.attention)}</p></div>`
+    : b.verifier ? `<div class="g-note check">${icon("help")}<p><b>À vérifier en jeu.</b> ${gtext(b.verifier)}</p></div>`
+    : b.carte ? gcarte(b.carte)
+    : b.objets ? gobjets(b.objets)
+    : b.figure ? gfigure(b.figure) : "";
+  const nVerif = (g) => g.sections.reduce((n, s) => n + s.blocs.filter((b) => b.verifier).length, 0);
+  const gcard = (g) => { const c = GCAT[g.cat] || {}; return `<a class="bld g-card" href="#guides/${esc(g.id)}">
+      <div class="bld-top">${g.vignette && getItem(g.vignette) ? art(getItem(g.vignette), "sm") : `<span class="emblem ${c.cls || ""}">${icon(g.icone)}</span>`}<div><h3>${esc(g.titre)}</h3>
+        <div class="tags"><span class="tag hot">${esc(g.niveau)}</span><span class="tag">${esc(g.version)}</span>${g.spoiler ? `<span class="tag ed">${icon("alert")}Spoilers</span>` : ""}</div></div></div>
+      <p>${esc(g.resume)}</p></a>`; };
+  function viewGuides(id) {
+    if (id) return viewGuide(id);
+    if (gcat && !GCAT[gcat]) gcat = "";
+    const verif = G.liste.reduce((n, g) => n + nVerif(g), 0);
+    app.innerHTML = `
+      <h1>Guides</h1>
+      <p class="lead">Des guides pratiques rédigés à partir de nos recherches sur la 1.0 : par où commencer, comment monter la Flamme, battre les boss, résoudre les salles et bâtir sa base.</p>
+      <div class="facts">
+        <div class="fact"><b>${G.liste.length}</b><span>guides</span></div>
+        <div class="fact"><b>${G.categories.length}</b><span>catégories</span></div>
+        <div class="fact"><b>${verif}</b><span>points signalés « à vérifier en jeu »</span></div>
+      </div>
+      <div class="chips scroll" role="group" aria-label="Catégorie" style="margin-top:14px"><button class="chip" data-gcat="" aria-pressed="${!gcat}">${icon("grid")}Toutes</button>${G.categories.map((c) => `<button class="chip ${c.cls}" data-gcat="${c.id}" aria-pressed="${gcat === c.id}">${icon(c.icone)}${esc(c.nom)}</button>`).join("")}</div>
+      ${G.categories.filter((c) => !gcat || c.id === gcat).map((c) => `<section class="g-cat">
+        <h2>${icon(c.icone)}${esc(c.nom)}</h2><p class="small muted">${esc(c.desc)}</p>
+        <div class="bgrid">${G.liste.filter((g) => g.cat === c.id).map(gcard).join("")}</div></section>`).join("")}
+      <p class="small muted" style="margin-top:22px">Les noms d'objets, de lieux et de compétences restent en anglais tant que nous n'avons pas relevé les noms officiels français dans le jeu. Ce qui n'est pas encore confirmé en 1.0 est signalé dans chaque guide. Mis à jour le ${fmtDate(G.maj)}.</p>`;
+  }
+  function viewGuide(id) {
+    const g = G.liste.find((x) => x.id === id);
+    if (!g) { app.innerHTML = `<div class="empty">${icon("help")}<p>Guide introuvable.</p><a class="btn" href="#guides">Retour aux guides</a></div>`; return; }
+    const c = GCAT[g.cat] || {};
+    const others = G.liste.filter((x) => x.cat === g.cat && x !== g);
+    const i = G.liste.indexOf(g), prev = G.liste[i - 1], next = G.liste[i + 1];
+    const srcs = (g.sources || []).map(gsrc).filter(Boolean);
+    const body = `
+      <nav class="g-toc" aria-label="Sommaire"><b>Sommaire</b><ol>${g.sections.map((s, k) => `<li><button data-gto="g-s${k}">${esc(s.titre)}</button></li>`).join("")}</ol></nav>
+      ${g.sections.map((s, k) => `<section class="g-sec" id="g-s${k}"><h2>${esc(s.titre)}</h2>${s.blocs.map(gbloc).join("")}</section>`).join("")}`;
+    app.innerHTML = `
+      <a class="back" href="#guides">${icon("back")}Tous les guides</a>
+      <article class="guide">
+        <header class="g-head"><span class="emblem ${c.cls || ""}">${icon(g.icone)}</span><div>
+          <div class="tags"><span class="tag">${icon(c.icone)}${esc(c.nom)}</span><span class="tag hot">${esc(g.niveau)}</span><span class="tag">Version ${esc(g.version)}</span>${nVerif(g) ? `<span class="tag">${icon("help")}${nVerif(g)} à vérifier</span>` : ""}</div>
+          <h1>${esc(g.titre)}</h1><p class="lead">${esc(g.resume)}</p></div></header>
+        ${g.spoiler ? `<div class="g-note warn">${icon("alert")}<p><b>Spoilers.</b> Ce guide révèle la fin de l'histoire.</p></div><details class="more g-spoil"><summary>${icon("book")}Afficher le guide</summary><div>${body}</div></details>` : body}
+        ${g.liens ? `<h2>${icon("link")}Sur le site</h2><div class="btn-row">${g.liens.map(([l, h]) => `<a class="btn small" href="${esc(h)}">${esc(l)}</a>`).join("")}</div>` : ""}
+        <h2>${icon("book")}Sources</h2>
+        <p class="small muted">Texte rédigé pour ce site à partir de ces sources, recoupées entre elles quand c'est possible.</p>
+        <div class="chips small-chips">${srcs.map((s) => `<a class="src-chip" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.nom)}</a>`).join("")}</div>
+      </article>
+      ${others.length ? `<h2>${icon(c.icone)}Dans la même catégorie</h2><div class="bgrid">${others.map(gcard).join("")}</div>` : ""}
+      <nav class="g-nav" aria-label="Guides voisins">${prev ? `<a class="btn" href="#guides/${esc(prev.id)}">${icon("back")}${esc(prev.titre)}</a>` : "<span></span>"}${next ? `<a class="btn" href="#guides/${esc(next.id)}">${esc(next.titre)}${icon("arrow")}</a>` : ""}</nav>`;
+  }
+
   // ════════════ MISES À JOUR & SOURCES ════════════
   const COV = { "1.0": ["ok", "À jour"], partiel: ["warn", "Partiel"], "pre-1.0": ["warn", "Avant 1.0"], absent: ["bad", "Absent"], editorial: ["ed", "Conseils"] };
   function viewMaj() {
@@ -1154,22 +1255,25 @@
 
   // ── Routeur
   function route() {
-    const h = decodeURIComponent(location.hash.slice(1)) || "builds";
+    const h = decodeURIComponent(location.hash.slice(1)) || EXT.accueil || "builds";
     const [view] = h.split(/[/=]/);
-    $$(".tabs a").forEach((a) => a.classList.toggle("active", a.dataset.view === view || ((view === "build" || view === "planner") && a.dataset.view === "builds")));
+    $$("a[data-view]").forEach((a) => a.classList.toggle("active", a.dataset.view === view || ((view === "build" || view === "planner") && a.dataset.view === "builds")));
     if ($("#dlg").open) $("#dlg").close();
     if (leaflet) { leaflet.map.remove(); leaflet = null; }
-    if (view === "build") viewBuild(h.split("/")[1]);
+    if (EXT.vues?.[view]) EXT.vues[view](h);
+    else if (view === "build") viewBuild(h.split("/")[1]);
     else if (view === "planner") viewPlanner(location.hash.split("=")[1]);
     else if (view === "carte") { const [, kind, val] = h.split("/"); viewCarte(kind === "item" ? { item: val } : kind === "region" ? { region: val } : kind === "cons" ? { cons: val } : kind === "point" ? { point: val } : null); }
     else if (view === "construction") viewConstruction(h.split("/")[1]);
+    else if (view === "guides") viewGuides(h.split("/")[1]);
     else ({ builds: viewBuilds, equipements: viewEquipements, competences: viewCompetences, comparateur: viewComparateur, maj: viewMaj }[view] || viewBuilds)();
     window.scrollTo(0, 0);
+    EXT.apres?.(view, h);
   }
 
   // ── Événements (délégation)
   document.addEventListener("click", (e) => {
-    const t = e.target.closest("[data-item],[data-skill],[data-slot],[data-quiz],[data-quiz-reset],[data-stage],[data-cat],[data-sub],[data-skb],[data-tree],[data-share],[data-cmp],[data-cmp-toggle],[data-cmp-remove],[data-del-mine],[data-help],[data-close],[data-ctab],[data-bcat],[data-bmode],[data-mpcat],[data-mpall],[data-mpfocus],[data-mpadd],[data-mplogout],[data-mppickcancel],[data-mpedit],[data-mpstatus],[data-mpdel],[data-mpdelok]");
+    const t = e.target.closest("[data-item],[data-skill],[data-slot],[data-quiz],[data-quiz-reset],[data-stage],[data-cat],[data-sub],[data-skb],[data-tree],[data-share],[data-cmp],[data-cmp-toggle],[data-cmp-remove],[data-del-mine],[data-help],[data-close],[data-ctab],[data-bcat],[data-bmode],[data-mpcat],[data-mpall],[data-mpfocus],[data-mpadd],[data-mplogout],[data-mppickcancel],[data-mpedit],[data-mpstatus],[data-mpdel],[data-mpdelok],[data-gcat],[data-gto]");
     if (!t) return;
     if (handleMapClick(t.dataset)) return;
     if (!t) return;
@@ -1194,9 +1298,15 @@
     else if (d.ctab) { location.hash = "#construction/" + d.ctab; }
     else if (d.bcat !== undefined) { cons.cat = d.bcat; renderBlocs(); }
     else if (d.bmode !== undefined) { cons.mode = d.bmode; renderBlocs(); }
+    else if (d.gcat !== undefined) { gcat = d.gcat; viewGuides(); }
+    else if (d.gto) document.getElementById(d.gto)?.scrollIntoView({ behavior: "smooth", block: "start" });
   });
   $("#help-btn").addEventListener("click", helpDialog);
   $("#dlg").addEventListener("click", (e) => { if (e.target.id === "dlg") e.target.close(); });
+
+  // Outils partagés avec les extensions (refonte.html)
+  window.ENS_API = { app, D, $, $$, esc, norm, icon, art, sdot, getItem, itemDetail, skillDetail, helpDialog, openDialog, toast, hydrateIcons,
+    rarKey, lvTxt, keyStat, styleIcon, styleColor, treeColor, TREE_UI, TAGS, BUILDS, SKILLS, buildCard, gcard, G, GCAT, CONS, CAT };
 
   hydrateIcons(); renderHeader(); saveCompare();
   window.addEventListener("hashchange", route);

@@ -39,7 +39,8 @@ doivent dormir dans un lit abrité.
 - Avant la 1.0, le passage 1 → 2 demandait la tête du **Fell Thunderbrute** `[games-gg-progression]` ; en 1.0 aucune tête
   n'est listée `[allthings-flame]`.
 - PinDrop rattache la couronne du palier 9 → 10 à Vorgoth `[pd-final-boss]` ; AllThings.How parle d'une couronne
-  « Broken Guard of the North » (boss différent ?). Les noms anglais sans traduction dans les fichiers compliquent le comptage `[pd-progression]`.
+  « Broken Guard of the North ». **Piste des vidéos** : cette garde brisée se récupère sur le bras d'une statue de la salle
+  du trône du château de **Cromville** (nord de Veilwater), pas sur un boss (une seule vidéo, voir [Vidéos : nouveautés 1.0](videos/01-nouveautes-1-0.md)).
 - Effets par palier (temps de Shroud, bonus d'attribut, autels) : seules des tables pré-1.0 existent (niveau 1 : 5 min,
   2 autels, +0 ; niveau 6 : 10 min, 8 autels, +5 ; niveau 9 : ≈13 min, 10 autels, +8) `[games-gg-progression]` `[xgs-base]`.
   En 1.0 : 15 autels à la Flamme 10, 16 à la Flamme 11.
@@ -77,7 +78,8 @@ En 1.0, un boss **regagne sa vie** si on quitte le combat.
 - **Points** (modèle pré-1.0, budget 184) : 2 par niveau (88 jusqu'au niv. 45), 1 par **Shroud Root** (39), 3 par
   **Elixir Well** (19 puits = 57) `[xgs-skills]`.
 - **En 1.0** : niveau 50, +18 racines, nouvelles régions sans puits dans Cinder's Cradle → **total exact non confirmé**
-  (les calculateurs en ligne sont encore en données 0.9.1.2) `[companion-10]`. À compter en jeu.
+  (les calculateurs en ligne sont encore en données 0.9.1.2) `[companion-10]`. Deux vidéos 1.0 avancent **212 points**
+  avec toutes les racines ([Vidéos : builds](videos/03-builds-competences.md)). À compter en jeu.
 - Points bonus uniquement à la **première** destruction de chaque racine/puits (par sauvegarde).
 - Les **Ancient Spires** (tours) révèlent les racines proches sur la carte ; les **obélisques** révèlent les sanctuaires `[prima-xp]` `[techraptor-poi]`.
 

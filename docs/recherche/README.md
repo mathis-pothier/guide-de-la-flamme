@@ -19,6 +19,7 @@ Recherche faite le **21/10/2026**, six jours après la sortie de la 1.0 (15/10/2
 | [07-strategies-conseils.md](07-strategies-conseils.md) | Conseils de début, erreurs fréquentes, stratégies de milieu et fin de partie |
 | [08-plan-contenu.md](08-plan-contenu.md) | Proposition de rubriques pour le site, ce qui existe déjà, ce qu'il reste à vérifier en jeu |
 | [09-sources.md](09-sources.md) | Toutes les sources consultées, avec date, fiabilité et limites (vidéos comprises) |
+| [videos/](videos/README.md) | **Résumés de 181 vidéos YouTube** (FR et EN) en 6 fiches : nouveautés 1.0, débuter, builds, équipement et farm, boss/donjons/quêtes, construction. Chaque point renvoie à sa vidéo |
 
 ## Conventions
 

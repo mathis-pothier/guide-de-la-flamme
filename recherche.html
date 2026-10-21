@@ -19,6 +19,7 @@
     .rch-nav a { display: block; padding: 8px 10px; border-radius: 10px; color: var(--text); text-decoration: none; font-size: .92rem; }
     .rch-nav a:hover { background: var(--card-2); }
     .rch-nav a[aria-current="page"] { background: var(--card); color: var(--ember-2); font-weight: 600; box-shadow: inset 3px 0 0 var(--ember); }
+    .rch-group { margin: 14px 0 4px; padding: 0 10px; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
     .rch-doc { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 26px 26px; min-width: 0; }
     .rch-doc h1 { margin-top: 1.2rem; }
     .rch-doc h2 { border-top: 1px solid var(--line); padding-top: 1.1rem; }
@@ -39,6 +40,7 @@
       .rch-layout { grid-template-columns: 1fr; gap: 12px; }
       .rch-nav { position: static; flex-direction: row; overflow-x: auto; gap: 6px; padding-bottom: 4px; }
       .rch-nav a { white-space: nowrap; background: var(--card-2); }
+      .rch-group { align-self: center; margin: 0 0 0 8px; white-space: nowrap; }
       .rch-doc { padding: 4px 16px 20px; }
     }
   </style>
@@ -58,7 +60,7 @@
   (function () {
     var pages = window.RECHERCHE || [];
     var esc = function (s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
-    var slug = function (f) { return f.replace(/\.md$/, "").toLowerCase(); };
+    var slug = function (f) { return f.replace(/\.md$/, "").replace(/\//g, "-").toLowerCase(); };
 
     // Mise en forme d'une ligne : code, gras, liens, renvois de sources, étiquettes.
     function inline(s) {
@@ -66,8 +68,9 @@
       s = s.replace(/`([^`]+)`/g, function (_, c) { codes.push(c); return "\u0000" + (codes.length - 1) + "\u0000"; });
       s = esc(s)
         .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/(^|[^*\w])\*([^*\s][^*]*?)\*(?![*\w])/g, "$1<em>$2</em>")
         .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, t, u) {
-          if (/^[\w-]+\.md$/.test(u)) return '<a href="#' + slug(u) + '">' + t + "</a>";
+          if (/^(videos\/)?[\w-]+\.md$/.test(u)) return '<a href="#' + slug(u) + '">' + t + "</a>";
           var ext = /^https?:/.test(u);
           return '<a href="' + u + '"' + (ext ? ' target="_blank" rel="noopener"' : "") + ">" + t + "</a>";
         })
@@ -126,8 +129,13 @@
 
     var nav = document.getElementById("nav"), doc = document.getElementById("doc");
     if (!pages.length) { doc.innerHTML = '<p class="muted">Contenu introuvable : lancer <code>node scripts/build-recherche.mjs</code>.</p>'; return; }
-    nav.innerHTML = pages.map(function (p, n) {
-      return '<a href="#' + slug(p.fichier) + '">' + (n ? n + ". " : "") + esc(p.fichier === "README.md" ? "Sommaire" : p.titre) + "</a>";
+    var num = 0;
+    nav.innerHTML = pages.map(function (p) {
+      var sommaire = /(^|\/)README\.md$/.test(p.fichier), groupe = "";
+      if (sommaire) num = 0; else num++;
+      if (p.fichier === "videos/README.md") groupe = '<div class="rch-group">Résumés des vidéos YouTube</div>';
+      var nom = sommaire ? "Sommaire" : num + ". " + p.titre.replace(/ \(d'après les vidéos\)$/, "");
+      return groupe + '<a href="#' + slug(p.fichier) + '">' + esc(nom) + "</a>";
     }).join("");
 
     function show() {
@@ -137,7 +145,7 @@
       doc.innerHTML = render(p.md) + '<div class="rch-pager"><span>' +
         (prev ? '<a href="#' + slug(prev.fichier) + '">← ' + esc(prev.titre) + "</a>" : "") + "</span><span>" +
         (next ? '<a href="#' + slug(next.fichier) + '">' + esc(next.titre) + " →</a>" : "") + "</span></div>";
-      [].forEach.call(nav.children, function (a, k) { k === n ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"); });
+      [].forEach.call(nav.querySelectorAll("a"), function (a, k) { k === n ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"); });
       document.title = (n ? p.titre + " · " : "") + "Recherche Enshrouded 1.0";
       window.scrollTo(0, 0);
     }

@@ -23,17 +23,21 @@ Guide de fan, non officiel, en français. Site statique, sans dépendance ni com
 | `data/skills.js` | Compétences de l'arbre (coût, rangs, effet, prérequis) | **données** |
 | `data/builds.js` | Styles de jeu, builds, recommandations de compétences | **éditorial** |
 | `data/versions.js` | Version du jeu prise en compte, couverture, historique des patchs | suivi |
-| `app.js`, `styles.css`, `index.html` | Interface | — |
+| `app.js`, `styles.css`, `index.html` | Interface : `app.js` affiche toutes les vues, `styles.css` les composants | — |
+| `refonte/refonte.css`, `refonte/refonte.js`, `refonte/img/` | Habillage du site dans le style du jeu (chargé par `index.html` après `styles.css`) : accueil, recherche globale (Ctrl K ou « / »), menu latéral sur ordinateur et barre d'onglets en bas sur mobile. Personnages tirés des rendus de sets du wiki | — |
+| `ancien.html` | Ancienne présentation du site (mêmes données, lien en pied de page) ; `refonte.html` redirige vers l'accueil | — |
 | `scripts/validate.mjs` | Contrôle de cohérence des données | outil |
 | `scripts/check-updates.mjs` | Détection des nouvelles annonces Steam | outil |
 | `data/catalog.js`, `data/map.js` | Catalogue de 833 objets et carte, générés depuis le wiki | **données générées** |
 | `data/builds-1.0.js` | Équipement 1.0 pièce par pièce par build (guides KeenGamer, AoEAH, PinDrop…) | **éditorial** |
 | `data/construction.js` | Onglet Construction : blocs (wiki), bâtiments et emplacements (guides), autel, confort, artisans, vidéos | **données + éditorial** |
+| `data/guides.js` | Onglet Guides : 24 guides rédigés en 7 catégories à partir de `docs/recherche/` (sources et points « à vérifier en jeu » par guide) | **éditorial** |
 | `data/merge.js` | Fusion objets vérifiés + catalogue du wiki | — |
 | `scripts/collect.html` | Collecte du wiki depuis le navigateur (avec `node scripts/serve.mjs 8081 --collect`) | outil |
 | `scripts/build-data.mjs` | Transforme la collecte en catalogue et carte | outil |
 | `recherche.html`, `docs/recherche/*.md` | Notes de recherche Enshrouded 1.0 (page à part, non liée au menu) ; `node scripts/build-recherche.mjs` régénère `docs/recherche/contenu.js` après modification | **recherche** |
 | `scripts/fetch-block-images.mjs` | Images des blocs : icône du wiki officiel, sinon capture de l'établi (wiki Fandom) recadrée → `images/blocs/` + `data/blocs-images.js` | outil |
+| `scripts/guide-images.py` | Visuels des guides → `images/guides/` : fonds de carte découpés dans les tuiles du wiki (les épingles sont placées par `app.js` d'après `data/map.js`) et rendus de sets en WebP. `python3 scripts/guide-images.py` (Pillow) | outil |
 | `scripts/fetch-images.mjs` | Copie locale des images, tuiles et icônes de carte → `images/` + `data/images.js` | outil |
 | `data/map-config.js` | Carte : catégories, précisions, raretés, statuts, dépôt de stockage, validation d'un point (partagée site + `validate.mjs`) | configuration |
 | `data/map-points.json` | Points ajoutés par les administrateurs depuis l'onglet Carte (vide au départ, aucune donnée de démonstration) | **données** |
@@ -55,6 +59,7 @@ affichent donc toujours la fiabilité des données sous-jacentes.
 - **Carte** : carte dynamique unique (Leaflet) : lieux du wiki, objets, blocs, survivants, emplacements de base et ajouts des
   administrateurs ; filtres par catégorie et rareté, recherche, regroupement des marqueurs, légende, fiche par point (nom,
   catégorie, description, rareté, source, fiabilité de la position, date de vérification). Voir [Carte dynamique](#carte-dynamique).
+- **Guides** : 24 guides pratiques classés par catégorie (débuter, Flamme, boss, builds, équipement, donjons et énigmes, construction), avec sommaire, encadrés « à vérifier en jeu » et sources.
 - **Comparateur** : jusqu'à 4 objets côte à côte, meilleure valeur surlignée.
 - **Mises à jour & sources** : version, couverture des données, historique des patchs, registre des sources.
 
@@ -147,6 +152,7 @@ en panne, la collecte échoue sans rien modifier et la suivante prend le relais.
 - **Données du wiki** (catalogue d'objets, marqueurs de carte, niveaux de zones) : [enshrouded.wiki.gg](https://enshrouded.wiki.gg),
   contenu sous licence Creative Commons BY-SA 4.0 (licence par défaut des wikis wiki.gg — vérifier la page *Copyrights* du wiki).
   Les fichiers `data/catalog.js`, `data/map.js` et `.collect/` en dérivent et restent sous cette licence.
+- **Visuels des guides** (`images/guides/`) : uniquement dérivés des images ci-dessus (rendus de carte et de sets © Keen Games via le wiki), avec le crédit affiché sous chaque image. Aucune image d'autres sites de guides ni de vidéos.
 - **Autres sources** (PinDrop, KeenGamer, AoEAH, Hack The Minotaur…) : citées et liées objet par objet dans le site (onglet *Sources*).
 - **Icônes de secours** : dessinées pour ce site, en partie d'après [Lucide](https://lucide.dev) (licence ISC).
 - **Carte** : [Leaflet](https://leafletjs.com) (BSD-2-Clause) et [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) (MIT), chargés depuis cdnjs.
