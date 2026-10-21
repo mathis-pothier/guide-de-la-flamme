@@ -123,6 +123,13 @@ body.rf { padding-bottom: calc(66px + env(safe-area-inset-bottom)); }
   .rf-link:hover { color: var(--gold-2) !important; }
   .rf .wrap { padding: 0 32px; }
 }
+/* ── Bouton de langue (FR / EN) ── */
+.rf-lang { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; width: fit-content; padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font: 700 .8rem/1 "Alegreya Sans", sans-serif; letter-spacing: .06em; }
+.rf-lang .ic { width: 16px; height: 16px; }
+.rf-lang:hover { border-color: var(--gold); color: var(--text); }
+.rf-lang:focus-visible, .rf-lang-mini:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+.rf-lang-cur { color: var(--gold-2); }
+.rf-lang-sep, .rf-lang-alt { opacity: .6; }
 kbd { font: 600 .72rem/1 "Alegreya Sans", sans-serif; padding: 3px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; color: var(--muted); background: rgba(0,0,0,.25); }
 
 /* ── Cadres : panneaux sombres à coins dorés ── */

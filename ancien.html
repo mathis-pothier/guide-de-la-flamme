@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css">
-  <link rel="stylesheet" href="styles.css?v=202610212108">
+  <link rel="stylesheet" href="styles.css?v=202610212204">
 </head>
 <body>
   <header class="site-header">
@@ -20,6 +20,7 @@
       </a>
       <div class="header-actions">
         <span id="version-chip" class="version-chip"></span>
+        <button class="icon-btn rf-lang-mini" type="button" data-lang-switch aria-label="Switch to English" title="Switch to English"><span class="rf-lang-cur">FR</span></button>
         <a class="icon-btn" href="./" aria-label="Nouvelle présentation du site" title="Nouvelle présentation du site"><span data-icon="star"></span></a>
         <button class="icon-btn" id="help-btn" aria-label="Comment lire ce site" title="Comment lire ce site"><span data-icon="help"></span></button>
       </div>
@@ -52,24 +53,26 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
-  <script src="icons.js?v=202610212108"></script>
-  <script src="data/sources.js?v=202610212108"></script>
-  <script src="data/items.js?v=202610212108"></script>
-  <script src="data/skills.js?v=202610212108"></script>
-  <script src="data/builds.js?v=202610212108"></script>
-  <script src="data/builds-1.0.js?v=202610212108"></script>
-  <script src="data/versions.js?v=202610212108"></script>
-  <script src="data/catalog.js?v=202610212108"></script>
-  <script src="data/images.js?v=202610212108"></script>
-  <script src="data/map.js?v=202610212108"></script>
-  <script src="data/progression.js?v=202610212108"></script>
-  <script src="data/tronc-commun.js?v=202610212108"></script>
-  <script src="data/construction.js?v=202610212108"></script>
-  <script src="data/blocs-images.js?v=202610212108"></script>
-  <script src="data/guides.js?v=202610212108"></script>
-  <script src="data/map-config.js?v=202610212108"></script>
-  <script src="data/merge.js?v=202610212108"></script>
-  <script src="admin.js?v=202610212108"></script>
-  <script src="app.js?v=202610212108"></script>
+  <script src="icons.js?v=202610212204"></script>
+  <script src="i18n.js?v=202610212204"></script>
+  <script src="data/sources.js?v=202610212204"></script>
+  <script src="data/items.js?v=202610212204"></script>
+  <script src="data/skills.js?v=202610212204"></script>
+  <script src="data/builds.js?v=202610212204"></script>
+  <script src="data/builds-1.0.js?v=202610212204"></script>
+  <script src="data/versions.js?v=202610212204"></script>
+  <script src="data/catalog.js?v=202610212204"></script>
+  <script src="data/images.js?v=202610212204"></script>
+  <script src="data/map.js?v=202610212204"></script>
+  <script src="data/progression.js?v=202610212204"></script>
+  <script src="data/tronc-commun.js?v=202610212204"></script>
+  <script src="data/construction.js?v=202610212204"></script>
+  <script src="data/blocs-images.js?v=202610212204"></script>
+  <script src="data/guides.js?v=202610212204"></script>
+  <script src="data/map-config.js?v=202610212204"></script>
+  <script>ENS_I18N.charger()</script>
+  <script src="data/merge.js?v=202610212204"></script>
+  <script src="admin.js?v=202610212204"></script>
+  <script src="app.js?v=202610212204"></script>
 </body>
 </html>

@@ -1,0 +1,141 @@
+// Noms d'objets : anglais (wiki) → français. Traductions du site (non officielles) sauf indication contraire.
+// Les noms officiels du wiki français (officiels-fr.mjs) sont prioritaires.
+// Règles (scripts/build-i18n.mjs) : pièce de set = PIECES + SETS ; sort = SORTS (+ « éternel(le) », chiffre romain) ;
+// anneau de santé/mana/endurance = ANNEAUX + GRADES ; le reste = OBJETS.
+
+export const PIECES = {
+  Boots: "Bottes", Chest: "Plastron", Chestplate: "Plastron", "Chest Plate": "Plastron", Gloves: "Gants", Helmet: "Casque", Hood: "Capuche",
+  Hat: "Chapeau", Trousers: "Pantalon", Pants: "Jambières", Set: "Ensemble", Vest: "Veste", Shoes: "Chaussures", Tunic: "Tunique",
+  Headwrap: "Turban", Headpiece: "Coiffe", Crown: "Couronne", Shirt: "Chemise", Arms: "Brassards", Shield: "Bouclier"
+};
+
+// Complément du nom de set (« Bottes » + complément)
+export const SETS = {
+  "Adventurer": "d'aventurier", "Alchemist Apprentice": "d'apprenti alchimiste", "Alpine Antler": "des bois alpins", "Archer": "d'archer",
+  "Archmage": "d'archimage", "Ashwind Strider": "de l'arpenteur du vent cendré", "Assassin": "d'assassin", "Blackguard": "de chevalier noir",
+  "Bloodfeather": "de plume de sang", "Brazen Bull": "du taureau d'airain", "Crestflame": "de crête de flamme", "Cutthroat": "d'égorgeur",
+  "Deadeye": "de tireur infaillible", "Deerstalker": "de traqueur de cerfs", "Eagle Eye": "d'œil d'aigle", "Elder": "d'ancien",
+  "Elite Hollow": "de l'élite creuse", "Emberguard": "de garde-braise", "Emerguard": "de garde-émeraude", "Flame Arcanist": "d'arcaniste de la Flamme",
+  "Fowler": "d'oiseleur", "Frostbite Slasher": "du tailladeur gelé", "Gloom Monarch": "du monarque des ténèbres", "Golden Bulwark": "du rempart doré",
+  "Guard of the North": "de la garde du Nord", "Guardian": "du protecteur", "Hailcaster": "de lance-grêle", "Hawk": "du faucon",
+  "Healer": "de guérisseur", "Herbalist": "d'herboriste", "Hunter": "de chasseur", "Knight": "de chevalier", "Lifelock": "de lien de vie",
+  "Mage": "de mage", "Magician": "d'enchanteur", "Marksman": "de tireur d'élite", "Mercenary": "de mercenaire",
+  "Mountain's Shadow": "de l'ombre de la montagne", "Mystic": "de mystique", "Omen": "du présage", "Pearlfrost Mentor": "du mentor de givre nacré",
+  "Plaguebringer": "de porte-peste", "Quetzal Hunter": "de chasseur de quetzal", "Radiant Paladin": "de paladin radieux", "Ranger": "de rôdeur",
+  "Rising Fighter": "de combattant émergent", "Rogue": "de voleur", "Sage": "de sage", "Scout": "d'éclaireur", "Sharpshooter": "de franc-tireur",
+  "Skull Stalker": "du traqueur de crânes", "Sky Specter": "du spectre céleste", "Soldier": "de soldat", "Spellbreaker": "de brise-sort",
+  "Sunpiercer": "de perce-soleil", "Tank": "de tank", "Thaumaturge": "de thaumaturge", "Tidecaller": "d'invocateur des marées",
+  "Trailblazer": "de pionnier", "Vorgoth's Soulbound": "de l'âme liée de Vorgoth", "Warden": "du gardien", "Warlock": "de sorcier",
+  "Warrior": "de guerrier", "Waveborne Ritualist": "de ritualiste né des vagues", "Wizard": "de magicien", "Wolf's Fang": "du croc de loup",
+  "Knight Set": "de chevalier"
+};
+
+// Sorts : [nom, genre] ; « Eternal X II » → « X éternel(le) II »
+export const SORTS = {
+  "Fireball": ["Boule de feu", "f"], "Fire Bolt": ["Trait de feu", "m"], "Ice Bolt": ["Trait de glace", "m"], "Ball Lightning": ["Boule de foudre", "f"],
+  "Blizzard": ["Blizzard", "m"], "Bonestorm": ["Tempête d'os", "f"], "Bone Channel": ["Canal d'os", "m"], "Chain Heal": ["Soin en chaîne", "m"],
+  "Chain Lightning": ["Éclair en chaîne", "m"], "Entangle": ["Enchevêtrement", "m"], "Fire Totem": ["Totem de feu", "m"], "Ice Totem": ["Totem de glace", "m"],
+  "Shock Totem": ["Totem de choc", "m"], "Heal Beam Channel": ["Canal de rayon de soin", "m"], "Heal Beam": ["Rayon de soin", "m"],
+  "Heal Cascade": ["Cascade de soin", "f"], "Heal Channel": ["Canal de soin", "m"], "Hollow Wretch": ["Misérable creux", "m"],
+  "Light Burst": ["Éclat de lumière", "m"], "Lightning Channel": ["Canal de foudre", "m"], "Pillar Of Flames": ["Pilier de flammes", "m"],
+  "Protective Barrier": ["Barrière protectrice", "f"], "Shock Wisp": ["Feu follet de choc", "m"], "Shroud Beam Channel": ["Canal de rayon du Voile", "m"],
+  "Shroud Beam": ["Rayon du Voile", "m"], "Shroud Meteor": ["Météore du Voile", "m"], "Acid Bite": ["Morsure acide", "f"],
+  "Arc Lightning": ["Arc électrique", "m"], "Mana Drain": ["Drain de mana", "m"]
+};
+
+export const ANNEAUX = { Health: "de santé", Mana: "de mana", Stamina: "d'endurance" };
+export const GRADES = { Lesser: "mineur", Greater: "majeur", Superior: "supérieur", Ultimate: "ultime", Exceptional: "exceptionnel", Ancient: "ancien" };
+
+export const OBJETS = {
+  // Armes
+  "Battering Ram Hammer": "Marteau bélier", "Darkwood Axe": "Hache de bois sombre", "Ancestral Star": "Étoile ancestrale", "Aerostriker": "Frappe-ciel",
+  "Chieftain's Hammer": "Marteau du chef", "Deeproot Axe": "Hache des racines profondes", "Spiked Greatsword": "Espadon à pointes", "Fool's Errand": "Vaine quête",
+  "Aurora Sword": "Épée aurore", "Broodmother's Eye": "Œil de la mère de couvée", "Rusty Sword": "Épée rouillée", "Wolf's Claw": "Griffe de loup",
+  "Chief Drak'Dal Axe": "Hache du chef Drak'Dal", "Mace of Wrath": "Masse de la colère", "Vesztah's Mace": "Masse de Vesztah", "Champion's Axe": "Hache du champion",
+  "Adorned Drakling Daggers": "Dagues de drakelin ornées", "Blink Daggers": "Dagues éclair", "Solstice Daggers": "Dagues du solstice", "Ignited Bow": "Arc embrasé",
+  "Arsonist's Bow": "Arc du pyromane", "Draconian Bow": "Arc draconique", "Dragonsbane": "Fléau des dragons", "Banebringer": "Porte-fléau",
+  "Polymath's Wand": "Baguette de l'érudit", "Reaper's Wand": "Baguette de la faucheuse", "Candlelight Wand": "Baguette de chandelle", "Staff of Guidance": "Bâton de guidance",
+  "Oracle's Everblue": "Bleu éternel de l'oracle", "Eternal Fireball": "Boule de feu éternelle", "Pikemead's Bulwark": "Rempart de Pikemead", "Riptide": "Contre-courant",
+  "Brazen Bull Shield": "Bouclier du taureau d'airain", "Wolf's Fang Shield": "Bouclier du croc de loup", "Mountain's Shadow Shield": "Bouclier de l'ombre de la montagne",
+  "Golden Bulwark Shield": "Bouclier du rempart doré", "Sunpiercer Shield": "Bouclier de perce-soleil", "Crestflame Shield": "Bouclier de crête de flamme",
+  "Prismatic Ward": "Égide prismatique", "Flaming Gauntlets": "Gantelets enflammés",
+  "Commander's Ring": "Anneau du commandant", "Ring of the Mother Flame": "Anneau de la Flamme mère", "Gemini Ring": "Anneau des Gémeaux", "Ring of the Ancients": "Anneau des Anciens",
+  "Abyssal Wing Axe": "Hache aile des abysses", "Abysswalker": "Marcheur des abysses", "Acid Cleaver": "Couperet acide", "Alchemist's Ring": "Anneau de l'alchimiste",
+  "Ancient Drak Wand": "Baguette drak antique", "Antler Bow": "Arc en bois de cerf", "Apex Machete": "Machette suprême", "Apprentice Wand": "Baguette d'apprenti",
+  "Avalanche Starter": "Déclencheur d'avalanche", "Barbarian Greatsword": "Espadon barbare", "Baroness Daggers": "Dagues de la baronne", "Batwing Axe": "Hache aile de chauve-souris",
+  "Blackened Staff": "Bâton noirci", "Blazing Wand": "Baguette flamboyante", "Blessed Club": "Gourdin béni", "Blizzard Wand": "Baguette de blizzard",
+  "Blood Omen Axe": "Hache du présage de sang", "Blunt Knives": "Couteaux émoussés", "Bonebreaker": "Brise-os", "Bonescourge Mace": "Masse fléau-des-os",
+  "Boreal Axe": "Hache boréale", "Bow": "Arc", "Bow Of The Serpent": "Arc du serpent", "Bright Morningstar": "Étoile du matin brillante", "Brisk Bow": "Arc vif",
+  "Bronze Sword": "Épée de bronze", "Celestial Axe": "Hache céleste", "Chimerical Greatsword": "Espadon chimérique", "Circlet Of Lightning": "Diadème de foudre",
+  "Circus Knives": "Couteaux de cirque", "Clearwater Staff": "Bâton d'eau claire", "Club": "Gourdin", "Club of Defiance": "Gourdin du défi",
+  "Coalescent Wand": "Baguette coalescente", "Coiling Wand": "Baguette spiralée", "Composite Bow": "Arc composite", "Corrosive Daggers": "Dagues corrosives",
+  "Crackling Wand": "Baguette crépitante", "Crown Crusher": "Broie-couronne", "Cryptic Wand": "Baguette énigmatique", "Crystal Knives": "Couteaux de cristal",
+  "Crystalwater Staff": "Bâton d'eau cristalline", "Curse Bringer Axe": "Hache porte-malédiction", "Daggers": "Dagues", "Dark Cleaver": "Couperet sombre",
+  "Dark Morningstar": "Étoile du matin sombre", "Dark Staff": "Bâton sombre", "Darya's Staff": "Bâton de Darya", "Darya's Wand": "Baguette de Darya",
+  "Death Gazer Axe": "Hache du regard de la mort", "Deceiving Staff": "Bâton trompeur", "Devilish Bow": "Arc diabolique", "Dimweald Axe": "Hache de Sombrebois",
+  "Dimweald Hammer": "Marteau de Sombrebois", "Dragon Sword": "Épée du dragon", "Dragon's Wing": "Aile de dragon", "Drak Whistle Bow": "Arc sifflet drak",
+  "Drak'Dal Spine": "Échine de Drak'Dal", "Drakling Daggers": "Dagues de drakelin", "Dreadbane": "Fléau de l'effroi", "Eclipsed Blade": "Lame éclipsée",
+  "Elder's Staff": "Bâton de l'ancien", "Enflamed Sword": "Épée enflammée", "Enhanced Spiked Club": "Gourdin à pointes renforcé", "Enshrouded Axe": "Hache voilée",
+  "Ethereal Plane": "Plan éthéré", "Executioner's Axe": "Hache du bourreau", "Explorer's Machete": "Machette de l'explorateur", "Extinguished Sword": "Épée éteinte",
+  "Falk Fall Daggers": "Dagues de la chute de Falk", "Fallen Wing Axe": "Hache aile déchue", "Fang Blade": "Lame-croc", "Fearsome Club": "Gourdin redoutable",
+  "Feathered Mace": "Masse à plumes", "Fell Broad Sword": "Large épée funeste", "Fell Commander Bow": "Arc du commandant funeste", "Fell Impaler Bow": "Arc de l'empaleur funeste",
+  "Fell Shield": "Bouclier funeste", "Fell Thunderbrute Greatsword": "Espadon de la brute tonnante funeste", "Fenrig's Axe": "Hache de Fenrig", "Final Gambit": "Ultime coup",
+  "Fine Copperblade Greatsword": "Espadon fin à lame de cuivre", "Flail Of Misery": "Fléau de la misère", "Fleshgrinder": "Broie-chair", "Fool's Demise": "Perte du fou",
+  "Forest Longbow": "Arc long de la forêt", "Forsaken": "Abandonnée", "Freshblood Mace": "Masse de sang frais", "Frost Smasher": "Broyeur de givre", "Frost Wand": "Baguette de givre",
+  "Frostwing Axe": "Hache aile de givre", "Frozen Core Wand": "Baguette à cœur gelé", "Frozen Gauntlets": "Gantelets gelés", "Fur Armor Set": "Ensemble d'armure en fourrure",
+  "Ghostly Shield": "Bouclier fantomatique", "Gleaming Staff": "Bâton étincelant", "Goat Hammer": "Marteau de chèvre", "Golden Recruit Axe": "Hache dorée de recrue",
+  "Golden War Hero Axe": "Hache dorée du héros de guerre", "Goldlaced Greatsword": "Espadon lacé d'or", "Gorestriker": "Frappe-sang", "Graven Idol Axe": "Hache de l'idole gravée",
+  "Great Mace": "Grande masse", "Greater Golden Twinflame Sword": "Grande épée dorée à double flamme", "Greater Thunderblast Axe": "Grande hache de tonnerre",
+  "Greatsword Gauntlets": "Gantelets d'espadon", "Greatsword Of Rivalry": "Espadon de la rivalité", "Greatsword Of The Old Order": "Espadon de l'Ancien Ordre",
+  "Grey Blades": "Lames grises", "Guard Of The North Sword": "Épée de la garde du Nord", "Guillotine": "Guillotine", "Hailscourge": "Fléau de grêle",
+  "Hair Splitter": "Fend-cheveu", "Half-Light Halos": "Halos de pénombre", "Hammer Of The Piercing Gaze": "Marteau du regard perçant", "Hatchet": "Hachette",
+  "Head Pounder": "Cogne-crâne", "Helix": "Hélice", "Hero's Shield": "Bouclier du héros", "Hopeful Glimmer": "Lueur d'espoir", "Horn Daggers": "Dagues de corne",
+  "Horned Beast Bow": "Arc de la bête cornue", "Horned Greatsword": "Espadon cornu", "Hunter's Bow": "Arc du chasseur", "Hunter's Ring": "Anneau du chasseur",
+  "Ice Blade": "Lame de glace", "Ice-Coated Daggers": "Dagues givrées", "Icicle Sword": "Épée stalactite", "Ignited Hammer": "Marteau embrasé", "Infernal Wand": "Baguette infernale",
+  "Invisible Barrier": "Barrière invisible", "Iron Claw Club": "Gourdin à griffe de fer", "Ironheart Greatsword": "Espadon cœur-de-fer", "Jagged Obsidian Axe": "Hache d'obsidienne dentelée",
+  "Jezmina's Apotheosis": "Apothéose de Jezmina", "Lesser Golden Twinflame Sword": "Petite épée dorée à double flamme", "Lightforged Axe": "Hache forgée de lumière",
+  "Lightforged Daggers": "Dagues forgées de lumière", "Lumenshade Axe": "Hache d'ombre-lumière", "Luminous Wand": "Baguette lumineuse", "Lupa's Scalper": "Scalpeur de Lupa",
+  "Mace of Denial": "Masse du déni", "Mace-like Club": "Gourdin-masse", "Magic Shield": "Bouclier magique", "Major Arcana": "Arcanes majeurs", "Makeshift Daggers": "Dagues de fortune",
+  "Mandible Crusher": "Broie-mandibule", "Massive Hammer": "Marteau massif", "Masterful Mace": "Masse de maître", "Meat Chopper": "Hachoir à viande",
+  "Megalodon Greatsword": "Espadon mégalodon", "Metalstar Mace": "Masse étoile de métal", "Minor Arcana": "Arcanes mineurs", "Mirage": "Mirage", "Misfortune Mace": "Masse de l'infortune",
+  "Morningdew Greatsword": "Espadon rosée du matin", "Mother's Eye": "Œil de la mère", "Mythic Wand": "Baguette mythique", "New Moon Greatsword": "Espadon de la nouvelle lune",
+  "Nightfall": "Tombée de la nuit", "Nightnebula": "Nébuleuse nocturne", "Nightwind Bow": "Arc du vent nocturne", "Noble Sword": "Épée noble", "Nova": "Nova",
+  "Oath Breaker": "Brise-serment", "Ornate Greatsword": "Espadon orné", "Ornate Wood Bow": "Arc en bois orné", "Parade Daggers": "Dagues de parade", "Pine Shortbow": "Arc court en pin",
+  "Princely Greatsword": "Espadon princier", "Protector Greatsword": "Espadon du protecteur", "Proud Daggers": "Dagues fières", "Provisional Scythe": "Faux de fortune",
+  "Pyreblade": "Lame-bûcher", "Ragged Set": "Ensemble en haillons", "Rattlesnake Bow": "Arc crotale", "Recent Drak Wand": "Baguette drak récente",
+  "Ring of Endless Life": "Anneau de vie sans fin", "Ring of Frost": "Anneau de givre", "Ring of Rapacity": "Anneau de rapacité", "Ring of Rivulets": "Anneau des ruisseaux",
+  "Ring of the Burning Light": "Anneau de la lumière ardente", "Ring of the Ether": "Anneau de l'éther", "Ring of the Flame": "Anneau de la Flamme", "Ring of the Heir": "Anneau de l'héritier",
+  "Ring of Thundersnow": "Anneau de neige d'orage", "Ritual Tempest Wand": "Baguette de tempête rituelle", "Root Staff": "Bâton de racine", "Rotblood": "Sang-pourri",
+  "Ruffian's Axe": "Hache du voyou", "Rune Apprentice's Sword": "Épée de l'apprenti des runes", "Rune Master's Sword": "Épée du maître des runes", "Rusty Greatsword": "Espadon rouillé",
+  "Rusty Short Sword": "Épée courte rouillée", "Sacrificial Vukah Dagger": "Dague sacrificielle vukah", "Sacrilegious Steelsword": "Épée d'acier sacrilège",
+  "Sandstorm Swiftblades": "Lames rapides de tempête de sable", "Scavenger Miner Axe": "Hache de mineur pillard", "Scholar's Wand": "Baguette de l'érudit", "Scorching Wand": "Baguette brûlante",
+  "Scrappy Greatsword": "Espadon de bric et de broc", "Scrappy Sword": "Épée de bric et de broc", "Shadowbane": "Fléau des ombres", "Sharktooth Greatsword": "Espadon dent-de-requin",
+  "Sharpened Broadsword": "Large épée aiguisée", "Shellbreaker Daggers": "Dagues brise-carapace", "Shepherd's Lightning": "Foudre du berger", "Shepherd's Staff": "Bâton du berger",
+  "Shield": "Bouclier", "Shield of Light": "Bouclier de lumière", "Shivering Skeans": "Coutelas frissonnants", "Shivs": "Surins", "Shocking Ice Wand": "Baguette de glace électrique",
+  "Short Sword": "Épée courte", "Shroud Corrupted Hammer": "Marteau corrompu par le Voile", "Shroud Weaver": "Tisseur de Voile", "Shroudbinder Wand": "Baguette de lieur de Voile",
+  "Sickle Greatsword": "Espadon faucille", "Sigil Ring of the Elder Guard": "Chevalière de la vieille garde", "Silver Storm": "Tempête d'argent", "Silvernight Greatsword": "Espadon nuit d'argent",
+  "Silvershot Bow": "Arc tir d'argent", "Sinister Crescent Staff": "Bâton du croissant sinistre", "Skull Splitter Axe": "Hache fend-crâne", "Sleek Daggers": "Dagues effilées",
+  "Snakespine Wand": "Baguette échine de serpent", "Snowflake Splicer": "Fendeur de flocons", "Soothsayer": "Devin", "Spectral Ward": "Égide spectrale", "Spiked Bow": "Arc à pointes",
+  "Spiked Club": "Gourdin à pointes", "Spine Of Dalszul": "Échine de Dalszul", "Spine Splinter": "Éclat d'échine", "Spinechill Axe": "Hache frisson-d'échine", "Spiritual Cane": "Canne spirituelle",
+  "Staff": "Bâton", "Staff Of Reeds": "Bâton de roseaux", "Staff Of The Moor": "Bâton de la lande", "Staff of the Ram": "Bâton du bélier", "Staff Of The Serpent": "Bâton du serpent",
+  "Staff of the Taurus": "Bâton du Taureau", "Steel Moon Axe": "Hache lune d'acier", "Stonewrought Sword": "Épée forgée de pierre", "Stormbound Staff": "Bâton lié aux tempêtes",
+  "Sun Axe": "Hache du soleil", "Sun Hammer": "Marteau du soleil", "Sunbeam": "Rayon de soleil", "Sword of Radiance": "Épée de l'éclat", "Sword Of The Serpent": "Épée du serpent",
+  "Tainted Axe": "Hache souillée", "Talion's Bow": "Arc de Talion", "Tarred Bow": "Arc goudronné", "Temple Keeper's Bow": "Arc du gardien du temple", "The Needles": "Les Aiguilles",
+  "Thunderbolt Axe": "Hache de la foudre", "Tomb Raider's Bow": "Arc du pilleur de tombes", "Torchlight Staff": "Bâton de torche", "Totem Wand": "Baguette totem",
+  "Totemhead Mace": "Masse à tête de totem", "Totempole Mace": "Masse mât totémique", "Traitor's Bow": "Arc du traître", "Transcendental Screen": "Écran transcendantal",
+  "Tribal Hammer": "Marteau tribal", "Twisting Wand": "Baguette torsadée", "Undergrowth Staff": "Bâton des sous-bois", "Valiant Shield": "Bouclier vaillant",
+  "Valor Heart Daggers": "Dagues cœur vaillant", "Vaporous Staff": "Bâton vaporeux", "Veilrift Axe": "Hache fendeuse de voile", "Venomkiss": "Baiser venimeux",
+  "Violet Storm": "Tempête violette", "Voidcaller": "Appel du néant", "Wand": "Baguette", "Wand Of Bloodflow": "Baguette du flux sanguin", "Warrior Arms": "Brassards de guerrier",
+  "White Wolf Sword": "Épée du loup blanc", "Wildheart Seekers": "Chercheurs cœur-sauvage", "Wildwood Shortbow": "Arc court des bois sauvages", "Winged Shadow": "Ombre ailée",
+  "Wolf Daggers": "Dagues du loup", "Wolf Pack Axe": "Hache de la meute", "Wolf's Hydra": "Hydre du loup", "Wolf's Maw": "Gueule du loup", "Wolf's Snarl Longbow": "Arc long du grognement de loup",
+  "Wooden Shield": "Bouclier en bois", "Wooden Tooth": "Dent de bois", "Guardian Shield": "Bouclier du protecteur", "Mercenary Shield": "Bouclier de mercenaire",
+  "Rogue Shield": "Bouclier de voleur", "Soldier Shield": "Bouclier de soldat", "Rising Fighter Shield": "Bouclier de combattant émergent", "Acid Bite": "Morsure acide",
+  "Eternal Acid Bite": "Morsure acide éternelle",
+  // Sets du site (noms « Set X »)
+  "Set Rising Fighter": "Ensemble de combattant émergent", "Set Knight": "Ensemble de chevalier", "Set Brazen Bull": "Ensemble du taureau d'airain",
+  "Set Golden Bulwark": "Ensemble du rempart doré", "Set Crestflame": "Ensemble de crête de flamme", "Set Emerguard": "Ensemble de garde-émeraude", "Set Scout": "Ensemble d'éclaireur",
+  "Set Hunter": "Ensemble de chasseur", "Set Deadeye": "Ensemble de tireur infaillible", "Set Alpine Antler": "Ensemble des bois alpins", "Set Skull Stalker": "Ensemble du traqueur de crânes",
+  "Set Ashwind Strider": "Ensemble de l'arpenteur du vent cendré", "Set Sky Specter": "Ensemble du spectre céleste", "Set Alchemist Apprentice": "Ensemble d'apprenti alchimiste",
+  "Set Mage": "Ensemble de mage", "Set Wizard": "Ensemble de magicien", "Set Healer": "Ensemble de guérisseur", "Set Archmage": "Ensemble d'archimage", "Set Elder": "Ensemble d'ancien",
+  "Set Hailcaster": "Ensemble de lance-grêle", "Set Flame Arcanist": "Ensemble d'arcaniste de la Flamme", "Set Lifelock": "Ensemble de lien de vie", "Set Vorgoth's Soulbound": "Ensemble de l'âme liée de Vorgoth"
+};

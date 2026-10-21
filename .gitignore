@@ -7,3 +7,4 @@ desktop.ini
 # Node (aucune dépendance, par précaution)
 node_modules/
 captures-carte/
+data/i18n/a-traduire.txt

@@ -5,6 +5,7 @@
 window.ENS_ADMIN = (() => {
   "use strict";
   const C = window.ENS.mapConfig.stockage;
+  const t = (window.ENS_I18N && window.ENS_I18N.t) || ((s, ...a) => String(s).replace(/{(d+)}/g, (_, i) => a[i] ?? ""));
   const KEY = "ens.ghToken";
   // Serveur de test local (scripts/mock-github.mjs) : uniquement quand le site tourne sur la machine du développeur.
   const isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
@@ -28,13 +29,13 @@ window.ENS_ADMIN = (() => {
         cache: "no-store",
         headers: { Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", ...(token ? { Authorization: "Bearer " + token } : {}), ...(opts.body ? { "Content-Type": "application/json" } : {}) }
       });
-    } catch { throw new Error("GitHub est injoignable (connexion réseau ?)."); }
+    } catch { throw new Error(t("GitHub est injoignable (connexion réseau ?).")); }
     const data = r.status === 204 ? null : await r.json().catch(() => null);
     if (!r.ok) {
-      const msg = r.status === 401 ? "Jeton refusé par GitHub (invalide ou expiré)."
-        : r.status === 403 ? "GitHub refuse l'opération : ce jeton n'a pas le droit d'écriture sur le dépôt (ou la limite de requêtes est atteinte)."
-        : r.status === 404 ? "Dépôt ou fichier introuvable pour ce jeton (droits insuffisants ?)."
-        : r.status === 409 || r.status === 422 ? "conflit" : `Erreur GitHub ${r.status}${data?.message ? " : " + data.message : ""}.`;
+      const msg = r.status === 401 ? t("Jeton refusé par GitHub (invalide ou expiré).")
+        : r.status === 403 ? t("GitHub refuse l'opération : ce jeton n'a pas le droit d'écriture sur le dépôt (ou la limite de requêtes est atteinte).")
+        : r.status === 404 ? t("Dépôt ou fichier introuvable pour ce jeton (droits insuffisants ?).")
+        : r.status === 409 || r.status === 422 ? "conflit" : t("Erreur GitHub {0}", r.status) + (data?.message ? " : " + data.message : "") + ".";
       const err = new Error(msg); err.status = r.status; throw err;
     }
     return data;
@@ -45,10 +46,10 @@ window.ENS_ADMIN = (() => {
     const prev = token;
     token = String(t || "").trim();
     try {
-      if (!/^[A-Za-z0-9_]{20,255}$/.test(token)) throw new Error("Format de jeton inattendu.");
+      if (!/^[A-Za-z0-9_]{20,255}$/.test(token)) throw new Error(t("Format de jeton inattendu."));
       const user = await gh("/user");
       const repo = await gh(`/repos/${C.depot}`);
-      if (!repo?.permissions?.push) throw new Error(`Le compte « ${user.login} » n'a pas le droit d'écriture sur ${C.depot} : il n'est pas administrateur de la carte.`);
+      if (!repo?.permissions?.push) throw new Error(t("Le compte « {0} » n'a pas le droit d'écriture sur {1} : il n'est pas administrateur de la carte.", user.login, C.depot));
       session = { login: user.login, name: user.name || user.login, avatar: user.avatar_url };
       store.set(token, remember);
       return session;
@@ -69,7 +70,7 @@ window.ENS_ADMIN = (() => {
   // Lecture publique (fichier publié par GitHub Pages) — pas besoin d'être connecté.
   async function loadPublic() {
     const r = await fetch(`${C.fichier}?t=${Date.now()}`, { cache: "no-store" });
-    if (!r.ok) throw new Error(`Fichier des points introuvable (${r.status}).`);
+    if (!r.ok) throw new Error(t("Fichier des points introuvable ({0}).", r.status));
     return r.json();
   }
   // Lecture de la dernière version dans le dépôt (pour les administrateurs : sans attendre la publication du site).
@@ -80,14 +81,14 @@ window.ENS_ADMIN = (() => {
 
   // Applique une modification et l'enregistre par un commit ; réessaie si quelqu'un a modifié le fichier entre-temps.
   async function save(mutate, message) {
-    if (!session) throw new Error("Connectez-vous d'abord en administrateur.");
+    if (!session) throw new Error(t("Connectez-vous d'abord en administrateur."));
     for (let i = 0; i < 3; i++) {
       const { data, sha } = await loadRemote();
       if (!Array.isArray(data.points)) data.points = [];
       mutate(data);
       for (const p of data.points) {
         const errs = window.ENS.validateMapPoint(p);
-        if (errs.length) throw new Error(`Point « ${p.nom || p.id} » invalide : ${errs.join(", ")}.`);
+        if (errs.length) throw new Error(t("Point « {0} » invalide : {1}.", p.nom || p.id, errs.map((x) => t(x)).join(", ")));
       }
       try {
         const res = await gh(`/repos/${C.depot}/contents/${C.fichier}`, {
@@ -95,7 +96,7 @@ window.ENS_ADMIN = (() => {
           body: JSON.stringify({ message: `${message}\n\nPar ${session.login} depuis l'onglet Carte du site.`, content: b64encode(JSON.stringify(data, null, 2) + "\n"), sha, branch: C.branche })
         });
         return { data, commit: res?.commit?.sha?.slice(0, 7) || "", url: res?.commit?.html_url || "" };
-      } catch (e) { if (e.message !== "conflit" || i === 2) throw e.message === "conflit" ? new Error("Le fichier a été modifié en même temps par un autre administrateur : réessayez.") : e; }
+      } catch (e) { if (e.message !== "conflit" || i === 2) throw e.message === "conflit" ? new Error(t("Le fichier a été modifié en même temps par un autre administrateur : réessayez.")) : e; }
     }
   }
   const newId = () => "pt-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7);

@@ -5,30 +5,31 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const API = () => window.ENS_API;
-  const TITRES = { accueil: "Accueil", guides: "Guides", builds: "Builds", build: "Build", planner: "Mon build", equipements: "Équipements", competences: "Compétences",
-    construction: "Construction", carte: "Carte", comparateur: "Comparateur", maj: "Mises à jour et sources" };
+  const { t, tp, nm, nmh } = window.ENS_I18N;
+  const TITRES = Object.fromEntries(Object.entries({ accueil: "Accueil", guides: "Guides", builds: "Builds", build: "Build", planner: "Mon build", equipements: "Équipements", competences: "Compétences",
+    construction: "Construction", carte: "Carte", comparateur: "Comparateur", maj: "Mises à jour et sources" }).map(([k, v]) => [k, t(v)]));
   // Personnage affiché selon la famille du build (rendus de sets du wiki, © Keen Games)
   const FIGURE = { "c-war": "guerrier", "c-rng": "rodeur", "c-mag": "mage", "c-hyb": "hybride", "c-base": "base" };
   const fig = (k, cls = "") => `<img class="${cls}" src="refonte/img/heros-${k}.webp" alt="" loading="lazy" decoding="async">`;
 
   // ════════════ ACCUEIL ════════════
   function vueAccueil() {
-    const { app, D, icon, esc, buildCard, gcard, G, CONS, BUILDS } = API();
-    const n = (x) => x.toLocaleString("fr-FR");
+    const { app, D, icon, esc, buildCard, gcard, G, CONS, BUILDS, fmtDate } = API();
+    const n = (x) => x.toLocaleString(window.ENS_I18N.locale);
     const pins = D.items.filter((it) => (it.marqueurs || []).length).length;
     const guide = (id) => G.liste.find((g) => g.id === id);
     const etapes = [
-      ["premieres-heures", "1", "Vos premières heures", "Sortir du tutoriel, choisir sa base, éviter les pièges du début."],
-      ["builds", "2", "Trouvez votre build", "Trois questions pour choisir un style, puis l'équipement pièce par pièce."],
-      ["flamme-paliers", "3", "Faites grandir la Flamme", "Les paliers 1 à 11, ce qu'ils débloquent et l'ordre des régions."]
+      ["premieres-heures", "1", t("Vos premières heures"), t("Sortir du tutoriel, choisir sa base, éviter les pièges du début.")],
+      ["builds", "2", t("Trouvez votre build"), t("Trois questions pour choisir un style, puis l'équipement pièce par pièce.")],
+      ["flamme-paliers", "3", t("Faites grandir la Flamme"), t("Les paliers 1 à 11, ce qu'ils débloquent et l'ordre des régions.")]
     ];
     const rubriques = [
-      ["guides", "book", "Guides", `${G.liste.length} guides en ${G.categories.length} catégories`, "c-base"],
-      ["builds", "star", "Builds", `${D.builds.length} styles, équipement par étape`, "c-war"],
-      ["equipements", "sword", "Équipements", `${n(D.items.length)} objets et leurs sources`, "c-rng"],
-      ["carte", "map", "Carte", `${n(pins)} objets épinglés`, "c-hyb"],
-      ["competences", "tree", "Compétences", `${D.skills.length} compétences, tronc commun`, "c-mag"],
-      ["construction", "home", "Construction", `${CONS.blocs.length} blocs, ${CONS.batiments.length} bâtiments`, "c-base"]
+      ["guides", "book", t("Guides"), t("{0} guides en {1} catégories", G.liste.length, G.categories.length), "c-base"],
+      ["builds", "star", t("Builds"), t("{0} styles, équipement par étape", D.builds.length), "c-war"],
+      ["equipements", "sword", t("Équipements"), t("{0} objets et leurs sources", n(D.items.length)), "c-rng"],
+      ["carte", "map", t("Carte"), t("{0} objets épinglés", n(pins)), "c-hyb"],
+      ["competences", "tree", t("Compétences"), t("{0} compétences, tronc commun", D.skills.length), "c-mag"],
+      ["construction", "home", t("Construction"), t("{0} blocs, {1} bâtiments", CONS.blocs.length, CONS.batiments.length), "c-base"]
     ];
     const une = ["mage-bataille", "barbare", "rodeur", "soigneur"].map((id) => BUILDS[id]).filter(Boolean);
     const essentiels = ["regions", "boss-faiblesses", "equipement-fin", "base"].map(guide).filter(Boolean);
@@ -36,11 +37,11 @@
       <section class="rf-hero">
         <div class="rf-hero-txt">
           <p class="rf-kicker">${icon("flame")}Enshrouded · version ${esc(D.meta.versionJeu)}</p>
-          <h1>Ravivez la Flamme,<br>repoussez le Shroud.</h1>
-          <p class="rf-hero-lead">Le guide de fan en français : builds, guides pas à pas, équipement, carte et construction. Chaque information affiche sa source et sa fiabilité.</p>
-          <button class="rf-hero-search" type="button" data-palette>${icon("search")}<span>Un objet, un boss, un guide…</span><kbd>/</kbd></button>
+          <h1>${t("Ravivez la Flamme,<br>repoussez le Shroud.")}</h1>
+          <p class="rf-hero-lead">${t("Le guide de fan en français : builds, guides pas à pas, équipement, carte et construction. Chaque information affiche sa source et sa fiabilité.")}</p>
+          <button class="rf-hero-search" type="button" data-palette>${icon("search")}<span>${t("Un objet, un boss, un guide…")}</span><kbd>/</kbd></button>
           <div class="rf-hero-stats">
-            <span><b>${n(D.items.length)}</b>objets</span><span><b>${G.liste.length}</b>guides</span><span><b>${D.builds.length}</b>builds</span><span><b>${CONS.blocs.length}</b>blocs</span>
+            <span><b>${n(D.items.length)}</b>${t("objets")}</span><span><b>${G.liste.length}</b>${t("guides")}</span><span><b>${D.builds.length}</b>builds</span><span><b>${CONS.blocs.length}</b>${t("blocs")}</span>
           </div>
         </div>
         <div class="rf-hero-art" aria-hidden="true">
@@ -48,27 +49,27 @@
         </div>
       </section>
 
-      <h2>${icon("compass")}Par où commencer ?</h2>
-      <div class="rf-steps">${etapes.map(([id, k, t, d]) => { const g = guide(id); const href = g ? `#guides/${id}` : `#${id}`; return `
-        <a class="rf-step" href="${href}"><span class="rf-step-n">${k}</span><span><b>${esc(t)}</b><small>${esc(d)}</small></span>${icon("arrow")}</a>`; }).join("")}</div>
+      <h2>${icon("compass")}${t("Par où commencer ?")}</h2>
+      <div class="rf-steps">${etapes.map(([id, k, ti, d]) => { const g = guide(id); const href = g ? `#guides/${id}` : `#${id}`; return `
+        <a class="rf-step" href="${href}"><span class="rf-step-n">${k}</span><span><b>${esc(ti)}</b><small>${esc(d)}</small></span>${icon("arrow")}</a>`; }).join("")}</div>
 
-      <h2>${icon("grid")}Explorer le guide</h2>
-      <div class="rf-tiles">${rubriques.map(([h, ic, t, d, c]) => `
-        <a class="rf-tile ${c}" href="#${h}"><span class="emblem">${icon(ic)}</span><span><b>${t}</b><small>${d}</small></span></a>`).join("")}</div>
+      <h2>${icon("grid")}${t("Explorer le guide")}</h2>
+      <div class="rf-tiles">${rubriques.map(([h, ic, ti, d, c]) => `
+        <a class="rf-tile ${c}" href="#${h}"><span class="emblem">${icon(ic)}</span><span><b>${ti}</b><small>${d}</small></span></a>`).join("")}</div>
 
-      <h2>${icon("star")}Builds à la une</h2>
+      <h2>${icon("star")}${t("Builds à la une")}</h2>
       <div class="grid rf-rail">${une.map(buildCard).join("")}</div>
-      <p class="rf-more"><a class="btn" href="#builds">${icon("star")}Tous les builds et le questionnaire</a></p>
+      <p class="rf-more"><a class="btn" href="#builds">${icon("star")}${t("Tous les builds et le questionnaire")}</a></p>
 
-      <h2>${icon("book")}Guides essentiels</h2>
+      <h2>${icon("book")}${t("Guides essentiels")}</h2>
       <div class="bgrid">${essentiels.map(gcard).join("")}</div>
-      <p class="rf-more"><a class="btn" href="#guides">${icon("book")}Les ${G.liste.length} guides</a></p>
+      <p class="rf-more"><a class="btn" href="#guides">${icon("book")}${t("Les {0} guides", G.liste.length)}</a></p>
 
       <section class="rf-trust">
         <span class="emblem c-mag">${icon("check")}</span>
-        <div><h3>Un guide qui dit d'où il tient ses infos</h3>
-          <p>Chaque objet porte une pastille de fiabilité (vérifié en 1.0, ancienne version, sources en désaccord…) et ses sources. Dernière vérification le ${new Date(D.meta.derniereActualisation + "T12:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}.</p>
-          <div class="btn-row"><button class="btn small" type="button" data-help>${icon("help")}Comment lire les pastilles</button><a class="btn small" href="#maj">${icon("refresh")}Versions et sources</a></div></div>
+        <div><h3>${t("Un guide qui dit d'où il tient ses infos")}</h3>
+          <p>${t("Chaque objet porte une pastille de fiabilité (vérifié en 1.0, ancienne version, sources en désaccord…) et ses sources. Dernière vérification le {0}.", fmtDate(D.meta.derniereActualisation))}</p>
+          <div class="btn-row"><button class="btn small" type="button" data-help>${icon("help")}${t("Comment lire les pastilles")}</button><a class="btn small" href="#maj">${icon("refresh")}${t("Versions et sources")}</a></div></div>
       </section>`;
   }
 
@@ -76,15 +77,16 @@
   let index = null, results = [], active = 0;
   const pal = $("#palette"), palQ = $("#pal-q"), palRes = $("#pal-res");
   function buildIndex() {
-    const { D, G, CONS, TAGS, norm, lvTxt } = API();
+    const { D, G, CONS, TAGS, norm, lvTxt, tr } = API();
     const out = [];
-    const add = (groupe, label, sub, extra, go, visuel) => out.push({ groupe, label, sub, go, visuel, n: norm(label), hay: norm([label, sub, extra].join(" ")) });
-    Object.entries(TITRES).filter(([k]) => !["build", "planner"].includes(k)).forEach(([k, t]) => add("Rubriques", t, "Rubrique du guide", "", { hash: k }, { icone: "grid" }));
-    G.liste.forEach((g) => add("Guides", g.titre, g.resume, g.sections.map((s) => s.titre).join(" "), { hash: "guides/" + g.id }, { icone: g.icone }));
-    D.builds.forEach((b) => add("Builds", TAGS[b.id]?.court || b.nom, TAGS[b.id]?.accroche || b.role, b.nom + " " + b.style, { hash: "build/" + b.id }, { icone: "star" }));
-    D.items.forEach((it) => add("Objets", it.nom, [lvTxt(it), it.rarete || it.type].filter(Boolean).join(" · "), [it.type, ...(it.atouts || []), ...(it.effets || []), it.obtention].join(" "), { item: it.id }, { item: it.id }));
-    D.skills.forEach((s) => add("Compétences", s.nom, `${s.arbre} · ${s.effet}`, s.sous, { skill: s.id }, { icone: "tree" }));
-    CONS.blocs.forEach((b) => add("Blocs", b.nom, b.recette, [b.lieu, b.region].join(" "), { hash: "construction/blocs" }, { icone: "block" }));
+    // label = nom affiché (langue du site) ; en = nom anglais d'origine, cherché aussi
+    const add = (groupe, label, sub, extra, go, visuel, en = "") => out.push({ groupe, label, sub, go, visuel, n: norm(label), hay: norm([label, en, sub, extra].join(" ")) });
+    Object.entries(TITRES).filter(([k]) => !["build", "planner"].includes(k)).forEach(([k, ti]) => add("Rubriques", ti, t("Rubrique du guide"), "", { hash: k }, { icone: "grid" }));
+    G.liste.forEach((g) => add("Guides", tr(g.titre), tr(g.resume), g.sections.map((s) => tr(s.titre)).join(" "), { hash: "guides/" + g.id }, { icone: g.icone }));
+    D.builds.forEach((b) => add("Builds", TAGS[b.id]?.court || b.nom, tr(TAGS[b.id]?.accroche || b.role), b.nom + " " + b.style, { hash: "build/" + b.id }, { icone: "star" }));
+    D.items.forEach((it) => add("Objets", nm(it.nom), [lvTxt(it), tr(it.rarete || it.type)].filter(Boolean).join(" · "), [it.type, tr(it.type), ...(it.atouts || []), ...(it.atouts || []).map(tr), ...(it.effets || []), it.obtention, tr(it.obtention)].join(" "), { item: it.id }, { item: it.id }, it.nom));
+    D.skills.forEach((s) => add("Compétences", nm(s.nom), `${tr(s.arbre)} · ${tr(s.effet)}`, tr(s.sous), { skill: s.id }, { icone: "tree" }, s.nom));
+    CONS.blocs.forEach((b) => add("Blocs", nm(b.nom), tr(b.recette), [tr(b.lieu), b.region, nm(b.region)].join(" "), { hash: "construction/blocs" }, { icone: "block" }, b.nom));
     return out;
   }
   const LIMITE = { Rubriques: 3, Guides: 5, Builds: 4, Objets: 8, "Compétences": 5, Blocs: 3 };
@@ -107,11 +109,11 @@
     let last = "";
     palRes.innerHTML = results.map((r, i) => {
       const q = palQ.value.trim();
-      const head = (q ? r.groupe !== last : i === 0) ? `<div class="rf-pal-group" role="presentation">${esc(q ? r.groupe : "Suggestions")}</div>` : "";
+      const head = (q ? r.groupe !== last : i === 0) ? `<div class="rf-pal-group" role="presentation">${esc(q ? t(r.groupe) : t("Suggestions"))}</div>` : "";
       last = r.groupe;
       const vis = r.visuel.item ? art(getItem(r.visuel.item), "xs") : `<span class="rf-pal-ic">${icon(r.visuel.icone)}</span>`;
-      return `${head}<div class="rf-pal-row" role="option" id="pal-${i}" data-pal="${i}" aria-selected="${i === active}">${vis}<span><b>${esc(r.label)}</b><small>${esc(r.sub || "")}</small></span><span class="rf-pal-kind">${esc(r.groupe.replace(/s$/, ""))}</span></div>`;
-    }).join("") || `<p class="rf-pal-empty">Rien trouvé pour « ${esc(palQ.value)} ». Essayez le nom anglais d'un objet ou un mot plus court.</p>`;
+      return `${head}<div class="rf-pal-row" role="option" id="pal-${i}" data-pal="${i}" aria-selected="${i === active}">${vis}<span><b>${esc(r.label)}</b><small>${esc(r.sub || "")}</small></span><span class="rf-pal-kind">${esc(t(r.groupe.replace(/s$/, "")))}</span></div>`;
+    }).join("") || `<p class="rf-pal-empty">${t("Rien trouvé pour « {0} ». Essayez un autre nom (français ou anglais) ou un mot plus court.", esc(palQ.value))}</p>`;
     palQ.setAttribute("aria-activedescendant", results.length ? "pal-" + active : "");
   }
   function openPalette(q = "") {

@@ -640,3 +640,6 @@ ol.g-pins li::marker { color: var(--ember-2); font-weight: 800; }
 .mp-leg-img { width: 22px; height: 22px; object-fit: contain; filter: drop-shadow(0 0 1px #000); }
 .mp-sym.grp { position: relative; }
 .mp-sym.grp b { position: absolute; right: -8px; bottom: -6px; min-width: 18px; padding: 0 4px; border-radius: 9px; background: var(--ember); color: #1a1006; font: 800 10px/16px Inter, sans-serif; text-align: center; border: 1.5px solid #1a1006; }
+/* Langue : bouton compact et noms du jeu traduits (info-bulle = nom anglais) */
+.rf-lang-mini .rf-lang-cur { font: 800 .78rem/1 Inter, "Alegreya Sans", sans-serif; letter-spacing: .06em; }
+.nom-tr { text-decoration: underline dotted rgba(255,255,255,.28); text-underline-offset: 3px; cursor: help; }
