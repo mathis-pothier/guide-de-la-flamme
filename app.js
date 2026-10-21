@@ -601,6 +601,7 @@
           <div class="map-wrap"><div id="leaflet" class="leaflet-box"></div></div>
           <aside class="map-side">
             <div class="searchbox">${icon("search")}<input id="map-q" type="search" placeholder="Chercher un objet ou un lieu…" aria-label="Chercher sur la carte"></div>
+            <div class="layer-list cons-layers">${CLAYERS.map(([k, label, ic, n]) => `<label class="layer"><input type="checkbox" data-clayer="${k}" ${cLayers.has(k) ? "checked" : ""}><span class="clayer-ic c-${k}">${icon(ic)}</span>${label} <span class="muted">${n()}</span></label>`).join("")}</div>
             <details class="more" style="margin-top:10px"><summary>${icon("layers")}Lieux affichés</summary><div class="layer-list">
               ${Object.entries(MAP.groupes).map(([g, info]) => `<label class="layer"><input type="checkbox" data-layer="${g}" ${mapLayers.has(g) ? "checked" : ""}>${info.icone ? `<img src="${esc(info.icone)}" alt="">` : icon("pin")}${esc(info.nom)} <span class="muted">${MAP.marqueurs.filter((m) => m.g === g).length}</span></label>`).join("")}
             </div></details>
@@ -624,6 +625,15 @@
         <p class="small muted">Ces cartes refusent l'intégration dans une autre page : elles s'ouvrent dans un nouvel onglet.</p>`}`;
     if (mapMode === "objets") initLeaflet(focus);
   }
+  // Couches de l'onglet Construction
+  const CONS = D.construction || { blocs: [], survivants: [], emplacements: [] };
+  const consPinned = (list) => list.filter((x) => (x.marqueurs || []).some((id) => MARKERS[id]));
+  const CLAYERS = [
+    ["blocs", "Blocs de construction", "block", () => consPinned(CONS.blocs).length],
+    ["artisans", "Artisans à sauver", "users", () => consPinned(CONS.survivants).length],
+    ["bases", "Lieux de base conseillés", "home", () => consPinned(CONS.emplacements).length]
+  ];
+  const cLayers = new Set(store.get("ens.cLayers", ["blocs", "artisans"]));
   function initLeaflet(focus) {
     const box = $("#leaflet");
     if (!window.L) { box.innerHTML = `<div class="empty">${icon("alert")}<p>La bibliothèque de carte (Leaflet) n'a pas pu être chargée : une connexion Internet est nécessaire la première fois.</p></div>`; return; }
@@ -648,8 +658,28 @@
           .addTo(itemLayer);
       });
     });
+    // Couches Construction
+    const cLayer = {}, cMarkers = {};
+    const consPin = (kind, ic, title, html, id) => (mid) => {
+      const m = MARKERS[mid];
+      const mk = L.marker([m.y, m.x], { icon: L.divIcon({ className: "cons-pin c-" + kind, html: `<span>${icon(ic)}</span>`, iconSize: [30, 30], iconAnchor: [15, 15] }), title, zIndexOffset: 400 })
+        .bindPopup(`<div class="pop-cons"><b>${esc(title)}</b><br><span class="muted">${esc(m.nom)}</span>${html}</div>`);
+      (cMarkers[id] ||= []).push(mk);
+      return mk;
+    };
+    cLayer.blocs = L.layerGroup(CONS.blocs.flatMap((b, i) => (b.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("blocs", "block", b.nom, `<br>${esc(b.recette)}<br><small>${esc(b.lieu || "")}</small><br><a class="btn small" href="#construction/blocs">Tous les blocs</a>`, "bloc-" + i))));
+    cLayer.artisans = L.layerGroup(CONS.survivants.flatMap((s, i) => (s.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("artisans", "users", `${s.nom} (${s.role})`, `<br><small>${esc(s.debloque)}</small>`, "artisan-" + i))));
+    cLayer.bases = L.layerGroup(CONS.emplacements.flatMap((s, i) => (s.marqueurs || []).filter((id) => MARKERS[id]).map(consPin("bases", "home", s.nom, `<br><small>${esc(s.etape)} · ${esc(s.pourquoi)}</small>`, "base-" + i))));
+    Object.entries(cLayer).forEach(([k, l]) => { if (cLayers.has(k)) l.addTo(map); });
     let regionCircle = null;
     leaflet = {
+      focusCons(id) {
+        const kind = id.split("-")[0], k = kind === "bloc" ? "blocs" : kind === "artisan" ? "artisans" : "bases";
+        if (!cLayers.has(k)) { cLayers.add(k); cLayer[k].addTo(map); const cb = $(`[data-clayer="${k}"]`); if (cb) cb.checked = true; }
+        const ms = cMarkers[id]; if (!ms?.length) return;
+        map.flyTo(ms[0].getLatLng(), 0, { duration: .6 }); setTimeout(() => ms[0].openPopup(), 650);
+      },
+      ctoggle(k, on) { on ? cLayer[k].addTo(map) : cLayer[k].remove(); },
       map,
       focusItem(id) {
         const it = getItem(id); if (!it) return;
@@ -678,7 +708,97 @@
     };
     renderList();
     $("#map-q").addEventListener("input", (e) => renderList(e.target.value));
-    setTimeout(() => { map.invalidateSize(); if (focus?.item) leaflet.focusItem(focus.item); if (focus?.region) leaflet.focusRegion(focus.region); }, 80);
+    setTimeout(() => { map.invalidateSize(); if (focus?.item) leaflet.focusItem(focus.item); if (focus?.region) leaflet.focusRegion(focus.region); if (focus?.cons) leaflet.focusCons(focus.cons); }, 80);
+  }
+
+  // ════════════ CONSTRUCTION ════════════
+  const cons = { cat: "", mode: "", q: "" };
+  const CTABS = [["batiments", "Bâtiments", "home"], ["blocs", "Blocs", "block"], ["emplacements", "Où bâtir", "compass"], ["autel", "Autel & confort", "flame"], ["artisans", "Artisans", "users"], ["videos", "Vidéos", "video"]];
+  const BCAT = { Bois: ["Bois", "c-rng"], Pierre: ["Pierre", "c-base"], Lumineux: ["Lumineux", "c-mag"], "Métal et autres": ["Métal et autres", "c-war"] };
+  const BMODE = { ramassage: ["Se débloque en ramassant le matériau", "leaf"], fabrication: ["Se débloque en fabriquant le matériau", "hammer"], lieu: ["À trouver dans le monde", "pin"] };
+  const pinnedBloc = (b) => (b.marqueurs || []).some((id) => MARKERS[id]);
+  function viewConstruction(tab) {
+    if (!CONS.blocs.length) { app.innerHTML = `<div class="empty">${icon("alert")}<p>Données de construction absentes.</p></div>`; return; }
+    tab = CTABS.some(([k]) => k === tab) ? tab : "batiments";
+    const nLieu = CONS.blocs.filter((b) => b.mode === "lieu").length, nPin = CONS.blocs.filter(pinnedBloc).length;
+    app.innerHTML = `
+      <h1>Construction</h1>
+      <p class="lead">Des idées de bâtiments pour votre base, tous les blocs et où les débloquer, et les règles de l'autel et du confort.</p>
+      <div class="facts">
+        <div class="fact"><b>${CONS.blocs.length}</b><span>blocs de construction (wiki, 1.0)</span></div>
+        <div class="fact"><b>${nLieu}</b><span>à trouver dans le monde, dont ${nPin} épinglés sur la carte</span></div>
+        <div class="fact"><b>${CONS.batiments.length}</b><span>idées de bâtiments pas à pas</span></div>
+      </div>
+      <div class="chips scroll" role="group" aria-label="Rubrique" style="margin-top:14px">${CTABS.map(([k, l, ic]) => `<button class="chip" data-ctab="${k}" aria-pressed="${tab === k}">${icon(ic)}${l}</button>`).join("")}</div>
+      <div id="cons-body"></div>`;
+    const body = $("#cons-body");
+    if (tab === "batiments") body.innerHTML = `
+      <p class="small muted">Conseils repris de guides et de vidéos 1.0 (sources sur chaque carte). Touchez « Voir les étapes ».</p>
+      <div class="bgrid">${CONS.batiments.map((b) => `<article class="bld">
+        <div class="bld-top"><span class="emblem c-base">${icon(b.icone)}</span><div><h3>${esc(b.nom)}</h3><div class="tags"><span class="tag hot">${esc(b.etape)}</span>${b.taille ? `<span class="tag">${esc(b.taille)}</span>` : ""}</div></div></div>
+        <p>${esc(b.resume)}</p>
+        <details class="more"><summary>${icon("arrow")}Voir les étapes</summary><div>
+          <ol class="bld-steps">${b.etapes.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>
+          ${b.astuces.length ? `<h3>Astuces</h3><ul class="tight">${b.astuces.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>` : ""}
+        </div></details>
+        <div class="chips small-chips">${b.materiaux.map((m) => `<span class="perk">${esc(m)}</span>`).join("")}</div>
+        <div class="bld-foot">${srcChips(b.sources)}${b.video && SOURCES[b.video] ? `<a class="btn small" href="${esc(SOURCES[b.video].url)}" target="_blank" rel="noopener">${icon("video")}Vidéo</a>` : ""}</div>
+      </article>`).join("")}</div>`;
+    else if (tab === "blocs") { body.innerHTML = `
+      <div class="chips scroll" style="margin-top:6px"><button class="chip" data-bcat="" aria-pressed="${!cons.cat}">${icon("grid")}Tous</button>${Object.entries(BCAT).map(([k, [l, c]]) => `<button class="chip ${c}" data-bcat="${k}" aria-pressed="${cons.cat === k}">${icon("block")}${l}</button>`).join("")}</div>
+      <div class="chips scroll" style="margin-top:8px"><button class="chip small" data-bmode="" aria-pressed="${!cons.mode}">Tous les déblocages</button>${Object.entries(BMODE).map(([k, [l, ic]]) => `<button class="chip small" data-bmode="${k}" aria-pressed="${cons.mode === k}">${icon(ic)}${l}</button>`).join("")}</div>
+      <div class="bar"><div class="searchbox">${icon("search")}<input id="bloc-q" type="search" value="${esc(cons.q)}" placeholder="Nom, matériau, lieu, région…" aria-label="Chercher un bloc"></div>
+        <a class="btn" href="#carte">${icon("map")}Voir sur la carte</a></div>
+      <div class="result-line"><span id="bloc-count"></span></div>
+      <div id="bloc-list" class="blgrid"></div>
+      <p class="small muted">${esc(CONS.blocsNote)} Sources : ${srcLinks(CONS.blocsSources)}</p>`;
+      $("#bloc-q").addEventListener("input", (e) => { cons.q = e.target.value; renderBlocs(); });
+      renderBlocs(); }
+    else if (tab === "emplacements") body.innerHTML = `
+      <p class="small muted">Emplacements conseillés par les guides. ${icon("pin")} = visible sur la carte (couche « Lieux de base conseillés »).</p>
+      <div class="loc-list">${CONS.emplacements.map((s, i) => `<div class="loc">
+        <span class="tag hot">${esc(s.etape)}</span><div><b>${esc(s.nom)}</b> <span class="muted small">· ${esc(s.region)}${ZONES.find((z) => z.nom === s.region) ? " (niv. " + esc(ZONES.find((z) => z.nom === s.region).niveau) + ")" : ""}</span><p>${esc(s.pourquoi)}</p><div class="tronc-src">${srcChips(s.sources)}</div></div>
+        ${(s.marqueurs || []).some((id) => MARKERS[id]) ? `<a class="btn small" href="#carte/cons/base-${i}">${icon("pin")}Carte</a>` : ""}</div>`).join("")}</div>`;
+    else if (tab === "autel") body.innerHTML = `
+      <h2>${icon("flame")}Autel de la Flamme</h2>
+      <div class="table-wrap"><table><thead><tr><th>Niveau</th><th>Zone constructible</th><th>Coût</th><th>Flamme requise</th></tr></thead><tbody>
+        ${CONS.autel.niveaux.map((n) => `<tr><td><b>${n.niveau}</b></td><td>${esc(n.zone)}</td><td>${esc(n.cout)}</td><td>${n.flamme}</td></tr>`).join("")}</tbody></table></div>
+      <p class="small">${esc(CONS.autel.capacite)}</p>
+      <ul class="tight small">${CONS.autel.regles.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>
+      <p class="small muted">Source : ${srcLinks(CONS.autel.sources)}</p>
+      <h2>${icon("heart")}Confort et bonus Reposé</h2>
+      <ul class="tight">${CONS.confort.regles.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>
+      <h3>Exemples d'objets de confort</h3>
+      <div class="table-wrap"><table><thead><tr><th>Objet</th><th>Confort</th></tr></thead><tbody>${CONS.confort.exemples.map((x) => `<tr><td>${esc(x.objet)}</td><td><b>+${x.confort}</b></td></tr>`).join("")}</tbody></table></div>
+      <p class="small muted">Valeurs observées en jeu selon le wiki. Sources : ${srcLinks(CONS.confort.sources)}</p>`;
+    else if (tab === "artisans") body.innerHTML = `
+      <p class="small muted">${esc(CONS.survivantsNote)}</p>
+      <div class="bgrid">${CONS.survivants.map((s, i) => `<article class="bld"><div class="bld-top"><span class="emblem c-mag">${icon("users")}</span><div><h3>${esc(s.nom)}</h3><div class="tags"><span class="tag">${esc(s.role)}</span></div></div></div>
+        <p>${esc(s.debloque)}</p><div class="bld-foot">${(s.marqueurs || []).some((id) => MARKERS[id]) ? `<a class="btn small" href="#carte/cons/artisan-${i}">${icon("pin")}Où le sauver</a>` : ""}</div></article>`).join("")}</div>
+      <p class="small muted">Sources : ${srcLinks(CONS.survivantsSources)}</p>`;
+    else if (tab === "videos") body.innerHTML = `
+      <p class="small muted">Tutoriels YouTube 1.0. Seule la première vidéo a été résumée (chapitres repris par AllThings.How) ; les autres sont listées avec leur titre et leur date.</p>
+      <div class="res-list">${CONS.videos.map((v) => { const s = SOURCES[v.id]; if (!s) return ""; return `<div class="res vid"><span class="vid-ic">${icon("video")}</span><span><b>${esc(s.nom.replace(/^YouTube — /, ""))}</b><small>${s.miseAJourSource ? fmtDate(s.miseAJourSource) + " · " : ""}${esc(s.note)}</small>
+        ${v.chapitres ? `<span class="chaps">${v.chapitres.map(([t, l]) => { const p = t.split(":").map(Number); return `<a href="${esc(s.url)}&t=${p[0] * 60 + p[1]}s" target="_blank" rel="noopener">${t} ${esc(l)}</a>`; }).join("")}</span>` : ""}</span>
+        <a class="btn small" href="${esc(s.url)}" target="_blank" rel="noopener">${icon("external")}Regarder</a></div>`; }).join("")}</div>`;
+  }
+  function renderBlocs() {
+    const q = norm(cons.q).trim();
+    $$("[data-bcat]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.bcat === cons.cat));
+    $$("[data-bmode]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.bmode === cons.mode));
+    const list = CONS.blocs.map((b, i) => [b, i]).filter(([b]) => (!cons.cat || b.cat === cons.cat) && (!cons.mode || b.mode === cons.mode)
+      && (!q || q.split(/\s+/).every((w) => norm([b.nom, b.recette, b.lieu, b.region, b.quete].join(" ")).includes(w))));
+    $("#bloc-count").textContent = `${list.length} bloc${list.length > 1 ? "s" : ""}`;
+    $("#bloc-list").innerHTML = list.map(([b, i]) => `<article class="bl ${BCAT[b.cat]?.[1] || ""}">
+      <span class="bl-ic">${icon("block")}<span class="bl-mono">${esc(initials(b.nom))}</span></span>
+      <div class="bl-body"><b>${esc(b.nom)}</b>
+        <small>${icon("hammer")}${esc(b.recette)}</small>
+        <small>${icon(BMODE[b.mode][1])}${esc(b.mode === "ramassage" ? "Ramasser le matériau" : b.mode === "fabrication" ? (b.lieu || "Fabriquer le matériau") : (b.lieu || "Lieu non documenté"))}</small>
+        ${b.quete ? `<small class="muted">Quête associée : « ${esc(b.quete)} »</small>` : ""}
+        ${b.conflit ? `<small class="conflict">${icon("alert")}${esc(b.conflit)}</small>` : ""}
+        <span class="tag">${esc(b.region)}</span></div>
+      ${pinnedBloc(b) ? `<a class="pin-btn bl-pin" href="#carte/cons/bloc-${i}" title="Voir sur la carte" aria-label="Voir ${esc(b.nom)} sur la carte">${icon("pin")}</a>` : ""}
+    </article>`).join("") || `<div class="empty" style="grid-column:1/-1">${icon("search")}<p>Aucun bloc ne correspond.</p></div>`;
   }
 
   // ════════════ COMPÉTENCES ════════════
@@ -807,14 +927,15 @@
     if (leaflet) { leaflet.map.remove(); leaflet = null; }
     if (view === "build") viewBuild(h.split("/")[1]);
     else if (view === "planner") viewPlanner(location.hash.split("=")[1]);
-    else if (view === "carte") { const [, kind, val] = h.split("/"); if (kind) mapMode = "objets"; viewCarte(kind === "item" ? { item: val } : kind === "region" ? { region: val } : null); }
+    else if (view === "carte") { const [, kind, val] = h.split("/"); if (kind) mapMode = "objets"; viewCarte(kind === "item" ? { item: val } : kind === "region" ? { region: val } : kind === "cons" ? { cons: val } : null); }
+    else if (view === "construction") viewConstruction(h.split("/")[1]);
     else ({ builds: viewBuilds, equipements: viewEquipements, competences: viewCompetences, comparateur: viewComparateur, maj: viewMaj }[view] || viewBuilds)();
     window.scrollTo(0, 0);
   }
 
   // ── Événements (délégation)
   document.addEventListener("click", (e) => {
-    const t = e.target.closest("[data-item],[data-skill],[data-slot],[data-quiz],[data-quiz-reset],[data-stage],[data-cat],[data-sub],[data-skb],[data-tree],[data-share],[data-cmp],[data-cmp-toggle],[data-cmp-remove],[data-del-mine],[data-help],[data-close],[data-mapmode],[data-mapfocus],[data-region]");
+    const t = e.target.closest("[data-item],[data-skill],[data-slot],[data-quiz],[data-quiz-reset],[data-stage],[data-cat],[data-sub],[data-skb],[data-tree],[data-share],[data-cmp],[data-cmp-toggle],[data-cmp-remove],[data-del-mine],[data-help],[data-close],[data-mapmode],[data-mapfocus],[data-region],[data-ctab],[data-bcat],[data-bmode]");
     if (!t) return;
     const d = t.dataset;
     if (d.item) itemDetail(d.item);
@@ -837,8 +958,13 @@
     else if (d.mapmode) { mapMode = d.mapmode; if (leaflet) { leaflet.map.remove(); leaflet = null; } viewCarte(); }
     else if (d.mapfocus) leaflet?.focusItem(d.mapfocus);
     else if (d.region) leaflet?.focusRegion(d.region);
+    else if (d.ctab) { location.hash = "#construction/" + d.ctab; }
+    else if (d.bcat !== undefined) { cons.cat = d.bcat; renderBlocs(); }
+    else if (d.bmode !== undefined) { cons.mode = d.bmode; renderBlocs(); }
   });
   document.addEventListener("change", (e) => {
+    const ck = e.target.dataset?.clayer;
+    if (ck) { e.target.checked ? cLayers.add(ck) : cLayers.delete(ck); store.set("ens.cLayers", [...cLayers]); leaflet?.ctoggle(ck, e.target.checked); return; }
     const g = e.target.dataset?.layer;
     if (!g) return;
     e.target.checked ? mapLayers.add(g) : mapLayers.delete(g);

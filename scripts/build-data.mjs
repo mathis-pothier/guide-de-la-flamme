@@ -260,6 +260,8 @@ const bg = JSON.parse(M.pages["Map:Embervale/Background"].text);
 const tiles = bg.background.tiles.map((t) => ({ f: t.image.replace(/\.jpg$/, ""), x: t.position[0], y: t.position[1], url: M.files[t.image.replace(/_/g, " ")]?.url }));
 const KEEP = ["Ancient_Spire", "Flame_Shrine", "Elixir_Well", "Shroud_Root", "Hollow_Halls", "Shroud_Lair", "Sun_Temple", "Night_Sanctum", "Ancient_Vault", "Enemy_Camp", "Hidden_Temple", "Tomb", "Village", "Cave_Passage", "Gem_Forge", "Balefire"];
 const usedIds = new Set(catalog.flatMap((i) => i.marqueurs || []));
+// Lieux cités par l'onglet Construction (data/construction.js) : blocs, survivants, emplacements de base.
+try { for (const m of readFileSync(join(root, "data", "construction.js"), "utf8").matchAll(/marqueurs: \[([^\]]*)\]/g)) for (const id of m[1].match(/"([^"]+)"/g) || []) usedIds.add(id.slice(1, -1)); } catch { /* pas d'onglet construction */ }
 const mapMarkers = Object.values(markers).filter((m) => (KEEP.includes(m.g) || usedIds.has(m.id)) && m.x >= 0 && m.y >= 0 && m.x <= 10240 && m.y <= 10240)
   .map(({ id, g, nom, x, y, desc }) => ({ id, g, nom, x, y, desc: desc || undefined }));
 const groups = JSON.parse(M.pages["Map:Embervale/Groups"].text).groups;

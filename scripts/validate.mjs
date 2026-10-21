@@ -12,7 +12,7 @@ const curatedCtx = { window: {} };
 vm.createContext(curatedCtx);
 vm.runInContext(readFileSync(join(root, "data", "items.js"), "utf8"), curatedCtx);
 const curatedItems = curatedCtx.window.ENS.items;
-for (const f of ["sources", "items", "skills", "builds", "builds-1.0", "versions", "catalog", "images", "map", "progression", "tronc-commun", "merge"]) {
+for (const f of ["sources", "items", "skills", "builds", "builds-1.0", "versions", "catalog", "images", "map", "progression", "tronc-commun", "construction", "merge"]) {
   vm.runInContext(readFileSync(join(root, "data", f + ".js"), "utf8"), ctx, { filename: f + ".js" });
 }
 const D = ctx.window.ENS;
@@ -71,6 +71,13 @@ const PIECES = ["Tête", "Torse", "Mains", "Jambes", "Pieds"];
 let holes = 0;
 for (const b of D.builds) for (const s of b.equipement) if (PIECES.includes(s.emplacement)) for (const k of ["debut", "milieu"]) if (!s.etapes.some((e) => e.item && e.etape.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().startsWith(k))) { holes++; warnings.push(`Build « ${b.id} » / ${s.emplacement} : aucune pièce sourcée pour l'étape ${k} (repli automatique)`); }
 console.log(`Emplacements d'armure sans conseil sourcé à une étape : ${holes}`);
+if (D.construction) {
+  const C = D.construction, mk = new Set(D.map.marqueurs.map((m) => m.id));
+  for (const x of [...C.blocs, ...C.survivants, ...C.emplacements]) for (const id of x.marqueurs || []) if (!mk.has(id)) errors.push(`Construction : lieu « ${id} » absent de la carte (${x.nom})`);
+  for (const id of [...C.blocsSources, ...C.autel.sources, ...C.confort.sources, ...C.survivantsSources, ...C.batiments.flatMap((b) => b.sources), ...C.emplacements.flatMap((e) => e.sources), ...C.videos.map((v) => v.id)]) if (!src.has(id)) errors.push(`Construction : source inconnue « ${id} »`);
+  for (const b of C.blocs) if (!["ramassage", "fabrication", "lieu"].includes(b.mode)) errors.push(`Construction : mode invalide pour « ${b.nom} »`);
+  console.log(`Construction : ${C.blocs.length} blocs (${C.blocs.filter((b) => (b.marqueurs || []).length).length} épinglés), ${C.batiments.length} bâtiments, ${C.emplacements.length} emplacements.`);
+}
 const noImg = D.items.filter((i) => !D.images[i.id] && !D.images[i.catalogId]).length;
 console.log(`Objets sans image (icône générée) : ${noImg}`);
 const statCount = D.items.reduce((a, i) => ((a[i.statut] = (a[i.statut] || 0) + 1), a), {});

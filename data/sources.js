@@ -225,5 +225,95 @@ window.ENS.sources = [
     id: "wiki-10", nom: "Enshrouded Wiki — 1.0 Update (notes officielles recopiées)", type: "officiel", fiabilite: "haute",
     url: "https://enshrouded.wiki.gg/wiki/1.0_Update", consulte: "2026-10-20", miseAJourSource: "2026-10-14",
     note: "Notes de version officielles : niveau max 50, équipement 55 une fois amélioré ; correction d'un coffre de niveau 30 qui donnait du butin de niveau 1 (le butin suit le niveau de la zone)."
+  },
+  {
+    id: "wiki-building", nom: "Enshrouded Wiki — Building Materials", type: "wiki", fiabilite: "haute",
+    url: "https://enshrouded.wiki.gg/wiki/Building_Materials", consulte: "2026-10-21", miseAJourSource: "2026-10-20",
+    note: "61 blocs avec recette et lieu de déblocage ; page indiquée pour la version 1.0.0.0."
+  },
+  {
+    id: "wiki-comfort", nom: "Enshrouded Wiki — Comfort", type: "wiki", fiabilite: "moyenne",
+    url: "https://enshrouded.wiki.gg/wiki/Comfort", consulte: "2026-10-21", miseAJourSource: "2026-10-20",
+    note: "Conditions du bonus Reposé, confort max 120, valeurs de confort observées ; le wiki signale un bug possible sur la durée par niveau."
+  },
+  {
+    id: "wiki-survivors", nom: "Enshrouded Wiki — Survivors", type: "wiki", fiabilite: "moyenne",
+    url: "https://enshrouded.wiki.gg/wiki/Survivors", consulte: "2026-10-21", miseAJourSource: "2026-10-16",
+    note: "27 survivants (artisans, assistants, villageois) et lieux de sauvetage."
+  },
+  {
+    id: "wiki-altar", nom: "Enshrouded Wiki — Flame Altar", type: "wiki", fiabilite: "haute",
+    url: "https://enshrouded.wiki.gg/wiki/Flame_Altar", consulte: "2026-10-21", miseAJourSource: "2026-10-19",
+    note: "Taille de zone par niveau d'autel, coûts, nombre d'autels par niveau de Flamme."
+  },
+  {
+    id: "allthings-blocks10", nom: "AllThings.How — All New Building Blocks in 1.0", type: "guide", fiabilite: "moyenne",
+    url: "https://allthings.how/enshrouded-1-0-all-new-building-blocks-and-how-to-get-them/", consulte: "2026-10-21", miseAJourSource: "2026-10-17",
+    note: "Les 7 blocs de Cinder's Cradle / Blackmire et leurs coffres."
+  },
+  {
+    id: "allthings-starter", nom: "AllThings.How — Starter Base Guide (Modular Hub)", type: "guide", fiabilite: "moyenne",
+    url: "https://allthings.how/enshrouded-1-0-starter-base-guide-modular-hub-farm-and-alchemist-wing/", consulte: "2026-10-21", miseAJourSource: "2026-10-19",
+    note: "Base en croix pas à pas, d'après la vidéo de P4wnyhof."
+  },
+  {
+    id: "allthings-tips", nom: "AllThings.How — Base Building Tips (1.0)", type: "guide", fiabilite: "moyenne",
+    url: "https://allthings.how/enshrouded-1-0-base-building-tips-that-save-materials-and-time/", consulte: "2026-10-21", miseAJourSource: "2026-10-17",
+    note: "Maison 3×5 sur trois niveaux, cheminée, coffres, confort, astuces de construction."
+  },
+  {
+    id: "pd-base", nom: "PinDrop — Base Building (1.0)", type: "base-donnees", fiabilite: "moyenne",
+    url: "https://pindrop.gg/enshrouded/guides/base-building", consulte: "2026-10-21", miseAJourSource: "2026-10-18",
+    note: "Recettes de coffres, eau, irrigation et lits lues dans les fichiers 1.0."
+  },
+  {
+    id: "pd-farming", nom: "PinDrop — Farming Guide (1.0)", type: "base-donnees", fiabilite: "moyenne",
+    url: "https://pindrop.gg/enshrouded/guides/farming", consulte: "2026-10-21", miseAJourSource: "2026-10-18",
+    note: "Terre de culture, Seedbed, plants, terres améliorées (fichiers 1.0)."
+  },
+  {
+    id: "kg-bases", nom: "KeenGamer — 1.0 Best Base Locations", type: "guide", fiabilite: "moyenne",
+    url: "https://www.keengamer.com/articles/guides/enshrouded-1-0-best-base-locations-where-to-build-your-base/", consulte: "2026-10-21", miseAJourSource: "2026-10-18",
+    note: "14 emplacements de base du début à la fin de partie."
+  },
+  {
+    id: "grindnstrat-bases", nom: "Grind n' Strat — 1.0 Base Location Guide", type: "guide", fiabilite: "faible",
+    url: "https://grindnstrat.com/enshrouded-1-0-base-location-guide/", consulte: "2026-10-21", miseAJourSource: "2026-10-15",
+    note: "Classe Woodgard meilleure base de départ (KeenGamer préfère Braelyn Bridge)."
+  },
+  {
+    id: "destructoid-blocks", nom: "Destructoid — All building blocks and locations", type: "guide", fiabilite: "faible",
+    url: "https://www.destructoid.com/all-building-blocks-and-material-locations-in-enshrouded/", consulte: "2026-10-21", miseAJourSource: "2025-05-20",
+    note: "Antérieur à la 1.0 ; précise plusieurs coffres."
+  },
+  {
+    id: "gamerguides-blocks", nom: "GamerGuides — All Building Block Materials", type: "guide", fiabilite: "faible",
+    url: "https://www.gamerguides.com/enshrouded/guide/crafting/workbench/all-building-block-materials-in-enshrouded", consulte: "2026-10-21", miseAJourSource: "2024-05-22",
+    note: "Ancien (2024) ; donne les quêtes associées aux blocs."
+  },
+  {
+    id: "yt-onlybase", nom: "YouTube — « Enshrouded 1.0: The Only Base You'll Ever Need » (P4wnyhof)", type: "video", fiabilite: "moyenne",
+    url: "https://www.youtube.com/watch?v=eRhxZc5jPms", consulte: "2026-10-21", miseAJourSource: "2026-10-19",
+    note: "Base modulaire en croix ; chapitres repris par AllThings.How."
+  },
+  {
+    id: "yt-starterbase", nom: "YouTube — « Enshrouded 1.0 Build Tutorial: The Perfect Starter Base »", type: "video", fiabilite: "faible",
+    url: "https://www.youtube.com/watch?v=NsuqzPXPez4", consulte: "2026-10-21", miseAJourSource: "2026-10-16",
+    note: "Tutoriel de base de départ ; vidéo non analysée (titre et date)."
+  },
+  {
+    id: "yt-buildguide", nom: "YouTube — « Enshrouded Building Guide for 1.0: Everything You Need to Know »", type: "video", fiabilite: "faible",
+    url: "https://www.youtube.com/watch?v=lVAd4Bm5pKU", consulte: "2026-10-21", miseAJourSource: "2026-10-05",
+    note: "Guide général de construction ; vidéo non analysée."
+  },
+  {
+    id: "yt-baselocations", nom: "YouTube — « Enshrouded 1.0 Best Base Locations: Building Tips »", type: "video", fiabilite: "faible",
+    url: "https://www.youtube.com/watch?v=N6s-IfMClWg", consulte: "2026-10-21",
+    note: "Emplacements et conseils ; vidéo non analysée."
+  },
+  {
+    id: "yt-settlement", nom: "YouTube — « Building Our First Settlement Base & Blacksmith Home: Enshrouded 1.0 »", type: "video", fiabilite: "faible",
+    url: "https://www.youtube.com/watch?v=SM5oN9wCuzc", consulte: "2026-10-21",
+    note: "Première base et maison du forgeron ; vidéo non analysée."
   }
 ];
