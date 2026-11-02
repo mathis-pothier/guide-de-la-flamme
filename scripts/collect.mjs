@@ -1,22 +1,24 @@
 // Collecte du wiki (enshrouded.wiki.gg) sans navigateur : même contenu que scripts/collect.html.
-// Produit .collect/wiki-items.json et .collect/wiki-maps.json, puis :
-//   node scripts/build-data.mjs && node scripts/fetch-images.mjs && node scripts/validate.mjs
+// Produit .collect/wiki-items.json, .collect/wiki-maps.json et .collect/wiki-creatures.json, puis :
+//   node scripts/build-data.mjs && node scripts/build-bestiaire.mjs && node scripts/fetch-images.mjs && node scripts/validate.mjs
 // Usage : node scripts/collect.mjs
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { collecterCreatures } from "./collect-creatures.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const API = "https://enshrouded.wiki.gg/api.php?format=json&";
+const API_FR = "https://enshrouded.wiki.gg/fr/api.php?format=json&";
 const UA = { "User-Agent": "guide-de-la-flamme/1.0 (https://github.com/mathis-pothier/guide-de-la-flamme)" };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const log = (m) => console.log(m);
 
-async function api(q, tries = 5) {
+async function api(q, tries = 5, base = API) {
   let last = "";
   for (let i = 0; i < tries; i++) {
     try {
-      const r = await fetch(API + q, { headers: UA });
+      const r = await fetch(base + q, { headers: UA });
       const t = await r.text();
       if (r.ok && t.startsWith("{")) return JSON.parse(t);
       // Diagnostic lisible dans le journal de l'Action
@@ -97,4 +99,9 @@ const fetched = new Date().toISOString();
 mkdirSync(join(root, ".collect"), { recursive: true });
 writeFileSync(join(root, ".collect", "wiki-items.json"), JSON.stringify({ fetched, pages: content }));
 writeFileSync(join(root, ".collect", "wiki-maps.json"), JSON.stringify({ fetched, pages: maps, files: urls }));
+
+// Bestiaire (créatures, résistances, butin)
+const creatures = await collecterCreatures({ api, apiFr: (q) => api(q, 5, API_FR), log, sleep });
+writeFileSync(join(root, ".collect", "wiki-creatures.json"), JSON.stringify(creatures));
+log(`Créatures : ${Object.keys(creatures.pages).length} pages`);
 log("TERMINÉ");

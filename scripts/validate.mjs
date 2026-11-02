@@ -12,7 +12,7 @@ const curatedCtx = { window: {} };
 vm.createContext(curatedCtx);
 vm.runInContext(readFileSync(join(root, "data", "items.js"), "utf8"), curatedCtx);
 const curatedItems = curatedCtx.window.ENS.items;
-for (const f of ["sources", "items", "skills", "builds", "builds-1.0", "versions", "catalog", "images", "map", "progression", "tronc-commun", "construction", "blocs-images", "map-config", "merge"]) {
+for (const f of ["sources", "items", "skills", "builds", "builds-1.0", "versions", "catalog", "images", "map", "progression", "tronc-commun", "construction", "blocs-images", "map-config", "bestiaire", "bestiaire-notes", "merge"]) {
   vm.runInContext(readFileSync(join(root, "data", f + ".js"), "utf8"), ctx, { filename: f + ".js" });
 }
 const D = ctx.window.ENS;
@@ -93,6 +93,24 @@ try {
   for (const [g, cat] of Object.entries(D.mapConfig.groupesWiki)) if (!D.mapConfig.categories[cat]) errors.push(`map-config : catégorie inconnue « ${cat} » pour ${g}`);
   console.log(`Carte : ${(mp.points || []).length} point(s) ajouté(s) par les administrateurs.`);
 } catch (e) { errors.push("map-points.json illisible : " + e.message); }
+// Bestiaire (généré par build-bestiaire.mjs) et notes rédigées (bestiaire-notes.js)
+if (D.bestiaire) {
+  const B = D.bestiaire.creatures, noms = new Set(B.map((c) => c.nom));
+  dupes(B, "Créature");
+  const VAL = ["Effective", "Weak", "Neutral", "Resisted", "Immune"], TYPES = ["Cutting", "Piercing", "Blunt", "Poison", "Fire", "Ice", "Shock", "Shroud"];
+  for (const c of B) {
+    if (!c.wiki || !c.nom) errors.push(`Créature « ${c.id} » : nom ou page du wiki manquant`);
+    if (!["w10", "pre"].includes(c.statut)) errors.push(`Créature « ${c.id} » : statut invalide « ${c.statut} »`);
+    for (const [k, x] of Object.entries(c.degats || {})) if (!TYPES.includes(k) || !VAL.includes(x)) errors.push(`Créature « ${c.id} » : résistance invalide ${k} = ${x}`);
+  }
+  const N = D.bestiaireNotes || {};
+  const notes = [...Object.values(N.familles || {}), ...Object.values(N.creatures || {}).flat()];
+  for (const n of notes) { if (!n.texte) errors.push("bestiaire-notes : note sans texte"); if (!n.sources?.length) errors.push(`bestiaire-notes : note sans source « ${String(n.texte).slice(0, 40)}… »`); (n.sources || []).forEach((s) => { if (!src.has(s)) errors.push(`bestiaire-notes : source inconnue « ${s} »`); }); }
+  for (const nom of [...Object.keys(N.pindrop || {}), ...Object.keys(N.creatures || {})]) if (!noms.has(nom)) warnings.push(`bestiaire-notes : « ${nom} » ne correspond à aucune créature du wiki`);
+  for (const [nom, v] of Object.entries(N.pindrop || {})) for (const [k, x] of Object.entries(v)) if (!TYPES.includes(k) || typeof x !== "number") errors.push(`bestiaire-notes : valeur PinDrop invalide ${nom} ${k}`);
+  for (const s of ["wiki-bestiaire", "wiki-combat", "wiki-perks", "pd-bosses"]) if (!src.has(s)) errors.push(`Bestiaire : source « ${s} » absente de data/sources.js`);
+  console.log(`Bestiaire : ${B.length} créatures, collecte du ${D.bestiaire.meta.collecte}.`);
+}
 const noImg = D.items.filter((i) => !D.images[i.id] && !D.images[i.catalogId]).length;
 console.log(`Objets sans image (icône générée) : ${noImg}`);
 const statCount = D.items.reduce((a, i) => ((a[i.statut] = (a[i.statut] || 0) + 1), a), {});

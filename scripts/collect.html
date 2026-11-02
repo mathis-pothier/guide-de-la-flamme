@@ -1,16 +1,19 @@
 <!doctype html>
 <meta charset="utf-8">
 <title>Collecte wiki</title>
-<!-- Récupère le contenu brut du wiki (wikitext + images + cartes) depuis le navigateur et l'envoie au serveur local
-     lancé avec `node scripts/serve.mjs 8081 --collect`. Le traitement se fait ensuite dans scripts/build-data.mjs. -->
+<!-- Récupère le contenu brut du wiki (wikitext + images + cartes + créatures) depuis le navigateur et l'envoie au serveur local
+     lancé avec `node scripts/serve.mjs 8081 --collect`. Le traitement se fait ensuite dans scripts/build-data.mjs et build-bestiaire.mjs.
+     collect.html?creatures : bestiaire seulement. Les vignettes des créatures sont téléchargées par scripts/fetch-images.mjs
+     (le wiki n'autorise pas leur lecture depuis une autre origine : en attendant, le site affiche l'image du wiki). -->
 <pre id="log">Démarrage…</pre>
-<script>
+<script type="module">
+import { collecterCreatures } from "./collect-creatures.mjs";
 const API = "https://enshrouded.wiki.gg/api.php?format=json&origin=*&";
 const log = (m) => { document.getElementById("log").textContent += "\n" + m; };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-async function api(q, tries = 4) {
+async function api(q, tries = 4, base = API) {
   for (let i = 0; i < tries; i++) {
-    try { const r = await fetch(API + q); if (r.ok) return await r.json(); } catch (e) {}
+    try { const r = await fetch(base + q); if (r.ok) return await r.json(); } catch (e) {}
     await sleep(1200 * (i + 1));
   }
   throw new Error("échec " + q.slice(0, 80));
@@ -48,8 +51,13 @@ async function post(name, data) {
   const r = await fetch("/__collect/" + name, { method: "POST", body: JSON.stringify(data) });
   log(`→ ${name} : ${r.status}`);
 }
+async function bestiaire() {
+  const c = await collecterCreatures({ api, apiFr: (q) => api(q, 4, API.replace("/api.php", "/fr/api.php")), log, sleep });
+  await post("wiki-creatures.json", c);
+}
 (async () => {
   try {
+    if (location.search.includes("creatures")) { await bestiaire(); log("TERMINÉ"); return; }
     const CATS = ["Category:Melee Weapons", "Category:Ranged Weapons", "Category:Magic Weapons", "Category:Lore Weapons",
       "Category:Armor Set", "Category:Magic Armor", "Category:Melee Armor", "Category:Ranged Armor",
       "Category:Rings", "Category:Shields", "Category:Staff Charges"];
@@ -82,6 +90,7 @@ async function post(name, data) {
     }
     log(`Fichiers de carte : ${Object.keys(urls).length}/${fl.length}`);
     await post("wiki-maps.json", { fetched: new Date().toISOString(), pages: maps, files: urls });
+    await bestiaire();
     log("TERMINÉ");
   } catch (e) { log("ERREUR " + e.message); }
 })();

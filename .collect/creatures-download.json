@@ -1,0 +1,338 @@
+[
+ {
+  "id": "baby-capybara",
+  "url": "https://enshrouded.wiki.gg/images/Baby_Capybara.png?8b19bf"
+ },
+ {
+  "id": "baby-common-goat",
+  "url": "https://enshrouded.wiki.gg/images/Baby_Goat.png?4f4170"
+ },
+ {
+  "id": "baby-dune-armadillo",
+  "url": "https://enshrouded.wiki.gg/images/Baby_Dune_Armadillo.png?3b9fb1"
+ },
+ {
+  "id": "baby-fae-deer",
+  "url": "https://enshrouded.wiki.gg/images/Baby_Fae_Deer.png?e157c8"
+ },
+ {
+  "id": "baby-flightless-redtail",
+  "url": "https://enshrouded.wiki.gg/images/Baby_Flightless_Redtail.png?f420f5"
+ },
+ {
+  "id": "baby-frizzy-goat",
+  "url": "https://enshrouded.wiki.gg/images/Baby_Frizzy_Goat.png?4fb60c"
+ },
+ {
+  "id": "baby-hophare",
+  "url": "https://enshrouded.wiki.gg/images/Baby_Hophare.png?abfb41"
+ },
+ {
+  "id": "baby-round-billed-sailer",
+  "url": "https://enshrouded.wiki.gg/images/Baby_Round-Billed_Sailer.png?2ada26"
+ },
+ {
+  "id": "baby-yak",
+  "url": "https://enshrouded.wiki.gg/images/Baby_Yak.png?5f4378"
+ },
+ {
+  "id": "bat",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Bat.png/320px-Bat.png?d0c55e"
+ },
+ {
+  "id": "boar",
+  "url": "https://enshrouded.wiki.gg/images/Boar.png?165df5"
+ },
+ {
+  "id": "capybara",
+  "url": "https://enshrouded.wiki.gg/images/Capybara.png?ce92ee"
+ },
+ {
+  "id": "common-goat",
+  "url": "https://enshrouded.wiki.gg/images/Goat.png?dee9d8"
+ },
+ {
+  "id": "cyclops",
+  "url": "https://enshrouded.wiki.gg/images/Cyclops.png?b2a18a"
+ },
+ {
+  "id": "draconian-vulture",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Draconian_Vulture.png/320px-Draconian_Vulture.png?2c80df"
+ },
+ {
+  "id": "drak-broodwarden",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Drak_Broodwarden.png/320px-Drak_Broodwarden.png?f0348c"
+ },
+ {
+  "id": "drak-chieftan",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Drak_Chieftan.png/320px-Drak_Chieftan.png?1403d5"
+ },
+ {
+  "id": "drak-hunter",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Drak_Hunter.png/320px-Drak_Hunter.png?b25de7"
+ },
+ {
+  "id": "drak-priest",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Drak_Priest.png/320px-Drak_Priest.png?471049"
+ },
+ {
+  "id": "dune-armadillo",
+  "url": "https://enshrouded.wiki.gg/images/Dune_Armadillo.png?a24b60"
+ },
+ {
+  "id": "exploding-fell-critter",
+  "url": "https://enshrouded.wiki.gg/images/Exploding_Fell_Critter.png?78c1ba"
+ },
+ {
+  "id": "fae-deer",
+  "url": "https://enshrouded.wiki.gg/images/Fae_Deer.png?779fb1"
+ },
+ {
+  "id": "fell-banshee",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Banshee.png/320px-Fell_Banshee.png?25976e"
+ },
+ {
+  "id": "fell-berserker",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Berserker.png/320px-Fell_Berserker.png?58aba5"
+ },
+ {
+  "id": "fell-boar",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Boar.png/320px-Fell_Boar.png?24476d"
+ },
+ {
+  "id": "fell-commander",
+  "url": "https://enshrouded.wiki.gg/images/Fell_Commander.png?afbe2b"
+ },
+ {
+  "id": "fell-critter",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Critter.png/320px-Fell_Critter.png?e7d657"
+ },
+ {
+  "id": "fell-critter-queen",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Critter_Queen.png/320px-Fell_Critter_Queen.png?4d241e"
+ },
+ {
+  "id": "fell-cyclops",
+  "url": "https://enshrouded.wiki.gg/images/Fell_Cyclops.png?be0102"
+ },
+ {
+  "id": "fell-draconian-vulture",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Draconian_Vulture.png/320px-Fell_Draconian_Vulture.png?97e62a"
+ },
+ {
+  "id": "fell-dragon-youngling",
+  "url": "https://enshrouded.wiki.gg/images/Fell_Dragon_Youngling.png?7bc337"
+ },
+ {
+  "id": "fell-footsoldier",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Footsoldier_Shortsword.png/320px-Fell_Footsoldier_Shortsword.png?88da1b"
+ },
+ {
+  "id": "fell-monstrosity",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Monstrosity.png/320px-Fell_Monstrosity.png?49df50"
+ },
+ {
+  "id": "fell-mushroom-crab",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Mushroom_Crab.png/320px-Fell_Mushroom_Crab.png?497dcb"
+ },
+ {
+  "id": "fell-ranger",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Ranger.png/320px-Fell_Ranger.png?6f991f"
+ },
+ {
+  "id": "fell-sicklescythe",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Sicklescythe.png/320px-Fell_Sicklescythe.png?8d7823"
+ },
+ {
+  "id": "fell-sporehead",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Sporehead.png/320px-Fell_Sporehead.png?7f39bd"
+ },
+ {
+  "id": "fell-thunderbrute",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Thunderbrute.png/320px-Fell_Thunderbrute.png?cb7421"
+ },
+ {
+  "id": "fell-vicious-vine",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Spitting_Plant.png/320px-Fell_Spitting_Plant.png?2a1b08"
+ },
+ {
+  "id": "fell-wispwyvern",
+  "url": "https://enshrouded.wiki.gg/images/Fell_Wispwyvern.png?7b72d8"
+ },
+ {
+  "id": "flightless-redtail",
+  "url": "https://enshrouded.wiki.gg/images/Flightless_Redtail.png?599ad5"
+ },
+ {
+  "id": "frizzy-goat",
+  "url": "https://enshrouded.wiki.gg/images/Frizzy_Goat.png?ddf6ab"
+ },
+ {
+  "id": "frost-wisp",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Frost_Wisp.png/320px-Frost_Wisp.png?5b7bb8"
+ },
+ {
+  "id": "hollow-cyclops",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Hollow_Cyclops.png/320px-Hollow_Cyclops.png?68dcd8"
+ },
+ {
+  "id": "hollow-damned",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Hollow_Damned.png/320px-Hollow_Damned.png?b4af2c"
+ },
+ {
+  "id": "hollow-hound",
+  "url": "https://enshrouded.wiki.gg/images/Hollow_Hound.png?928409"
+ },
+ {
+  "id": "hollow-reaper",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Hollow_Reaper.png/320px-Hollow_Reaper.png?f0968c"
+ },
+ {
+  "id": "hollow-summoner",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Hollow_Summoner.png/320px-Hollow_Summoner.png?1dd0a8"
+ },
+ {
+  "id": "hollow-wretch",
+  "url": "https://enshrouded.wiki.gg/images/Hollow_Wretch.png?28d487"
+ },
+ {
+  "id": "hophare",
+  "url": "https://enshrouded.wiki.gg/images/Hophare.png?dcc9c1"
+ },
+ {
+  "id": "mushroom-crab",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Mushroom_Crab.png/320px-Mushroom_Crab.png?8e9c1d"
+ },
+ {
+  "id": "pink-stinger",
+  "url": "https://enshrouded.wiki.gg/images/Pink_Stinger.png?95a3e5"
+ },
+ {
+  "id": "rat",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Rat.png/320px-Rat.png?d7c803"
+ },
+ {
+  "id": "round-billed-sailer",
+  "url": "https://enshrouded.wiki.gg/images/Round-Billed_Sailer.png?da3da8"
+ },
+ {
+  "id": "sabertooth-tiger",
+  "url": "https://enshrouded.wiki.gg/images/Sabertooth_Tiger.png?fce036"
+ },
+ {
+  "id": "scavenger-berserker",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Scavenger_Berserker.png/320px-Scavenger_Berserker.png?df1569"
+ },
+ {
+  "id": "scavenger-matron",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Scavenger_Matron.png/320px-Scavenger_Matron.png?bc7561"
+ },
+ {
+  "id": "scavenger-miner",
+  "url": "https://enshrouded.wiki.gg/images/Scavenger_Miner.png?fc739f"
+ },
+ {
+  "id": "scavenger-pyreblade",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Scavenger_Pyreblade.png/320px-Scavenger_Pyreblade.png?3aa8c7"
+ },
+ {
+  "id": "scavenger-pyro",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Scavenger_Pyro.png/320px-Scavenger_Pyro.png?8cf835"
+ },
+ {
+  "id": "scavenger-scalper",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Scavenger_Scalper.png/320px-Scavenger_Scalper.png?3dacab"
+ },
+ {
+  "id": "scavenger-scrapgun",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Scavenger_Ballista.png/320px-Scavenger_Ballista.png?ffe217"
+ },
+ {
+  "id": "scavenger-tyrant",
+  "url": "https://enshrouded.wiki.gg/images/Scavenger_Tyrant.png?878368"
+ },
+ {
+  "id": "scavenger-wolf",
+  "url": "https://enshrouded.wiki.gg/images/Scavenger_Wolf.png?493732"
+ },
+ {
+  "id": "scorpion",
+  "url": "https://enshrouded.wiki.gg/images/Scorpion.png?b810b7"
+ },
+ {
+  "id": "shroud-depthdweller",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Shroud_Depthdweller.png/320px-Shroud_Depthdweller.png?f98ca6"
+ },
+ {
+  "id": "shroud-flayer",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Shroud_Flayer.png/320px-Shroud_Flayer.png?289305"
+ },
+ {
+  "id": "shroud-gazer",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Shroud_Gazer.png/320px-Shroud_Gazer.png?3896f4"
+ },
+ {
+  "id": "shroud-stalker",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Shroud_Stalker.png/320px-Shroud_Stalker.png?7f0a16"
+ },
+ {
+  "id": "snapjaw",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Snapjaw.png/320px-Snapjaw.png?b30827"
+ },
+ {
+  "id": "snow-leopard",
+  "url": "https://enshrouded.wiki.gg/images/Snow_Leopard.png?e1e30e"
+ },
+ {
+  "id": "spider",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Spider.png/320px-Spider.png?ffb521"
+ },
+ {
+  "id": "vicious-vine",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Vicious_Vine.png/320px-Vicious_Vine.png?212bad"
+ },
+ {
+  "id": "vukah-berserker",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Vukah_Berserker.png/320px-Vukah_Berserker.png?a453ea"
+ },
+ {
+  "id": "vukah-brawler",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Vukah_Brawler.png/320px-Vukah_Brawler.png?b5bc72"
+ },
+ {
+  "id": "vukah-ranger",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Vukah_Ranger.png/320px-Vukah_Ranger.png?d5444f"
+ },
+ {
+  "id": "vukah-shaman",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Vukah_Shaman.png/320px-Vukah_Shaman.png?4c47a0"
+ },
+ {
+  "id": "vukah-warrior",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Vukah_Warrior.png/320px-Vukah_Warrior.png?5e7ce0"
+ },
+ {
+  "id": "water-reptile",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Water_Reptile.png/320px-Water_Reptile.png?4bd166"
+ },
+ {
+  "id": "whitewing-vulture",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Whitewing_Vulture.png/320px-Whitewing_Vulture.png?ddfe9c"
+ },
+ {
+  "id": "wisp",
+  "url": "https://enshrouded.wiki.gg/images/Wisp.png?df6858"
+ },
+ {
+  "id": "wolf",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Wolf.png/320px-Wolf.png?3c743d"
+ },
+ {
+  "id": "yak",
+  "url": "https://enshrouded.wiki.gg/images/Yak.png?1479ed"
+ },
+ {
+  "id": "yellow-stinger",
+  "url": "https://enshrouded.wiki.gg/images/Yellow_Stinger.png?eb1ad5"
+ }
+]

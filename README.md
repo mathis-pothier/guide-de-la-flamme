@@ -40,6 +40,10 @@ Guide de fan, non officiel, en français. Site statique, sans dépendance ni com
 | `scripts/guide-images.py` | Visuels des guides → `images/guides/` : fonds de carte découpés dans les tuiles du wiki (les épingles sont placées par `app.js` d'après `data/map.js`) et rendus de sets en WebP. `python3 scripts/guide-images.py` (Pillow) | outil |
 | `scripts/fetch-images.mjs` | Copie locale des images, tuiles et icônes de carte → `images/` + `data/images.js` | outil |
 | `data/map-config.js` | Carte : catégories, précisions, raretés, statuts, dépôt de stockage, validation d'un point (partagée site + `validate.mjs`) | configuration |
+| `bestiaire.js` | Onglet Bestiaire : liste, filtres, tri, fiche d'une créature (vue ajoutée au routeur d'`app.js` par `window.ENS_EXT`) | — |
+| `data/bestiaire.js` | Créatures lues sur le wiki : comportement, faction, régions, résistances par type de dégâts, butin, textes de combat | **données générées** |
+| `data/bestiaire-notes.js` | Notes sourcées ajoutées à la main (familles d'ennemis, faiblesses PinDrop des boss) | **données** |
+| `scripts/collect-creatures.mjs`, `scripts/build-bestiaire.mjs` | Collecte des pages de créatures (partagée par `collect.mjs` et `collect.html`) et construction du bestiaire | outil |
 | `data/map-points.json` | Points ajoutés par les administrateurs depuis l'onglet Carte (vide au départ, aucune donnée de démonstration) | **données** |
 | `i18n.js` | Langue du site (français par défaut, anglais par le bouton FR / EN) : traduction de l'interface et des données à l'affichage | — |
 | `data/i18n/fr.js`, `data/i18n/en.js` | Dictionnaires anglais → français (noms et textes du wiki) et français → anglais (interface et textes du site) | **générés** |
@@ -57,6 +61,7 @@ affichent donc toujours la fiabilité des données sous-jacentes.
 - **Builds** : filtre par style, fiche détaillée (attributs, équipement par emplacement et par étape, compétences, synergies,
   contextes, conseils), lien de partage, planificateur personnel enregistré dans le navigateur et partageable par lien.
 - **Équipements** : recherche (nom, atout, lieu), filtres catégorie / style / rareté / fiabilité / niveau, tri, fiche détaillée.
+- **Bestiaire** : créatures hostiles et passives du wiki officiel, recherche, filtres (catégorie, faction, région, vulnérabilité, résistance, type de dégâts comparé), tri, fiche avec résistances, sources en désaccord signalées, sorts et armes du type efficace, butin, particularités de combat et sources. Voir [Bestiaire](#bestiaire).
 - **Compétences** : recommandations générales, coop et par build ; liste filtrable avec coûts, conflits et sources.
 - **Construction** : 8 idées de bâtiments pas à pas (base en croix, maison 3×5, ferme, coffres, atelier, confort…), les 61 blocs du wiki avec recette et lieu de déblocage, les emplacements de base conseillés, l'autel et le confort, les artisans à sauver et des tutoriels vidéo (`data/construction.js`).
 - **Carte** : carte dynamique unique (Leaflet) : lieux du wiki, objets, blocs, survivants, emplacements de base et ajouts des
@@ -122,6 +127,46 @@ collaborateur ou le jeton ne cible pas ce dépôt avec Contents en écriture ; �
 http://localhost:8090, puis dans la console du navigateur `localStorage.setItem("ens.devApi", "http://localhost:8099")`
 (adresse acceptée uniquement sur localhost). Jetons fictifs : `test_admin_token_0123456789abcd` (écriture) et
 `test_reader_token_0123456789abcd` (refusé). Les données restent en mémoire. Ensuite : `localStorage.removeItem("ens.devApi")`.
+
+## Bestiaire
+
+**Sources.** Le bestiaire reprend les pages de créatures du wiki officiel (catégories *Creatures*, *Drak* et *Bosses*), lues par son API
+lors de la collecte. Pour chaque créature : comportement (*Hostile*, *Fleeting*, *Peaceful*, *Neutral*), faction, régions, butin, sections
+« Attacks », « Behavior », « Tips »… et surtout l'infobox des défenses : un terme par type de dégâts (tranchant, perforant, contondant,
+poison, feu, glace, foudre, Voile).
+
+**Ce que veulent dire les valeurs.** La page [Combat Mechanics](https://enshrouded.wiki.gg/wiki/Combat_Mechanics) du wiki définit les
+termes que le jeu affiche sous les dégâts : « Effective » = multiplicateur de dégâts subis supérieur à 1, « Resisted » = inférieur à 1.
+L'écart exact varie selon l'ennemi et n'est pas publié dans l'infobox. Le site affiche donc ces termes tels quels (« Efficace »,
+« Résisté », « Immunisé », « Neutre ») et n'invente aucun pourcentage. « Weak », employé seulement pour le feu sur les bébés animaux, n'a
+pas de définition publiée : il n'est compté ni comme vulnérabilité ni comme résistance.
+
+**Recoupements.** Deux autres sources sont comparées à l'infobox, type par type, et tout désaccord est signalé dans la fiche (l'infobox,
+plus récente, reste la valeur principale) :
+- les multiplicateurs mesurés par des joueurs sur la page Combat Mechanics (29 créatures, page d'avril 2026, donc **antérieure à la 1.0**) ;
+- les faiblesses en pourcentage de quelques boss reprises du guide « Boss » du site (PinDrop), dans `data/bestiaire-notes.js`.
+
+La base d'ennemis PinDrop « 1.0 » (tirée des fichiers du jeu) n'a pas pu être consultée lors de la création du bestiaire : aucune de ses
+valeurs n'est reprise. Elle est citée dans les sources comme piste de vérification.
+
+**Suggestions d'armes.** Elles sont calculées, pas rédigées : pour chaque type « Efficace », la fiche liste les sorts dont le wiki indique
+ce type de dégâts et les armes dont un atout ajoute ce type (+10 % des dégâts de base par atout, page Weapons/Perks du wiki). Les dégâts de
+base d'une arme peuvent mêler plusieurs types : la fiche le rappelle et renvoie à l'indication « Effective » / « Resisted » en jeu.
+
+**Limites.** Liste non exhaustive (seulement les créatures qui ont une page sur le wiki). 11 créatures n'ont aucune résistance renseignée,
+7 en ont une partie. Certaines pages n'ont pas été modifiées depuis la 1.0 (pastille « Ancienne version »). Les pillards changent de
+faiblesse selon la région d'après le wiki, alors que l'infobox ne donne qu'une valeur : la fiche le signale. Les images viennent du wiki ;
+tant que la collecte automatique ne les a pas copiées dans `images/creatures/`, le site affiche celles du wiki.
+
+**Mettre à jour.** La collecte automatique (lundi et jeudi) relit les créatures et ouvre une pull request si la liste change. À la main :
+1. `node scripts/collect.mjs` (ou, sans réseau pour Node : `node scripts/serve.mjs 8081 --collect` puis
+   http://localhost:8081/scripts/collect.html?creatures) ;
+2. `node scripts/build-bestiaire.mjs` (résumé : nombre de créatures, résistances complètes, pages modifiées depuis la 1.0…) ;
+3. `node scripts/fetch-images.mjs` (vignettes), `node scripts/build-i18n.mjs --a-traduire` (noms et textes à traduire, voir
+   [Langues](#langues)), `node scripts/validate.mjs`, puis `node scripts/stamp-version.mjs`.
+
+Une note ajoutée à la main va dans `data/bestiaire-notes.js` avec ses sources (identifiants de `data/sources.js`) : `validate.mjs`
+refuse une note sans source. Après une mise à jour majeure du jeu, changez aussi `RELEASE_10` dans `scripts/build-bestiaire.mjs`.
 
 ## Langues
 
@@ -195,7 +240,7 @@ en panne, la collecte échoue sans rien modifier et la suivante prend le relais.
 
 1. `node scripts/collect.mjs` (ou, si Node n'a pas accès au réseau : `node scripts/serve.mjs 8081 --collect` puis ouvrir
    http://localhost:8081/scripts/collect.html et attendre « TERMINÉ ») ;
-2. `node scripts/build-data.mjs` ;
+2. `node scripts/build-data.mjs` et `node scripts/build-bestiaire.mjs` ;
 3. `node scripts/fetch-images.mjs` (ne télécharge que les nouvelles images) ;
 4. `node scripts/validate.mjs` ;
 5. `node scripts/build-i18n.mjs --a-traduire` (traductions, voir [Langues](#langues)).

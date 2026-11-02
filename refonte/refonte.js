@@ -6,7 +6,7 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const API = () => window.ENS_API;
   const { t, tp, nm, nmh } = window.ENS_I18N;
-  const TITRES = Object.fromEntries(Object.entries({ accueil: "Accueil", guides: "Guides", builds: "Builds", build: "Build", planner: "Mon build", equipements: "Équipements", competences: "Compétences",
+  const TITRES = Object.fromEntries(Object.entries({ accueil: "Accueil", guides: "Guides", builds: "Builds", build: "Build", planner: "Mon build", equipements: "Équipements", bestiaire: "Bestiaire", competences: "Compétences",
     construction: "Construction", carte: "Carte", comparateur: "Comparateur", maj: "Mises à jour et sources" }).map(([k, v]) => [k, t(v)]));
   // Personnage affiché selon la famille du build (rendus de sets du wiki, © Keen Games)
   const FIGURE = { "c-war": "guerrier", "c-rng": "rodeur", "c-mag": "mage", "c-hyb": "hybride", "c-base": "base" };
@@ -27,6 +27,7 @@
       ["guides", "book", t("Guides"), t("{0} guides en {1} catégories", G.liste.length, G.categories.length), "c-base"],
       ["builds", "star", t("Builds"), t("{0} styles, équipement par étape", D.builds.length), "c-war"],
       ["equipements", "sword", t("Équipements"), t("{0} objets et leurs sources", n(D.items.length)), "c-rng"],
+      ["bestiaire", "skull", t("Bestiaire"), t("{0} créatures, faiblesses et butin", (D.bestiaire?.creatures || []).length), "c-war"],
       ["carte", "map", t("Carte"), t("{0} objets épinglés", n(pins)), "c-hyb"],
       ["competences", "tree", t("Compétences"), t("{0} compétences, tronc commun", D.skills.length), "c-mag"],
       ["construction", "home", t("Construction"), t("{0} blocs, {1} bâtiments", CONS.blocs.length, CONS.batiments.length), "c-base"]
@@ -86,10 +87,11 @@
     D.builds.forEach((b) => add("Builds", TAGS[b.id]?.court || b.nom, tr(TAGS[b.id]?.accroche || b.role), b.nom + " " + b.style, { hash: "build/" + b.id }, { icone: "star" }));
     D.items.forEach((it) => add("Objets", nm(it.nom), [lvTxt(it), tr(it.rarete || it.type)].filter(Boolean).join(" · "), [it.type, tr(it.type), ...(it.atouts || []), ...(it.atouts || []).map(tr), ...(it.effets || []), it.obtention, tr(it.obtention)].join(" "), { item: it.id }, { item: it.id }, it.nom));
     D.skills.forEach((s) => add("Compétences", nm(s.nom), `${tr(s.arbre)} · ${tr(s.effet)}`, tr(s.sous), { skill: s.id }, { icone: "tree" }, s.nom));
+    (D.bestiaire?.creatures || []).forEach((c) => add("Créatures", nm(c.nom), [window.ENS_BESTIAIRE?.faction(c.faction) || c.faction, ...(c.regions || []).map(nm)].filter(Boolean).join(" · "), (c.regions || []).join(" "), { hash: "bestiaire/" + c.id }, { icone: "skull" }, c.nom));
     CONS.blocs.forEach((b) => add("Blocs", nm(b.nom), tr(b.recette), [tr(b.lieu), b.region, nm(b.region)].join(" "), { hash: "construction/blocs" }, { icone: "block" }, b.nom));
     return out;
   }
-  const LIMITE = { Rubriques: 3, Guides: 5, Builds: 4, Objets: 8, "Compétences": 5, Blocs: 3 };
+  const LIMITE = { Rubriques: 3, Guides: 5, Builds: 4, Objets: 8, "Créatures": 5, "Compétences": 5, Blocs: 3 };
   function search(q) {
     const { norm } = API();
     index ||= buildIndex();

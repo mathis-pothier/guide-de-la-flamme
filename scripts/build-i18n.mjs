@@ -17,17 +17,18 @@ const { OFFICIELS } = await imp("officiels-fr.mjs");
 const { PIECES, SETS, SORTS, ANNEAUX, GRADES, OBJETS } = await imp("objets-fr.mjs");
 const { LIEUX, COMPETENCES, BLOCS, ATOUTS, QUETES, DIVERS, MATERIAUX } = await imp("lieux-fr.mjs");
 const { PIECES2, SETS2, NOMS2, LIEUX2, PROPRES2 } = await imp("noms-fr-2.mjs");
+const { CREATURES3, BUTIN3 } = await imp("noms-fr-3.mjs");
 Object.assign(PIECES, PIECES2); Object.assign(SETS, SETS2);
 
 // Données du site (comme scripts/validate.mjs)
 const ctx = { window: {} };
 vm.createContext(ctx);
-for (const f of ["sources", "items", "skills", "builds", "builds-1.0", "versions", "catalog", "images", "map", "progression", "tronc-commun", "construction", "blocs-images", "guides", "map-config", "merge"])
+for (const f of ["sources", "items", "skills", "builds", "builds-1.0", "versions", "catalog", "images", "map", "progression", "tronc-commun", "construction", "blocs-images", "guides", "map-config", "bestiaire", "bestiaire-notes", "merge"])
   vm.runInContext(readFileSync(join(root, "data", f + ".js"), "utf8"), ctx, { filename: f + ".js" });
 const D = ctx.window.ENS;
 
 // ── Noms : anglais → français
-const SITE = { ...OBJETS, ...LIEUX, ...COMPETENCES, ...BLOCS, ...ATOUTS, ...QUETES, ...DIVERS, ...NOMS2, ...LIEUX2, ...Object.fromEntries(PROPRES2.map((n) => [n, n])) };
+const SITE = { ...OBJETS, ...LIEUX, ...COMPETENCES, ...BLOCS, ...ATOUTS, ...QUETES, ...DIVERS, ...NOMS2, ...LIEUX2, ...CREATURES3, ...BUTIN3, ...Object.fromEntries(PROPRES2.map((n) => [n, n])) };
 const ROMAIN = /^(.*?)( [IVX]+)?$/;
 function regle(en) {
   // Pièce de set : « Alpine Antler Boots » → « Bottes des bois alpins »
@@ -68,6 +69,14 @@ for (const r of [...D.map.regions, ...D.map.zones]) nom(r.nom, "regions");
 for (const b of D.construction.blocs) { nom(b.nom, "blocs"); nom(b.quete, "quetes"); nom(b.region, "regions"); }
 for (const x of D.construction.confort.exemples) nom(x.objet, "divers");
 for (const [en] of Object.entries({ ...LIEUX, ...DIVERS, ...OFFICIELS })) nom(en, "divers");
+// Bestiaire : nom du wiki français (officiel) s'il existe, sinon traduction du site ; butin et lieux du butin unique
+const BEST = D.bestiaire?.creatures || [];
+for (const c of BEST) {
+  if (c.nomFr && !OFFICIELS[c.nom] && noms[c.nom] === undefined) noms[c.nom] = [c.nomFr, 1];
+  nom(c.nom, "noms de créatures");
+  (c.regions || []).forEach((r) => nom(r, "regions"));
+  for (const x of c.butin || []) { nom(x.nom, "butin"); if (x.lieu && !/,| and /.test(x.lieu)) nom(x.lieu, "lieux"); }
+}
 
 // ── Textes : anglais → français
 const textes = {};
@@ -125,6 +134,8 @@ const CONTROLE = json("controle-fr.json");
 parId(/^descriptions-fr.*\.json$/, D.items, "description", "descriptions");
 parId(/^obtention-fr.*\.json$/, D.items, "obtentionEn", "obtentionEn");
 parId(/^lieux-desc-fr.*\.json$/, D.map.marqueurs, "desc", "descLieux");
+// Bestiaire : description et sections de combat du wiki (identifiant « créature » ou « créature#Section »)
+parId(/^creatures-fr.*\.json$/, BEST.flatMap((c) => [{ id: c.id, texte: c.description }, ...(c.combat || []).map((s) => ({ id: c.id + "#" + s.titre, texte: s.texte }))]), "texte", "textes de créatures");
 writeFileSync(join(SRC, "controle-fr.json"), JSON.stringify(CONTROLE) + "\n");
 // Textes courts traduits tels quels (effets, améliorations…)
 for (const f of readdirSync(SRC).filter((x) => /^textes-fr.*\.json$/.test(x))) Object.assign(textes, json(f));
@@ -161,7 +172,7 @@ writeFileSync(join(root, "data", "i18n", "fr.js"),
 // un texte français modifié change d'empreinte et redevient « à traduire » (le site affiche alors le français).
 const aTraduire = new Set();
 const STR = '"((?:[^"\\\\]|\\\\.)*)"';
-for (const f of ["app.js", "refonte/refonte.js", "admin.js", "data/map-config.js"]) {
+for (const f of ["app.js", "refonte/refonte.js", "admin.js", "bestiaire.js", "data/map-config.js"]) {
   const s = readFileSync(join(root, f), "utf8");
   for (const re of [new RegExp("\\bt\\(" + STR, "g"), new RegExp("\\btp\\([^,]+, " + STR + ", " + STR, "g"), new RegExp("\\btr\\(" + STR + "\\)", "g")])
     for (const m of s.matchAll(re)) for (const g of m.slice(1)) if (g != null) aTraduire.add(JSON.parse('"' + g + '"'));
@@ -190,11 +201,11 @@ const walkFr = (v, k) => {
   // Clés « techniques » ignorées, sauf texte libre (builds.prerequis) ou objet (guides.sources, mapConfig.fonds.wiki)
   if (v && typeof v === "object") for (const [kk, x] of Object.entries(v)) if (!SAUTE.has(kk) || (x && typeof x === "object" && !Array.isArray(x)) || (kk === "prerequis" && typeof x === "string")) walkFr(x, kk);
 };
-for (const [k, v] of Object.entries(D)) if (!["catalog", "images", "blocsImages", "alias"].includes(k)) walkFr(v, k);
+for (const [k, v] of Object.entries(D)) if (!["catalog", "images", "blocsImages", "alias", "bestiaire"].includes(k)) walkFr(v, k);
 for (const it of D.items) { walkFr(it.description && FR_RE.test(it.description) && !/[a-z]{3} [a-z]{3} the /.test(it.description) ? it.description : null, "description"); }
 // « Où le trouver » mêlant français et anglais (« Fabrication : Manual Crafting », « Butin des Hollow Halls »)
 for (const it of D.items) if (/^(Fabrication|Butin)\b|fabricable/.test(it.obtention || "")) aTraduire.add(it.obtention);
-for (const k of ["Rareté non indiquée", "Commune", "Peu commune", "Rare", "Épique", "Légendaire", "Non indiquée"]) aTraduire.add(k);
+for (const k of ["Créatures", "Créature", "Rareté non indiquée", "Commune", "Peu commune", "Rare", "Épique", "Légendaire", "Non indiquée"]) aTraduire.add(k);
 // Configuration de la carte : tous les libellés (catégories, précisions, statuts, fonds) et messages de validation
 const walkAll = (v) => { if (typeof v === "string") { if (/[A-Za-zÀ-ÿ]{3}/.test(v) && !/^(#|https?:|images\/)/.test(v) && !/^[a-z0-9-]+$/.test(v)) aTraduire.add(v); } else if (v && typeof v === "object") Object.entries(v).forEach(([k, x]) => { if (!["couleur", "icone", "depot", "branche", "fichier", "dossier", "ext"].includes(k)) walkAll(x); }); };
 walkAll({ categories: D.mapConfig.categories, precisions: D.mapConfig.precisions, statuts: D.mapConfig.statuts, fonds: D.mapConfig.fonds });

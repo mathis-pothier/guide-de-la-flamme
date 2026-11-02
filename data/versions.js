@@ -13,6 +13,7 @@ window.ENS.meta = {
     { domaine: "Compétences", etat: "partiel", detail: "Effets issus du wiki (structure pré-1.0). Nouvelles compétences 1.0 intégrées avec coûts/rangs, valeurs souvent non publiées." },
     { domaine: "Carte", etat: "partiel", detail: "Carte dynamique unique : fond 1.0 tiré de captures en jeu (21/10/2026), lieux du wiki (marqueurs d'août 2026), ancien fond du wiki en option, objets, blocs, survivants, ajouts des administrateurs ; cartes 1.0 complètes de th.gl, Map Genie et AllThings.How en liens seulement (pas de licence de réutilisation)." },
     { domaine: "Anneaux", etat: "1.0", detail: "38 anneaux nommés sur le wiki + 7 lignées lues dans les fichiers 1.0 (PinDrop)." },
+    { domaine: "Bestiaire", etat: "partiel", detail: "126 créatures lues sur le wiki officiel le 02/11/2026 (113 pages modifiées depuis la 1.0) : résistances par type de dégâts (termes affichés par le jeu, complètes pour 108 créatures), butin, attaques. Multiplicateurs chiffrés seulement pour 29 créatures (mesures d'avant la 1.0) et 8 boss (PinDrop). Liste non exhaustive ; base PinDrop 1.0 non consultable le 02/11/2026." },
     { domaine: "Amulettes", etat: "absent", detail: "Aucune catégorie d'amulette sur le wiki ni dans les bases consultées." },
     { domaine: "Builds", etat: "editorial", detail: "10 builds ; équipement 1.0 pièce par pièce pour 9 d'entre eux d'après KeenGamer, AoEAH, PinDrop et Enshrouded Builds, plus un classement automatique du catalogue." }
   ]

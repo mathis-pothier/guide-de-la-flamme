@@ -1,5 +1,6 @@
 // Copie locale des images du wiki (© Keen Games, crédits dans le README) : icônes d'objets, tuiles et icônes de la carte.
-// Prérequis : node scripts/build-data.mjs (produit .collect/download-list.json).
+// Prérequis : node scripts/build-data.mjs (produit .collect/download-list.json) et, pour le bestiaire,
+// node scripts/build-bestiaire.mjs (produit .collect/creatures-download.json ; vignettes → images/creatures/).
 // Usage : node scripts/fetch-images.mjs          → ne télécharge que ce qui manque
 //         node scripts/fetch-images.mjs --force  → retélécharge tout
 // Produit data/images.js : liste des images présentes sur le disque (id → fichier + dimensions).
@@ -10,6 +11,8 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const list = JSON.parse(readFileSync(join(root, ".collect", "download-list.json"), "utf8"));
 const force = process.argv.includes("--force");
+const creaturesFile = join(root, ".collect", "creatures-download.json");
+const creatures = existsSync(creaturesFile) ? JSON.parse(readFileSync(creaturesFile, "utf8")) : [];
 const UA = { "User-Agent": "guide-de-la-flamme-local/1.0" };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -37,9 +40,11 @@ const isImg = (b) => isPng(b) || isJpg(b) || b.subarray(8, 12).toString() === "W
 const jobs = [
   ...list.items.map((i) => ({ url: i.url, dest: join(root, "images", i.id + ".png"), magic: isImg, kind: "objet" })),
   ...list.tiles.filter((t) => t.url).map((t) => ({ url: t.url, dest: join(root, "images", "map", "tiles", t.f + ".jpg"), magic: isJpg, kind: "tuile" })),
-  ...list.icons.map((i) => ({ url: i.url, dest: join(root, i.file), magic: isPng, kind: "icône" }))
+  ...list.icons.map((i) => ({ url: i.url, dest: join(root, i.file), magic: isPng, kind: "icône" })),
+  ...creatures.map((c) => ({ url: c.url, dest: join(root, "images", "creatures", c.id + ".png"), magic: isImg, kind: "créature" }))
 ];
 mkdirSync(join(root, "images", "map", "tiles"), { recursive: true });
+mkdirSync(join(root, "images", "creatures"), { recursive: true });
 let bytes = 0, done = 0, failed = [];
 const queue = [...jobs];
 await Promise.all(Array.from({ length: 4 }, async () => {
@@ -66,6 +71,15 @@ for (const f of readdirSync(join(root, "images"))) {
   out[f.replace(/\.png$/, "")] = { fichier: "images/" + f, l, h };
 }
 for (const f of readdirSync(join(root, "images", "map", "tiles"))) total += statSync(join(root, "images", "map", "tiles", f)).size;
+// Vignettes du bestiaire présentes (le site affiche l'image du wiki pour les autres)
+const outC = {};
+for (const f of readdirSync(join(root, "images", "creatures"))) {
+  if (!/\.png$/.test(f)) continue;
+  const buf = readFileSync(join(root, "images", "creatures", f));
+  const [l, h] = dims(buf);
+  total += buf.length;
+  outC[f.replace(/\.png$/, "")] = { fichier: "images/creatures/" + f, l, h };
+}
 writeFileSync(join(root, "data", "images.js"),
   "// Images d'objets (© Keen Games) copiées depuis enshrouded.wiki.gg — crédits dans le README.\n" +
   "// Généré par scripts/fetch-images.mjs — ne pas modifier à la main.\n" +

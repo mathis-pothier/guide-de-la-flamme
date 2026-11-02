@@ -93,7 +93,7 @@ window.ENS_I18N = (() => {
   function appliquer(D) {
     if (lang === "en") {
       const d = EN();
-      for (const k of Object.keys(D)) if (!["catalog", "images", "blocsImages", "map", "alias", "items"].includes(k)) walk(D[k], k, d, false);
+      for (const k of Object.keys(D)) if (!["catalog", "images", "blocsImages", "map", "alias", "items", "bestiaire", "imagesCreatures"].includes(k)) walk(D[k], k, d, false);
       // Objets : textes rédigés par le site (notes, conflits, améliorations, descriptions de sets…)
       for (const it of D.items || []) for (const k of ["note", "degatsNote", "conflits", "amelioration", "description", "obtention"]) if (it[k] != null) {
         if (Array.isArray(it[k])) it[k] = it[k].map((s) => d[s] ?? s); else it[k] = d[it[k]] ?? it[k];

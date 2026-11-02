@@ -27,13 +27,22 @@ jobs:
           node-version: 24
 
       - name: Garder l'ancien catalogue pour comparaison
-        run: cp data/catalog.js "$RUNNER_TEMP/old-catalog.js"
+        run: |
+          cp data/catalog.js "$RUNNER_TEMP/old-catalog.js"
+          cp data/bestiaire.js "$RUNNER_TEMP/old-bestiaire.js"
 
       - name: Collecter le wiki (API)
         run: node scripts/collect.mjs
 
       - name: Reconstruire le catalogue et la carte
         run: node scripts/build-data.mjs
+
+      - name: Bestiaire (créatures, résistances, butin)
+        id: best
+        run: |
+          node scripts/build-bestiaire.mjs | tee "$RUNNER_TEMP/bestiaire.txt"
+          # Changement réel = liste des créatures modifiée (la date de collecte change à chaque fois)
+          node -e "const vm=require('vm'),fs=require('fs');const l=(f)=>{const c={window:{}};vm.createContext(c);vm.runInContext(fs.readFileSync(f,'utf8'),c);return JSON.stringify(c.window.ENS.bestiaire.creatures)};process.stdout.write('changed='+(l(process.argv[1])!==l('data/bestiaire.js'))+'\n')" "$RUNNER_TEMP/old-bestiaire.js" >> "$GITHUB_OUTPUT"
 
       - name: Télécharger les nouvelles images
         run: node scripts/fetch-images.mjs
@@ -62,6 +71,11 @@ jobs:
             echo '```'
             cat "$RUNNER_TEMP/i18n.txt"
             echo '```'
+            echo
+            echo "### Bestiaire"
+            echo '```'
+            cat "$RUNNER_TEMP/bestiaire.txt"
+            echo '```'
           } >> "$RUNNER_TEMP/pr.md"
 
       - name: Date du jour
@@ -69,7 +83,7 @@ jobs:
         run: echo "jour=$(date -u +%d/%m/%Y)" >> "$GITHUB_OUTPUT"
 
       - name: Ouvrir la pull request
-        if: steps.diff.outputs.changes != '0'
+        if: steps.diff.outputs.changes != '0' || steps.best.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           branch: collecte-wiki
@@ -79,5 +93,5 @@ jobs:
           body-path: ${{ runner.temp }}/pr.md
 
       - name: Aucun changement
-        if: steps.diff.outputs.changes == '0'
+        if: steps.diff.outputs.changes == '0' && steps.best.outputs.changed != 'true'
         run: echo "Catalogue identique à la dernière collecte, pas de pull request."

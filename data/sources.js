@@ -320,5 +320,36 @@ window.ENS.sources = [
     id: "fandom-blocks", nom: "Enshrouded Wiki (Fandom) — captures de l'établi", type: "wiki", fiabilite: "moyenne",
     url: "https://enshrouded.fandom.com/wiki/Workbench_Recipes", consulte: "2026-10-21", miseAJourSource: "2025-07-31",
     note: "Images des blocs de construction : captures de l'écran de l'établi (870×1022), recadrées sur le rendu du bloc. Utilisées tant que le wiki officiel (wiki.gg) ne fournit pas d'icône. Images © Keen Games."
+  },
+  // ── Bestiaire
+  {
+    id: "wiki-bestiaire", nom: "Enshrouded Wiki — pages des créatures (API)", type: "wiki", fiabilite: "moyenne",
+    url: "https://enshrouded.wiki.gg/wiki/Bestiary", consulte: "2026-11-02", miseAJourSource: "2026-10-30",
+    note: "126 pages de créatures lues via l'API (catégories Creatures, Drak et Bosses) : comportement, faction, régions, résistances par type de dégâts (termes de l'infobox : Effective, Neutral, Resisted, Immune, Weak), butin, sections « Attacks », « Behavior », « Tips ». 113 pages modifiées depuis la 1.0 ; une modification de page ne garantit pas que chaque valeur a été revérifiée."
+  },
+  {
+    id: "wiki-combat", nom: "Enshrouded Wiki — Combat Mechanics (résistances des ennemis)", type: "wiki", fiabilite: "moyenne",
+    url: "https://enshrouded.wiki.gg/wiki/Combat_Mechanics", consulte: "2026-11-02", miseAJourSource: "2026-04-25",
+    note: "Définit les termes affichés en jeu : « Effective » = multiplicateur de dégâts subis supérieur à 1, « Resisted » = inférieur à 1, l'écart variant selon l'ennemi et le type. Publie des multiplicateurs mesurés par les joueurs pour 29 créatures, tableau déclaré incomplet. Page antérieure à la 1.0."
+  },
+  {
+    id: "wiki-fr-bestiaire", nom: "Wiki Enshrouded (français) — créatures", type: "wiki", fiabilite: "moyenne",
+    url: "https://enshrouded.wiki.gg/fr/wiki/Bestiaire", consulte: "2026-11-02", miseAJourSource: "2026-08-17",
+    note: "Noms français de 20 animaux (faune et animaux d'élevage), repris comme noms officiels. Aucune page d'ennemi sur le wiki français à cette date."
+  },
+  {
+    id: "wiki-perks", nom: "Enshrouded Wiki — Weapons/Perks (atouts d'armes)", type: "wiki", fiabilite: "moyenne",
+    url: "https://enshrouded.wiki.gg/wiki/Weapons/Perks", consulte: "2026-11-02",
+    note: "Tableau des atouts d'armes : « Cutting Damage », « Piercing Damage », « Blunt Damage », « Poison Damage », « Magic Fire/Ice/Shock/Shroud Damage » ajoutent chacun des dégâts de leur type égaux à 10 % des dégâts de base. Sert aux suggestions d'armes du bestiaire."
+  },
+  {
+    id: "pd-bosses", nom: "PinDrop — Bosses", type: "base-donnees", fiabilite: "moyenne",
+    url: "https://pindrop.gg/enshrouded/bosses",
+    note: "Faiblesses des boss en pourcentage de dégâts subis (ex. feu 140 %), déjà reprises dans le guide « Boss » du site. Seules les faiblesses sont listées. Site injoignable depuis l'outil de vérification le 02/11/2026 : valeurs non revérifiées à cette date."
+  },
+  {
+    id: "pd-enemies", nom: "PinDrop — Enemies (base de données 1.0)", type: "base-donnees", fiabilite: "moyenne",
+    url: "https://pindrop.gg/enshrouded/enemies",
+    note: "Base d'ennemis annoncée comme tirée des fichiers du jeu 1.0, avec un pourcentage par type de dégâts. Injoignable depuis l'outil de vérification le 02/11/2026 : aucune valeur n'en est reprise. Source à consulter pour recouper le bestiaire."
   }
 ];

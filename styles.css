@@ -643,3 +643,57 @@ ol.g-pins li::marker { color: var(--ember-2); font-weight: 800; }
 /* Langue : bouton compact et noms du jeu traduits (info-bulle = nom anglais) */
 .rf-lang-mini .rf-lang-cur { font: 800 .78rem/1 Inter, "Alegreya Sans", sans-serif; letter-spacing: .06em; }
 .nom-tr { text-decoration: underline dotted rgba(255,255,255,.28); text-underline-offset: 3px; cursor: help; }
+
+/* Bestiaire (bestiaire.js) */
+.bt-note { display: flex; gap: 10px; align-items: flex-start; background: color-mix(in srgb, var(--info) 10%, var(--card)); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; font-size: .86rem; margin: 0 0 12px; }
+.bt-note > .ic { color: var(--info); flex: none; margin-top: 2px; }
+.bt-note .rf-link { display: inline; margin-left: 4px; padding: 0; background: none; border: 0; color: var(--ember-2); font: inherit; text-decoration: underline; cursor: pointer; }
+.bt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.bt-card { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px; display: grid; gap: 8px; transition: border-color .15s, transform .15s; }
+.bt-card:hover { border-color: var(--ember); transform: translateY(-1px); }
+.bt-card.boss { border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); }
+.bt-main { display: flex; gap: 12px; align-items: center; background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; min-width: 0; }
+.bt-txt { display: grid; gap: 2px; min-width: 0; padding-right: 22px; }
+.bt-name { font-weight: 700; line-height: 1.25; }
+.bt-sub, .bt-vul, .bt-cmp { font-size: .8rem; color: var(--muted); }
+.bt-vul b, .bt-cmp b { color: var(--elc, var(--text)); font-weight: 700; }
+.bt-cmp { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.bt-img { --s: 64px; width: var(--s); height: var(--s); flex: none; border-radius: 14px; display: grid; place-items: center; position: relative; overflow: hidden; background: var(--bg-2); color: var(--muted); }
+.bt-img > .ic { width: 50%; height: 50%; stroke-width: 1.4; }
+.bt-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.bt-img.loaded > .ic { visibility: hidden; }
+.bt-img.xl { --s: 96px; border-radius: 20px; }
+.bt-bar { display: flex; gap: 4px; flex-wrap: wrap; }
+.bt-dmg { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--bc, var(--line)); background: color-mix(in srgb, var(--bc, transparent) 16%, transparent); color: var(--elc, var(--text)); }
+.bt-dmg .ic { width: 15px; height: 15px; }
+.bv-eff { --bc: var(--ok); } .bv-res { --bc: var(--warn); } .bv-imm { --bc: var(--bad); } .bv-neu { --bc: var(--line); } .bv-weak { --bc: var(--info); }
+.bt-dmg.bv-nd { opacity: .35; border-style: dashed; }
+.bt-dmg.bv-imm { text-decoration: line-through; }
+.bt-val { display: inline-block; border-radius: 999px; padding: 2px 9px; font-size: .8rem; font-weight: 700; color: var(--bc); background: color-mix(in srgb, var(--bc) 14%, transparent); }
+.bt-val.bv-neu { color: var(--muted); }
+.bt-card .sdot { position: absolute; top: 8px; right: 8px; width: 10px; height: 10px; background: var(--sc); }
+.bt-flag { position: absolute; top: 24px; right: 6px; color: var(--warn); }
+.bt-flag .ic { width: 15px; height: 15px; }
+.bt-legende { display: flex; gap: 10px; flex-wrap: wrap; }
+.bt-legende span { display: inline-flex; align-items: center; gap: 5px; }
+.bt-sw { width: 12px; height: 12px; border-radius: 4px; border: 1px solid var(--bc, var(--line)); background: color-mix(in srgb, var(--bc, transparent) 30%, transparent); }
+.bt-sw.bv-nd { border-style: dashed; }
+.bt-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.bt-table th, .bt-table td { padding: 6px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+.bt-table th[scope="row"] { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.bt-table tr.bt-conflit { background: color-mix(in srgb, var(--warn) 8%, transparent); }
+.bt-alerte { display: inline-flex; align-items: center; gap: 3px; color: var(--warn); font-size: .78rem; font-weight: 700; }
+.bt-alerte .ic { width: 13px; height: 13px; }
+.bt-sug { border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; margin: 8px 0; }
+.bt-sug h4 { margin: 0 0 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: .95rem; }
+.bt-sug p { margin: 6px 0 4px; }
+.bt-eviter { display: flex; gap: 8px; align-items: flex-start; font-size: .9rem; }
+.bt-eviter .ic { color: var(--warn); flex: none; margin-top: 2px; }
+.bt-combat { margin: 8px 0; font-size: .9rem; }
+.bt-combat p { margin: 4px 0 0; }
+.bt-butin { columns: 2 200px; margin: 6px 0; padding-left: 18px; font-size: .9rem; }
+.bt-fiche h3 .ic { color: var(--ember); vertical-align: -3px; }
+.bt-fiche h3 { margin-top: 18px; }
+@media (max-width: 720px) { .bt-grid { grid-template-columns: 1fr; } .bt-img.xl { --s: 76px; } }
+#bt-count { white-space: nowrap; }
+@media (max-width: 720px) { .bt-legende { font-size: .75rem; gap: 6px 10px; } .result-line:has(.bt-legende) { flex-wrap: wrap; } }
