@@ -41,6 +41,9 @@ Guide de fan, non officiel, en français. Site statique, sans dépendance ni com
 | `scripts/fetch-images.mjs` | Copie locale des images, tuiles et icônes de carte → `images/` + `data/images.js` | outil |
 | `data/map-config.js` | Carte : catégories, précisions, raretés, statuts, dépôt de stockage, validation d'un point (partagée site + `validate.mjs`) | configuration |
 | `data/map-points.json` | Points ajoutés par les administrateurs depuis l'onglet Carte (vide au départ, aucune donnée de démonstration) | **données** |
+| `i18n.js` | Langue du site (français par défaut, anglais par le bouton FR / EN) : traduction de l'interface et des données à l'affichage | — |
+| `data/i18n/fr.js`, `data/i18n/en.js` | Dictionnaires anglais → français (noms et textes du wiki) et français → anglais (interface et textes du site) | **générés** |
+| `data/i18n/src/`, `scripts/build-i18n.mjs` | Traductions sources et script qui construit les dictionnaires (voir [Langues](#langues)) | **données** + outil |
 | `admin.js` | Connexion administrateur et enregistrement des points par l'API GitHub | — |
 | `scripts/mock-github.mjs` | Faux serveur de l'API GitHub pour tester l'administration en local (jetons fictifs, données en mémoire) | outil de test |
 | `.github/workflows/verification.yml` | Lance `validate.mjs` à chaque push et pull request (bloque un `map-points.json` mal formé) | CI |
@@ -62,6 +65,7 @@ affichent donc toujours la fiabilité des données sous-jacentes.
 - **Guides** : 24 guides pratiques classés par catégorie (débuter, Flamme, boss, builds, équipement, donjons et énigmes, construction), avec sommaire, encadrés « à vérifier en jeu » et sources.
 - **Comparateur** : jusqu'à 4 objets côte à côte, meilleure valeur surlignée.
 - **Mises à jour & sources** : version, couverture des données, historique des patchs, registre des sources.
+- **Deux langues** : tout le site en français, ou en anglais avec le bouton FR / EN (menu latéral, barre du haut sur mobile). Voir [Langues](#langues).
 
 ## Carte dynamique
 
@@ -119,6 +123,49 @@ http://localhost:8090, puis dans la console du navigateur `localStorage.setItem(
 (adresse acceptée uniquement sur localhost). Jetons fictifs : `test_admin_token_0123456789abcd` (écriture) et
 `test_reader_token_0123456789abcd` (refusé). Les données restent en mémoire. Ensuite : `localStorage.removeItem("ens.devApi")`.
 
+## Langues
+
+Le site est rédigé en français ; les données du wiki sont en anglais. Le bouton **FR / EN** choisit la langue (mémorisée dans le
+navigateur, `?lang=en` dans l'adresse la force). Rien n'est traduit à la volée par un service extérieur : tout vient de
+dictionnaires relus, dans le dépôt.
+
+**Fonctionnement.** `i18n.js` est chargé avant les données et charge le dictionnaire de la langue choisie :
+
+- en **français**, `data/i18n/fr.js` traduit les noms du jeu et les textes du wiki. Un nom repris du wiki français est
+  **officiel** ; sinon c'est une traduction du site, signalée par un soulignement pointillé et une info-bulle « Nom anglais : … —
+  traduction non officielle ». Les descriptions traduites portent la même mention ;
+- en **anglais**, `data/i18n/en.js` traduit l'interface et tous les textes rédigés par le site (guides, builds, notes…) ;
+  les noms et textes du wiki restent dans leur version d'origine ;
+- les valeurs qui servent aux filtres et aux calculs (type, rareté, emplacement, catégories de la carte…) ne sont jamais modifiées
+  dans les données : elles sont traduites seulement à l'affichage (liste `LOGIQUE` dans `i18n.js`).
+
+**Sources des traductions** (`data/i18n/src/`, à modifier ici et jamais dans `fr.js` / `en.js`, qui sont générés) :
+
+| Fichier | Contenu |
+|---|---|
+| `officiels-fr.mjs` | Noms officiels du wiki français (prioritaires) |
+| `objets-fr.mjs`, `lieux-fr.mjs`, `noms-fr-2.mjs` | Noms traduits par le site : objets, sets (pièce + complément : « Bottes » + « de rose de sang »), sorts, lieux, compétences, blocs, atouts |
+| `effets-fr.mjs`, `textes-fr-effets.json` | Termes des effets et améliorations (« +6 Cutting Armor » est traduit terme par terme) |
+| `descriptions-fr-*.json`, `obtention-fr*.json`, `lieux-desc-fr-*.json` | Textes longs du wiki, par identifiant d'objet ou de lieu |
+| `controle-fr.json` | Empreinte du texte anglais traduit, par identifiant (tenu à jour par le script) |
+| `en-*.json` | Textes du site en anglais, par empreinte du texte français |
+
+Quand le wiki réécrit un texte déjà traduit, l'empreinte ne correspond plus : la traduction n'est plus appliquée (le site affiche
+l'anglais plutôt qu'une traduction périmée) et le texte est signalé « texte du wiki modifié, à revoir ». Les tournures fixes du
+wiki (« can be found in a chest in… », « obtained through Fishing using… ») sont traduites par des règles dans le script.
+
+**Après une modification du site ou une collecte :**
+
+1. `node scripts/build-i18n.mjs --a-traduire` reconstruit les dictionnaires et affiche la couverture ; il écrit la liste de ce qui
+   manque dans `data/i18n/a-traduire.txt` (anglais : empreinte → texte français) et `data/i18n/a-traduire-fr.json` (français :
+   catégorie → texte anglais → identifiant). Ces deux fichiers ne sont pas versionnés ;
+2. ajouter les traductions manquantes dans le fichier source qui convient (un nouveau fichier `descriptions-fr-N.json`,
+   `en-NN-sujet.json`… est lu automatiquement ; pour un texte à revoir, réécrire la traduction sous le même identifiant) ;
+3. relancer le script, puis `node scripts/stamp-version.mjs`.
+
+Un texte sans traduction n'empêche rien : il s'affiche simplement en anglais. La collecte automatique reconstruit les dictionnaires
+et ajoute la couverture des traductions à sa pull request.
+
 ## Publier une modification
 
 Avant chaque commit qui change le site, lancez `node scripts/stamp-version.mjs` : il ajoute un numéro de version aux
@@ -140,7 +187,7 @@ couleur selon l'élément, initiales du nom.
 
 **Automatique :** la GitHub Action `.github/workflows/collecte-wiki.yml` relance la collecte **le lundi et le jeudi** (5 h UTC).
 Si le catalogue a changé, elle ouvre une pull request « Collecte du wiki — date (N changements) » qui liste les objets ajoutés,
-retirés et modifiés. Il suffit de la relire puis de la fusionner : GitHub Pages republie le site tout seul. Si le wiki est
+retirés et modifiés. Elle indique aussi les nouveaux textes encore sans traduction. Il suffit de la relire puis de la fusionner : GitHub Pages republie le site tout seul. Si le wiki est
 en panne, la collecte échoue sans rien modifier et la suivante prend le relais. Lancement manuel : onglet **Actions** →
 **Collecte du wiki** → **Run workflow**.
 
@@ -150,7 +197,8 @@ en panne, la collecte échoue sans rien modifier et la suivante prend le relais.
    http://localhost:8081/scripts/collect.html et attendre « TERMINÉ ») ;
 2. `node scripts/build-data.mjs` ;
 3. `node scripts/fetch-images.mjs` (ne télécharge que les nouvelles images) ;
-4. `node scripts/validate.mjs`.
+4. `node scripts/validate.mjs` ;
+5. `node scripts/build-i18n.mjs --a-traduire` (traductions, voir [Langues](#langues)).
 
 ## Crédits et droits
 

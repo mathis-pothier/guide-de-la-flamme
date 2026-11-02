@@ -32,6 +32,8 @@ Voir « Rafraîchir le catalogue depuis le wiki » dans le README. Le catalogue 
 Les pages modifiées après la date de sortie 1.0 reçoivent le statut « Wiki après 1.0 » (`w10`) ; changez `RELEASE_10` dans `scripts/build-data.mjs` si une nouvelle version majeure sort.
 Après un patch, relire aussi `data/builds-1.0.js` (conseils des guides).
 
+**Traductions.** La pull request de collecte indique combien de noms et de textes nouveaux restent sans traduction française. On peut fusionner sans attendre (ils s'affichent en anglais), puis les traduire : `node scripts/build-i18n.mjs --a-traduire`, compléter `data/i18n/src/`, relancer le script et `node scripts/stamp-version.mjs` (détail : « Langues » dans le README). Un nouveau type de lieu du wiki n'apparaît sur la carte qu'une fois rattaché à une catégorie dans `groupesWiki` (`data/map-config.js`).
+
 **Niveaux des objets.** Le niveau d'une arme ou d'un anneau trouvé est celui de sa zone : la collecte relit le champ « Biome Level » des pages de biomes du wiki (Springlands, Revelwood…). Le champ « level » des armes du wiki n'est **pas** un niveau d'objet (valeur de calcul des dégâts) : il est conservé à part (`niveauWiki`) et jamais affiché comme niveau. Seuls les niveaux lus dans les fichiers 1.0 (statut `v1`, ex. « 1–55 ») et ceux des armures, boucliers, sorts et anneaux renseignés sur le wiki sont affichés tels quels. Quand le wiki publiera une page Cinder's Cradle, le niveau PinDrop (46–50) sera remplacé automatiquement.
 
 ## 3 bis. Modifier les données vérifiées à la main — règles
