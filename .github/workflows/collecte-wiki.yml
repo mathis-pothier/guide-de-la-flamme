@@ -45,12 +45,24 @@ jobs:
       - name: Vérifier la cohérence des données
         run: node scripts/validate.mjs
 
+      - name: Dictionnaires de langue (français / anglais)
+        run: node scripts/build-i18n.mjs | tee "$RUNNER_TEMP/i18n.txt"
+
       - name: Numéro de version des fichiers (cache des navigateurs)
         run: node scripts/stamp-version.mjs
 
       - name: Résumer les changements
         id: diff
-        run: node scripts/diff-catalog.mjs "$RUNNER_TEMP/old-catalog.js" data/catalog.js "$RUNNER_TEMP/pr.md"
+        run: |
+          node scripts/diff-catalog.mjs "$RUNNER_TEMP/old-catalog.js" data/catalog.js "$RUNNER_TEMP/pr.md"
+          {
+            echo
+            echo "### Traductions"
+            echo "Les nouveaux textes du wiki restent en anglais tant qu'ils ne sont pas traduits (liste : \`node scripts/build-i18n.mjs --a-traduire\`)."
+            echo '```'
+            cat "$RUNNER_TEMP/i18n.txt"
+            echo '```'
+          } >> "$RUNNER_TEMP/pr.md"
 
       - name: Date du jour
         id: date

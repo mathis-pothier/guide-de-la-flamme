@@ -29,7 +29,11 @@ window.ENS.mapConfig = {
     Shroud_Lair: "lieu", Hidden_Temple: "lieu", Tomb: "lieu", Cave_Passage: "lieu", Gem_Forge: "construction", Shroud_Root: "collection",
     Mine: "ressource",
     Fossil: "collection", Music_Sheet: "collection", QueenPikemeadStatuePiece: "collection", AlchemistWallHanging: "collection",
-    CyclopsSkeleton: "collection", WallTapestry: "collection", DragonsMapPiece: "collection", DrakRelief: "collection"
+    CyclopsSkeleton: "collection", WallTapestry: "collection", DragonsMapPiece: "collection", DrakRelief: "collection",
+    // Ajoutés par la collecte du 29/10/2026 (page Collectibles2 du wiki : objets à emplacement fixe)
+    Named_Area: "lieu", Cinder_Fast_Travel: "lieu",
+    Fixed_Weapons: "arme", Fixed_Equipment: "armure", Fixed_Other: "equipement", Fixed_Instruments: "equipement", Fixed_Building: "construction",
+    Miniature_Model: "collection", Painting: "collection", Meteorite: "collection", Hollow_Artifact: "collection", Orrery: "collection", FlameMosaic: "collection"
   },
 
   // Fiabilité de la position (affichée dans chaque fiche et dans la légende)

@@ -82,6 +82,8 @@ window.ENS_I18N = (() => {
     if (!v || typeof v !== "object") return;
     for (const k of Object.keys(v)) {
       const x = v[k], p = path + "." + k;
+      // Correspondances de catégories de la carte (valeurs = clés de mapConfig.categories) : jamais traduites
+      if (k === "groupesWiki" || k === "categoriesAjout") continue;
       // Clé de logique : on ne touche ni à sa valeur ni à ses listes, mais on descend dans un objet (ex. guides.sources, mapConfig.fonds.wiki)
       if (LOGIQUE.has(k) && (typeof x === "string" || Array.isArray(x)) && !(k === "nom" && !keepNom && NOMS_SITE.test(path) && !/contextes$/.test(path))) continue;
       if (typeof x === "string") { if (dict[x] != null) v[k] = dict[x]; }
