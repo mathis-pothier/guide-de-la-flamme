@@ -16,6 +16,8 @@ const json = (f) => (existsSync(join(SRC, f)) ? JSON.parse(readFileSync(join(SRC
 const { OFFICIELS } = await imp("officiels-fr.mjs");
 const { PIECES, SETS, SORTS, ANNEAUX, GRADES, OBJETS } = await imp("objets-fr.mjs");
 const { LIEUX, COMPETENCES, BLOCS, ATOUTS, QUETES, DIVERS, MATERIAUX } = await imp("lieux-fr.mjs");
+const { PIECES2, SETS2, NOMS2, LIEUX2, PROPRES2 } = await imp("noms-fr-2.mjs");
+Object.assign(PIECES, PIECES2); Object.assign(SETS, SETS2);
 
 // Données du site (comme scripts/validate.mjs)
 const ctx = { window: {} };
@@ -25,7 +27,7 @@ for (const f of ["sources", "items", "skills", "builds", "builds-1.0", "versions
 const D = ctx.window.ENS;
 
 // ── Noms : anglais → français
-const SITE = { ...OBJETS, ...LIEUX, ...COMPETENCES, ...BLOCS, ...ATOUTS, ...QUETES, ...DIVERS };
+const SITE = { ...OBJETS, ...LIEUX, ...COMPETENCES, ...BLOCS, ...ATOUTS, ...QUETES, ...DIVERS, ...NOMS2, ...LIEUX2, ...Object.fromEntries(PROPRES2.map((n) => [n, n])) };
 const ROMAIN = /^(.*?)( [IVX]+)?$/;
 function regle(en) {
   // Pièce de set : « Alpine Antler Boots » → « Bottes des bois alpins »
@@ -47,6 +49,8 @@ function frNom(en) {
   if (x) return x;
   const n = en.match(ROMAIN);
   if (n && n[2] && (SITE[n[1]] || OFFICIELS[n[1]])) return (OFFICIELS[n[1]] || SITE[n[1]]) + n[2];
+  // Liste de régions : « Springlands, Revelwood » → « Hautes pâtures, Bois envoûtés »
+  if (/, /.test(en)) { const p = en.split(", ").map((x) => frNom(x)); if (p.every((x) => x != null)) return p.map((x) => (Array.isArray(x) ? x[0] : x)).join(", "); }
   return null;
 }
 const noms = {}, manque = {};
@@ -54,7 +58,7 @@ const nom = (en, cat) => {
   if (!en || typeof en !== "string" || noms[en] !== undefined) return;
   const fr = frNom(en);
   if (fr != null) noms[en] = fr;
-  else if (!/ - /.test(en)) (manque[cat] ||= new Set()).add(en);
+  else if (!/ - /.test(en) && !/^Anneau /.test(en)) (manque[cat] ||= new Set()).add(en);
 };
 for (const it of D.items) { nom(it.nom, "objets"); (it.atouts || []).forEach((a) => nom(a.replace(/ ×\d+$/, ""), "atouts")); nom(it.region, "regions"); }
 for (const s of D.skills) nom(s.nom, "competences");
@@ -81,6 +85,24 @@ for (const it of D.items) {
   if (m) { const n = frNom(m[1]); textes[o] = `Butin aléatoire : ${n == null ? m[1] : Array.isArray(n) ? n[0] : n}`; }
   m = o.match(/^Fabrication : (.+)$/);
   if (m && FABRICATION[m[1]]) textes[o] = `Fabrication : ${FABRICATION[m[1]]}`;
+}
+// « Où le trouver » du wiki aux tournures fixes : « can be found in a chest in Albaneve Summits. Category:Bows … »
+// (les catégories du wiki en fin de texte sont ignorées). Les textes traduits par identifiant (obtention-fr*.json) restent prioritaires.
+const APPATS = { Pillbug: "cloporte", Frog: "grenouille", Grasshopper: "sauterelle", Moth: "papillon de nuit", "Fire Fly": "luciole", Scarab: "scarabée",
+  "Epic Fishing Bait II": "appât de pêche épique II" };
+const lieuFr = (s) => s.split(", ").map((x) => { const n = frNom(x.replace(/^the /, "")); return n == null ? x : Array.isArray(n) ? n[0] : n; }).join(", ");
+const TOURNURES = [
+  [/^It can also be obtained through Fishing using (.+)$/, (a) => (APPATS[a] ? `S'obtient aussi à la pêche, avec l'appât « ${APPATS[a]} ».` : null)],
+  [/^can be found in Lootable Chests in (.+)$/, (a) => `Se trouve dans les coffres : ${lieuFr(a)}.`],
+  [/^can be found in a chest in (.+)$/, (a) => `Se trouve dans un coffre : ${lieuFr(a)}.`],
+  [/^can be looted from a corpse in (.+)$/, (a) => `Se trouve sur un cadavre : ${lieuFr(a)}.`],
+  [/^is a world drop and obtained randomly from Lootable Chests or Bosses in (.+)$/, (a) => `Butin aléatoire des coffres et des boss : ${lieuFr(a)}.`]
+];
+for (const it of D.items) {
+  const o = it.obtentionEn;
+  if (!o) continue;
+  const s = o.replace(/\s+(?:Category|C|c|fr):.*$/, "").replace(/\.$/, "");
+  for (const [re, f] of TOURNURES) { const m = s.match(re); const fr = m && f(m[1]); if (fr) { textes[o] = fr; break; } }
 }
 // Textes par identifiant (descriptions d'objets, « où le trouver », descriptions des lieux)
 const parId = (fichiers, liste, champ, cat) => {
@@ -112,6 +134,7 @@ const nomTxt = (s) => { const n = frNom(s) ?? EFFETS[s]; return n == null ? null
 function effet(e) {
   const pre = e.match(/^(Commune|Peu commune|Rare|Épique|Légendaire) : (.+)$/);
   if (pre) { const r = effet(pre[2]); return r == null ? (/[éèàùç]/.test(pre[2]) ? e : null) : `${pre[1]} : ${r}`; }
+  if (/, /.test(e)) { const p = e.split(", ").map(effet); return p.every((x) => x != null) ? p.join(", ") : null; }
   let m = e.match(/^(.+?) (\+\d+\s(?:rangs?|%))$/);
   if (m && nomTxt(m[1])) return `${nomTxt(m[1])} ${m[2]}`;
   if (TERMES[e] || nomTxt(e)) return TERMES[e] || nomTxt(e);
@@ -189,6 +212,9 @@ if (process.argv.includes("--a-traduire")) writeFileSync(join(root, "data", "i18
 // ── Couverture
 const off = Object.values(noms).filter(Array.isArray).length;
 console.log(`Français : ${Object.keys(noms).length} noms (${off} officiels), ${Object.keys(textes).length} textes.`);
+// --a-traduire : liste aussi les noms et textes sans traduction française (data/i18n/a-traduire-fr.json, { catégorie: { texte anglais: identifiant } })
+if (process.argv.includes("--a-traduire")) writeFileSync(join(root, "data", "i18n", "a-traduire-fr.json"), JSON.stringify(Object.fromEntries(Object.entries(manque).map(([k, v]) =>
+  [k, Object.fromEntries([...(v instanceof Map ? v : new Map([...v].map((x) => [x, ""])))])])), null, 1) + "\n");
 for (const [k, v] of Object.entries(manque)) console.log(`  sans traduction — ${k} : ${v.size}${process.argv.includes("--detail") ? " : " + [...(v instanceof Map ? v.values() : v)].slice(0, 400).join(" | ") : ""}`);
 console.log(`Anglais : ${Object.keys(en).length} textes traduits ; ${sansEn.length} sans traduction (${sansEn.reduce((n, s) => n + s.length, 0)} caractères)` +
   (process.argv.includes("--a-traduire") ? " — liste : data/i18n/a-traduire.txt" : " — détail : --a-traduire"));
