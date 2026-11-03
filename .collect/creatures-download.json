@@ -1,5 +1,13 @@
 [
  {
+  "id": "ancient-s-p-d-r-construct",
+  "url": "https://enshrouded.wiki.gg/images/Ancient_S.P.D.R._Construct_Trophy.png"
+ },
+ {
+  "id": "armored-fell-thunderbrute",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Thunderbrute.png/320px-Fell_Thunderbrute.png?cb7421"
+ },
+ {
   "id": "baby-capybara",
   "url": "https://enshrouded.wiki.gg/images/Baby_Capybara.png?8b19bf"
  },
@@ -56,6 +64,10 @@
   "url": "https://enshrouded.wiki.gg/images/Cyclops.png?b2a18a"
  },
  {
+  "id": "direwolf",
+  "url": "https://enshrouded.wiki.gg/images/Direwolf_Trophy.png"
+ },
+ {
   "id": "draconian-vulture",
   "url": "https://enshrouded.wiki.gg/images/thumb/Draconian_Vulture.png/320px-Draconian_Vulture.png?2c80df"
  },
@@ -104,6 +116,10 @@
   "url": "https://enshrouded.wiki.gg/images/Fell_Commander.png?afbe2b"
  },
  {
+  "id": "fell-crimson-critter-queen",
+  "url": "https://enshrouded.wiki.gg/images/Fell_Crimson_Critter_Queen_Trophy.png"
+ },
+ {
   "id": "fell-critter",
   "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Critter.png/320px-Fell_Critter.png?e7d657"
  },
@@ -146,6 +162,10 @@
  {
   "id": "fell-sporehead",
   "url": "https://enshrouded.wiki.gg/images/thumb/Fell_Sporehead.png/320px-Fell_Sporehead.png?7f39bd"
+ },
+ {
+  "id": "fell-striker",
+  "url": "https://enshrouded.wiki.gg/images/Fell_Striker_Trophy.png"
  },
  {
   "id": "fell-thunderbrute",
@@ -192,12 +212,24 @@
   "url": "https://enshrouded.wiki.gg/images/thumb/Hollow_Summoner.png/320px-Hollow_Summoner.png?1dd0a8"
  },
  {
+  "id": "hollow-titan",
+  "url": "https://enshrouded.wiki.gg/images/Hollow_Titan_Trophy.png"
+ },
+ {
+  "id": "hollow-wispwyvern",
+  "url": "https://enshrouded.wiki.gg/images/Hollow_Wispwyvern_Trophy.png"
+ },
+ {
   "id": "hollow-wretch",
   "url": "https://enshrouded.wiki.gg/images/Hollow_Wretch.png?28d487"
  },
  {
   "id": "hophare",
   "url": "https://enshrouded.wiki.gg/images/Hophare.png?dcc9c1"
+ },
+ {
+  "id": "hydrakdal",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Hydrak%27Dal.png/320px-Hydrak%27Dal.png"
  },
  {
   "id": "mushroom-crab",
@@ -222,6 +254,14 @@
  {
   "id": "scavenger-berserker",
   "url": "https://enshrouded.wiki.gg/images/thumb/Scavenger_Berserker.png/320px-Scavenger_Berserker.png?df1569"
+ },
+ {
+  "id": "scavenger-gorger-matron",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Scavenger_Matron.png/320px-Scavenger_Matron.png?bc7561"
+ },
+ {
+  "id": "scavenger-grizzler-matron",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Scavenger_Matron.png/320px-Scavenger_Matron.png?bc7561"
  },
  {
   "id": "scavenger-matron",

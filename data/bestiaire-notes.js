@@ -22,6 +22,23 @@ window.ENS.bestiaireNotes = {
     "Scavenger Tyrant": { Piercing: 130, Ice: 130 },
     "Hydrak'Dal": { Piercing: 140, Ice: 120 }
   },
+  // Images quand la page du wiki n'en a pas (vérifiées le 03/11/2026), toujours signalées dans la fiche :
+  //   type « creature » = fichier du wiki montrant la créature mais non rattaché à sa page ;
+  //   type « trophee »  = trophée de la créature (tête montée sur plaque), fichier du wiki ;
+  //   comme : nom d'une autre créature dont la page du wiki dit que celle-ci est une variante (image de la forme de base).
+  // Une capture en jeu (images/creatures-jeu/<id>.jpg, voir scripts/import-captures-creatures.ps1) reste prioritaire.
+  images: {
+    "Hydrak'Dal": { url: "https://enshrouded.wiki.gg/images/thumb/Hydrak%27Dal.png/320px-Hydrak%27Dal.png", type: "creature" },
+    "Ancient S.P.D.R. Construct": { url: "https://enshrouded.wiki.gg/images/Ancient_S.P.D.R._Construct_Trophy.png", type: "trophee" },
+    "Direwolf": { url: "https://enshrouded.wiki.gg/images/Direwolf_Trophy.png", type: "trophee" },
+    "Fell Crimson Critter Queen": { url: "https://enshrouded.wiki.gg/images/Fell_Crimson_Critter_Queen_Trophy.png", type: "trophee" },
+    "Fell Striker": { url: "https://enshrouded.wiki.gg/images/Fell_Striker_Trophy.png", type: "trophee" },
+    "Hollow Titan": { url: "https://enshrouded.wiki.gg/images/Hollow_Titan_Trophy.png", type: "trophee" },
+    "Hollow Wispwyvern": { url: "https://enshrouded.wiki.gg/images/Hollow_Wispwyvern_Trophy.png", type: "trophee" },
+    "Armored Fell Thunderbrute": { comme: "Fell Thunderbrute" },
+    "Scavenger Gorger Matron": { comme: "Scavenger Matron" },
+    "Scavenger Grizzler Matron": { comme: "Scavenger Matron" }
+  },
   // Notes propres à une créature (nom anglais du wiki → [{ texte, sources }])
   creatures: {
     "Fell Wispwyvern": [{ texte: "Les mesures du wiki (avant la 1.0) donnent deux valeurs par type de dégâts (ex. 0,5/2,5) sans les expliquer. Voir aussi le guide du site consacré à ce boss.", sources: ["wiki-combat"] }]

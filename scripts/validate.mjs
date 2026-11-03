@@ -106,7 +106,12 @@ if (D.bestiaire) {
   const N = D.bestiaireNotes || {};
   const notes = [...Object.values(N.familles || {}), ...Object.values(N.creatures || {}).flat()];
   for (const n of notes) { if (!n.texte) errors.push("bestiaire-notes : note sans texte"); if (!n.sources?.length) errors.push(`bestiaire-notes : note sans source « ${String(n.texte).slice(0, 40)}… »`); (n.sources || []).forEach((s) => { if (!src.has(s)) errors.push(`bestiaire-notes : source inconnue « ${s} »`); }); }
-  for (const nom of [...Object.keys(N.pindrop || {}), ...Object.keys(N.creatures || {})]) if (!noms.has(nom)) warnings.push(`bestiaire-notes : « ${nom} » ne correspond à aucune créature du wiki`);
+  for (const [nom, im] of Object.entries(N.images || {})) {
+    if (im.url && !["creature", "trophee"].includes(im.type)) errors.push(`bestiaire-notes : type d'image invalide pour « ${nom} »`);
+    if (im.url && !im.url.startsWith("https://enshrouded.wiki.gg/images/")) errors.push(`bestiaire-notes : image hors du wiki pour « ${nom} »`);
+    if (!im.url && !noms.has(im.comme)) errors.push(`bestiaire-notes : forme de base inconnue pour « ${nom} »`);
+  }
+  for (const nom of [...Object.keys(N.pindrop || {}), ...Object.keys(N.creatures || {}), ...Object.keys(N.images || {})]) if (!noms.has(nom)) warnings.push(`bestiaire-notes : « ${nom} » ne correspond à aucune créature du wiki`);
   for (const [nom, v] of Object.entries(N.pindrop || {})) for (const [k, x] of Object.entries(v)) if (!TYPES.includes(k) || typeof x !== "number") errors.push(`bestiaire-notes : valeur PinDrop invalide ${nom} ${k}`);
   for (const s of ["wiki-bestiaire", "wiki-combat", "wiki-perks", "pd-bosses"]) if (!src.has(s)) errors.push(`Bestiaire : source « ${s} » absente de data/sources.js`);
   console.log(`Bestiaire : ${B.length} créatures, collecte du ${D.bestiaire.meta.collecte}.`);

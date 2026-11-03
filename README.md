@@ -44,6 +44,7 @@ Guide de fan, non officiel, en français. Site statique, sans dépendance ni com
 | `data/bestiaire.js` | Créatures lues sur le wiki : comportement, faction, régions, résistances par type de dégâts, butin, textes de combat | **données générées** |
 | `data/bestiaire-notes.js` | Notes sourcées ajoutées à la main (familles d'ennemis, faiblesses PinDrop des boss) | **données** |
 | `scripts/collect-creatures.mjs`, `scripts/build-bestiaire.mjs` | Collecte des pages de créatures (partagée par `collect.mjs` et `collect.html`) et construction du bestiaire | outil |
+| `scripts/import-captures-creatures.ps1`, `images/creatures-jeu/` | Import des captures en jeu des créatures sans image (Windows) | outil + images |
 | `data/map-points.json` | Points ajoutés par les administrateurs depuis l'onglet Carte (vide au départ, aucune donnée de démonstration) | **données** |
 | `i18n.js` | Langue du site (français par défaut, anglais par le bouton FR / EN) : traduction de l'interface et des données à l'affichage | — |
 | `data/i18n/fr.js`, `data/i18n/en.js` | Dictionnaires anglais → français (noms et textes du wiki) et français → anglais (interface et textes du site) | **générés** |
@@ -157,6 +158,18 @@ base d'une arme peuvent mêler plusieurs types : la fiche le rappelle et renvoie
 7 en ont une partie. Certaines pages n'ont pas été modifiées depuis la 1.0 (pastille « Ancienne version »). Les pillards changent de
 faiblesse selon la région d'après le wiki, alors que l'infobox ne donne qu'une valeur : la fiche le signale. Les images viennent du wiki ;
 tant que la collecte automatique ne les a pas copiées dans `images/creatures/`, le site affiche celles du wiki.
+
+**Images manquantes.** Le wiki n'a pas de portrait pour une partie des créatures. À défaut, `data/bestiaire-notes.js` (rubrique
+`images`) indique un fichier du wiki non rattaché à la page, le **trophée** de la créature (tête montée) ou l'image de sa **forme de
+base** quand le wiki dit qu'il s'agit d'une variante ; la vignette et la fiche le signalent. Les fichiers du jeu (archives
+`enshrouded_*.dat` de Keen Games) ne contiennent pas de portraits 2D et ne s'ouvrent qu'avec des outils non officiels : ils ne sont pas
+utilisés. Pour les autres créatures, on ajoute des **captures en jeu** :
+1. `node scripts/build-bestiaire.mjs` liste les créatures sans image (ligne « sans image ») ; la liste détaillée (nom français, régions)
+   est dans `captures-creatures/A-FAIRE.txt` (dossier non versionné) ;
+2. déposer les captures dans `captures-creatures/`, nommées par l'identifiant (`fell-knight.jpg`), créature au centre ;
+3. `powershell -ExecutionPolicy Bypass -File scripts/import-captures-creatures.ps1` (recadrage carré, 400 px → `images/creatures-jeu/`,
+   option `-Zoom 0.6` pour resserrer le cadre), puis `node scripts/build-bestiaire.mjs` et `node scripts/stamp-version.mjs`.
+Une capture remplace toujours l'image du wiki ou de remplacement.
 
 **Mettre à jour.** La collecte automatique (lundi et jeudi) relit les créatures et ouvre une pull request si la liste change. À la main :
 1. `node scripts/collect.mjs` (ou, sans réseau pour Node : `node scripts/serve.mjs 8081 --collect` puis

@@ -2,9 +2,10 @@
 // Usage : node scripts/build-bestiaire.mjs   (après node scripts/collect.mjs, ou scripts/collect.html?creatures sans réseau)
 // Ne déduit rien : chaque valeur affichée vient d'un champ du wiki. Les notes et recoupements rédigés à la main sont dans
 // data/bestiaire-notes.js (jamais écrasé par ce script).
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import vm from "node:vm";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(root, ".collect", "wiki-creatures.json");
@@ -164,6 +165,27 @@ for (const [titre, p] of Object.entries(C.pages).sort((a, b) => a[0].localeCompa
   });
 }
 
+// ── Images de remplacement (data/bestiaire-notes.js) et captures en jeu (images/creatures-jeu/<id>.jpg|png|webp)
+{
+  const ctx = { window: {} };
+  vm.createContext(ctx);
+  vm.runInContext(readFileSync(join(root, "data", "bestiaire-notes.js"), "utf8"), ctx);
+  const IMG = ctx.window.ENS.bestiaireNotes?.images || {};
+  const parNom = Object.fromEntries(creatures.map((c) => [c.nom, c]));
+  for (const c of creatures) {
+    const n = IMG[c.nom];
+    if (c.imageWiki || !n) continue;
+    if (n.url) { c.imageWiki = n.url; c.imageType = n.type; }
+    else if (n.comme && parNom[n.comme]?.imageWiki) { c.imageWiki = parNom[n.comme].imageWiki; c.imageType = "base"; c.imageBase = n.comme; }
+  }
+  const dossier = join(root, "images", "creatures-jeu");
+  const captures = existsSync(dossier) ? readdirSync(dossier).filter((f) => /\.(jpe?g|png|webp)$/i.test(f)) : [];
+  for (const f of captures) {
+    const c = creatures.find((x) => x.id === f.replace(/\.\w+$/, ""));
+    if (c) c.capture = "images/creatures-jeu/" + f; else console.log(`  capture sans créature correspondante : ${f}`);
+  }
+}
+
 // Identifiants uniques
 const vus = new Set();
 for (const c of creatures) { if (vus.has(c.id)) throw new Error("Identifiant en double : " + c.id); vus.add(c.id); }
@@ -183,6 +205,7 @@ writeFileSync(join(root, ".collect", "creatures-download.json"), JSON.stringify(
 const n = (fn) => creatures.filter(fn).length;
 console.log(`Bestiaire : ${creatures.length} créatures (${n((c) => c.categorie === "hostile")} hostiles, ${n((c) => c.categorie === "passive")} passives, ${n((c) => c.categorie === "neutre")} neutres, ${n((c) => !c.categorie)} sans comportement) ; ${n((c) => c.boss)} boss.`);
 console.log(`  résistances renseignées : ${n((c) => Object.keys(c.degats).length === 8)} complètes, ${n((c) => Object.keys(c.degats).length && Object.keys(c.degats).length < 8)} partielles, ${n((c) => !Object.keys(c.degats).length)} absentes`);
+console.log(`  images : ${n((c) => c.capture)} captures en jeu, ${n((c) => c.imageWiki && !c.imageType)} du wiki, ${n((c) => c.imageType === "creature")} fichiers du wiki hors page, ${n((c) => c.imageType === "trophee")} trophées, ${n((c) => c.imageType === "base")} formes de base ; sans image : ${creatures.filter((c) => !c.capture && !c.imageWiki).map((c) => c.id).join(", ") || "aucune"}`);
 console.log(`  pages modifiées depuis la 1.0 : ${n((c) => c.statut === "w10")} ; multiplicateurs mesurés : ${Object.keys(mesures).length} créatures (page du ${meta.mecaniques?.maj}) ; noms du wiki français : ${n((c) => c.nomFr)} ; images : ${n((c) => c.imageWiki)}`);
 if (mesuresSans.length) console.log(`  lignes de « Combat Mechanics » sans page de créature : ${mesuresSans.join(", ")}`);
 if (ignorees.length) console.log(`  pages sans infobox ignorées : ${ignorees.join(", ")}`);

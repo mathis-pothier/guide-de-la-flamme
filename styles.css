@@ -697,3 +697,6 @@ ol.g-pins li::marker { color: var(--ember-2); font-weight: 800; }
 @media (max-width: 720px) { .bt-grid { grid-template-columns: 1fr; } .bt-img.xl { --s: 76px; } }
 #bt-count { white-space: nowrap; }
 @media (max-width: 720px) { .bt-legende { font-size: .75rem; gap: 6px 10px; } .result-line:has(.bt-legende) { flex-wrap: wrap; } }
+.bt-img.contain img { object-fit: contain; padding: 4px; }
+.bt-img-tag { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; font: 700 .58rem/1.5 Inter, sans-serif; font-style: normal; text-align: center; text-transform: uppercase; letter-spacing: .04em; background: color-mix(in srgb, var(--bg) 78%, transparent); color: var(--muted); }
+.bt-img.xl .bt-img-tag { font-size: .68rem; }

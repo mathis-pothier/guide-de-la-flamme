@@ -68,10 +68,20 @@
   const icon = (n, cls) => API().icon(n, cls);
   const catLabel = (c) => c.boss ? t("Boss") : CATS[c.categorie]?.[0] || t("Non classée");
   const factionLabel = (f) => f ? FACTIONS[f] || f : t("Faction non indiquée");
-  const imgSrc = (c) => window.ENS.imagesCreatures?.[c.id]?.fichier || c.imageWiki || null;
+  // Ordre : capture en jeu, copie locale de l'image du wiki, image du wiki (ou de remplacement : trophée, forme de base)
+  const imgSrc = (c) => c.capture || window.ENS.imagesCreatures?.[c.id]?.fichier || c.imageWiki || null;
+  const imgNature = (c) => c.capture ? "capture" : c.imageType || (c.imageWiki ? "wiki" : null);
+  const imgLegende = (c) => ({
+    capture: t("Image : capture en jeu (© Keen Games)."),
+    wiki: t("Image : enshrouded.wiki.gg (© Keen Games)."),
+    creature: t("Image : fichier du wiki (© Keen Games), non rattaché à la page de la créature."),
+    trophee: t("Image : trophée de la créature (tête montée), fichier du wiki (© Keen Games) — pas de portrait de la créature sur le wiki."),
+    base: t("Image de la forme de base ({0}), dont le wiki dit que cette créature est une variante (© Keen Games).", nm(c.imageBase || ""))
+  })[imgNature(c)] || t("Pas d'image disponible : capture en jeu à faire.");
   function portrait(c, size = "") {
-    const src = imgSrc(c), ic = c.boss ? "trophy" : CATS[c.categorie]?.[1] || "help";
-    return `<span class="bt-img ${size}">${icon(ic)}${src ? `<img src="${esc(src)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onload="this.parentNode.classList.add('loaded')" onerror="this.remove()">` : ""}</span>`;
+    const src = imgSrc(c), ic = c.boss ? "trophy" : CATS[c.categorie]?.[1] || "help", nat = imgNature(c);
+    const marque = nat === "trophee" ? t("Trophée") : nat === "base" ? t("Forme de base") : "";
+    return `<span class="bt-img ${size}${nat === "trophee" ? " contain" : ""}"${marque ? ` title="${esc(marque)}"` : ""}>${icon(ic)}${src ? `<img src="${esc(src)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onload="this.parentNode.classList.add('loaded')" onerror="this.remove()">` : ""}${marque ? `<i class="bt-img-tag">${esc(marque)}</i>` : ""}</span>`;
   }
   const badge = (ty, v, extra = "") => `<span class="bt-dmg ${VAL[v]?.cls || "bv-nd"} ${TYPE[ty].el}" title="${esc(`${TYPE[ty].l} : ${v ? VAL[v].l : t("non renseigné")}`)}">${icon(TYPE[ty].ic)}${extra}</span>`;
   const barre = (c) => `<span class="bt-bar" role="img" aria-label="${esc(t("Résistances : {0}", TYPES.map(([ty]) => `${TYPE[ty].l} ${c.degats?.[ty] ? VAL[c.degats[ty]].l : "?"}`).join(", ")))}">${TYPES.map(([ty]) => badge(ty, c.degats?.[ty])).join("")}</span>`;
@@ -247,7 +257,7 @@
       <details class="more" open><summary>${icon("book")}${t("Sources et vérification")}</summary><div>
         <p>${t("Relevé sur le wiki le {0}", fmtDate(B().meta.collecte))}${c.wikiMaj ? ` · ${t("page wiki modifiée le {0}", fmtDate(c.wikiMaj))}` : ""} · ${t("version du jeu suivie par le site : {0}", esc(D.meta.versionJeu))}</p>
         <p>${src(["wiki-bestiaire"])}${c.mesures ? " · " + src(["wiki-combat"]) + ` (${t("page du {0}", fmtDate(B().meta.mecaniques?.maj))})` : ""}${NOTES().pindrop?.[c.nom] ? " · " + src(["pd-bosses"]) : ""}${c.nomFr ? " · " + src(["wiki-fr-bestiaire"]) : ""}</p>
-        <p class="muted">${imgSrc(c) ? t("Image : enshrouded.wiki.gg (© Keen Games).") : t("Pas d'image sur le wiki.")}</p></div></details></div>`);
+        <p class="muted">${esc(imgLegende(c))}</p></div></details></div>`);
     history.replaceState(null, "", "#bestiaire/" + c.id);
   }
 
