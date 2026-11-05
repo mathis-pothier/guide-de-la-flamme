@@ -1790,7 +1790,7 @@
   },
   {
    "id": "lesser-ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Ring_of_Health.png?7f50ab"
+   "url": "https://enshrouded.wiki.gg/images/Lesser_Ring_of_Health.png?705436"
   },
   {
    "id": "lesser-ring-of-mana",
@@ -2394,7 +2394,7 @@
   },
   {
    "id": "ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Lesser_Ring_of_Health.png?705436"
+   "url": "https://enshrouded.wiki.gg/images/Ring_of_Health.png?7f50ab"
   },
   {
    "id": "ring-of-mana",
@@ -2411,6 +2411,10 @@
   {
    "id": "ring-of-stamina",
    "url": "https://enshrouded.wiki.gg/images/Ring_of_Stamina.png?7761cb"
+  },
+  {
+   "id": "ring-of-the-ancients",
+   "url": "https://enshrouded.wiki.gg/images/Ring_of_the_Ancients.png?a555f6"
   },
   {
    "id": "ring-of-the-burning-light",
