@@ -74,7 +74,7 @@
   },
   {
    "id": "alchemists-ring",
-   "url": "https://enshrouded.wiki.gg/images/Alchemist%27s_Ring.png?502ba1"
+   "url": "https://enshrouded.wiki.gg/images/Alchemist%27s_Ring.png?1447e4"
   },
   {
    "id": "alpine-antler-boots",
@@ -550,7 +550,7 @@
   },
   {
    "id": "crestflame-chest",
-   "url": "https://enshrouded.wiki.gg/images/Crestflame_Chest.png?32453b"
+   "url": "https://enshrouded.wiki.gg/images/Crestflame_Chest.png?f040b6"
   },
   {
    "id": "crestflame-gloves",
@@ -589,8 +589,20 @@
    "url": "https://enshrouded.wiki.gg/images/Cutthroat_Boots.png?c0762a"
   },
   {
+   "id": "cutthroat-chest",
+   "url": "https://enshrouded.wiki.gg/images/Cutthroat_Chest.png?67391d"
+  },
+  {
    "id": "cutthroat-gloves",
    "url": "https://enshrouded.wiki.gg/images/Cutthroat_Gloves.png?4374d2"
+  },
+  {
+   "id": "cutthroat-helmet",
+   "url": "https://enshrouded.wiki.gg/images/Cutthroat_Helmet.png?4c25e8"
+  },
+  {
+   "id": "cutthroat-trousers",
+   "url": "https://enshrouded.wiki.gg/images/Cutthroat_Trousers.png?77f077"
   },
   {
    "id": "daggers",
@@ -838,7 +850,7 @@
   },
   {
    "id": "emberguard-chestplate",
-   "url": "https://enshrouded.wiki.gg/images/Emberguard_Chestplate.png?f040b6"
+   "url": "https://enshrouded.wiki.gg/images/Emberguard_Chestplate.png?32453b"
   },
   {
    "id": "emberguard-gloves",
@@ -1046,15 +1058,15 @@
   },
   {
    "id": "exceptional-ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Exceptional_Ring_of_Health.png?4c17b9"
+   "url": "https://enshrouded.wiki.gg/images/Exceptional_Ring_of_Health.png?da2070"
   },
   {
    "id": "exceptional-ring-of-mana",
-   "url": "https://enshrouded.wiki.gg/images/Exceptional_Ring_of_Mana.png?b8caad"
+   "url": "https://enshrouded.wiki.gg/images/Exceptional_Ring_of_Mana.png?4e88d3"
   },
   {
    "id": "exceptional-ring-of-stamina",
-   "url": "https://enshrouded.wiki.gg/images/Exceptional_Ring_of_Stamina.png?df46e1"
+   "url": "https://enshrouded.wiki.gg/images/Exceptional_Ring_of_Stamina.png?12f955"
   },
   {
    "id": "executioners-axe",
@@ -1306,7 +1318,7 @@
   },
   {
    "id": "gemini-ring",
-   "url": "https://enshrouded.wiki.gg/images/Gemini_Ring.png?c01335"
+   "url": "https://enshrouded.wiki.gg/images/Gemini_Ring.png?1b574d"
   },
   {
    "id": "ghostly-shield",
@@ -1398,15 +1410,15 @@
   },
   {
    "id": "greater-ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Greater_Ring_of_Health.png?b066d9"
+   "url": "https://enshrouded.wiki.gg/images/Greater_Ring_of_Health.png?e62c51"
   },
   {
    "id": "greater-ring-of-mana",
-   "url": "https://enshrouded.wiki.gg/images/Greater_Ring_of_Mana.png?dab8af"
+   "url": "https://enshrouded.wiki.gg/images/Greater_Ring_of_Mana.png?dd8c0d"
   },
   {
    "id": "greater-ring-of-stamina",
-   "url": "https://enshrouded.wiki.gg/images/Greater_Ring_of_Stamina.png?a40466"
+   "url": "https://enshrouded.wiki.gg/images/Greater_Ring_of_Stamina.png?6e1cac"
   },
   {
    "id": "greater-thunderblast-axe",
@@ -1690,7 +1702,7 @@
   },
   {
    "id": "hunters-ring",
-   "url": "https://enshrouded.wiki.gg/images/Hunter%27s_Ring.png?d511c4"
+   "url": "https://enshrouded.wiki.gg/images/Hunter%27s_Ring.png?12ff66"
   },
   {
    "id": "ice-bolt-i",
@@ -1742,7 +1754,7 @@
   },
   {
    "id": "invisible-barrier",
-   "url": "https://enshrouded.wiki.gg/images/Ethereal_Plane.png?870620"
+   "url": "https://enshrouded.wiki.gg/images/Invisible_Barrier.png?38e433"
   },
   {
    "id": "iron-claw-club",
@@ -1790,7 +1802,7 @@
   },
   {
    "id": "lesser-ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Ring_of_Health.png?7f50ab"
+   "url": "https://enshrouded.wiki.gg/images/Lesser_Ring_of_Health.png?504e5b"
   },
   {
    "id": "lesser-ring-of-mana",
@@ -1798,7 +1810,7 @@
   },
   {
    "id": "lesser-ring-of-stamina",
-   "url": "https://enshrouded.wiki.gg/images/Lesser_Ring_of_Stamina.png?9f97c2"
+   "url": "https://enshrouded.wiki.gg/images/Lesser_Ring_of_Stamina.png?cc6401"
   },
   {
    "id": "lifelock-boots",
@@ -1858,7 +1870,7 @@
   },
   {
    "id": "lupas-scalper",
-   "url": "https://enshrouded.wiki.gg/images/Lupa%27s_Scalper.png?741e5e"
+   "url": "https://enshrouded.wiki.gg/images/Lupa%27s_Scalper.png?d30275"
   },
   {
    "id": "mace-of-denial",
@@ -2394,7 +2406,7 @@
   },
   {
    "id": "ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Lesser_Ring_of_Health.png?705436"
+   "url": "https://enshrouded.wiki.gg/images/Ring_of_Health.png?b414f7"
   },
   {
    "id": "ring-of-mana",
@@ -2410,11 +2422,15 @@
   },
   {
    "id": "ring-of-stamina",
-   "url": "https://enshrouded.wiki.gg/images/Ring_of_Stamina.png?7761cb"
+   "url": "https://enshrouded.wiki.gg/images/Ring_of_Stamina.png?fbab88"
+  },
+  {
+   "id": "ring-of-the-ancients",
+   "url": "https://enshrouded.wiki.gg/images/Ring_of_the_Ancients.png?9debcd"
   },
   {
    "id": "ring-of-the-burning-light",
-   "url": "https://enshrouded.wiki.gg/images/Ring_of_the_Burning_Light.png?efbf63"
+   "url": "https://enshrouded.wiki.gg/images/Ring_of_the_Burning_Light.png?e67bcb"
   },
   {
    "id": "ring-of-the-ether",
@@ -2422,7 +2438,7 @@
   },
   {
    "id": "ring-of-the-flame",
-   "url": "https://enshrouded.wiki.gg/images/Ring_of_the_Flame.png?d59566"
+   "url": "https://enshrouded.wiki.gg/images/Ring_of_the_Flame.png?10caa1"
   },
   {
    "id": "ring-of-the-heir",
@@ -2990,15 +3006,15 @@
   },
   {
    "id": "superior-ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Superior_Ring_of_Health.png?3777b6"
+   "url": "https://enshrouded.wiki.gg/images/Superior_Ring_of_Health.png?d0bb51"
   },
   {
    "id": "superior-ring-of-mana",
-   "url": "https://enshrouded.wiki.gg/images/Superior_Ring_of_Mana.png?1ab483"
+   "url": "https://enshrouded.wiki.gg/images/Superior_Ring_of_Mana.png?1c301d"
   },
   {
    "id": "superior-ring-of-stamina",
-   "url": "https://enshrouded.wiki.gg/images/Superior_Ring_of_Stamina.png?d267dd"
+   "url": "https://enshrouded.wiki.gg/images/Superior_Ring_of_Stamina.png?ac7883"
   },
   {
    "id": "sword-of-radiance",
@@ -3166,15 +3182,15 @@
   },
   {
    "id": "ultimate-ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Ultimate_Ring_of_Health.png?a6ab8a"
+   "url": "https://enshrouded.wiki.gg/images/Ultimate_Ring_of_Health.png?49de66"
   },
   {
    "id": "ultimate-ring-of-mana",
-   "url": "https://enshrouded.wiki.gg/images/Ultimate_Ring_of_Mana.png?528772"
+   "url": "https://enshrouded.wiki.gg/images/Ultimate_Ring_of_Mana.png?fc462b"
   },
   {
    "id": "ultimate-ring-of-stamina",
-   "url": "https://enshrouded.wiki.gg/images/Ultimate_Ring_of_Stamina.png?d09e95"
+   "url": "https://enshrouded.wiki.gg/images/Ultimate_Ring_of_Stamina.png?a2aecc"
   },
   {
    "id": "undergrowth-staff",
@@ -3701,6 +3717,10 @@
    "url": "https://enshrouded.wiki.gg/images/Ancient_Spire.png?3b7b7b"
   },
   {
+   "file": "images/map/ancient-spire.png",
+   "url": "https://enshrouded.wiki.gg/images/Ancient_Spire.png?3b7b7b"
+  },
+  {
    "file": "images/map/flame-shrine.png",
    "url": "https://enshrouded.wiki.gg/images/Flame_Shrine.png?f7157e"
   },
@@ -3775,10 +3795,6 @@
   {
    "file": "images/map/village.png",
    "url": "https://enshrouded.wiki.gg/images/Village.png?1fe776"
-  },
-  {
-   "file": "images/map/ancient-spire.png",
-   "url": "https://enshrouded.wiki.gg/images/Ancient_Spire.png?3b7b7b"
   },
   {
    "file": "images/map/big-ammonite.png",

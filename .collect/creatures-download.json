@@ -1,5 +1,33 @@
 [
  {
+  "id": "ancient-b-l-d-r-construct",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Ancient_B.L.D.R._Construct.jpg/320px-Ancient_B.L.D.R._Construct.jpg?22eca6"
+ },
+ {
+  "id": "ancient-c-r-t-r-construct",
+  "url": "https://enshrouded.wiki.gg/images/Ancient_C.R.T.R._Construct.png?be44f3"
+ },
+ {
+  "id": "ancient-g-a-r-d-construct",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Ancient_G.A.R.D._Construct_%28burner%29.jpg/320px-Ancient_G.A.R.D._Construct_%28burner%29.jpg?bf773d"
+ },
+ {
+  "id": "ancient-g-t-h-r-construct",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Ancient_G.T.H.R._Construct.jpg/320px-Ancient_G.T.H.R._Construct.jpg?eb3a67"
+ },
+ {
+  "id": "ancient-g-u-n-r-construct",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Ancient_G.U.N.R._Construct.png/320px-Ancient_G.U.N.R._Construct.png?a281b1"
+ },
+ {
+  "id": "ancient-m-i-n-r-construct",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Ancient_M.I.N.R._Construct.png/320px-Ancient_M.I.N.R._Construct.png?61bb26"
+ },
+ {
+  "id": "ancient-s-i-r-n-construct",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Ancient_S.I.R.N._Construct_%28mobile%29.jpg/320px-Ancient_S.I.R.N._Construct_%28mobile%29.jpg?429a4f"
+ },
+ {
   "id": "ancient-s-p-d-r-construct",
   "url": "https://enshrouded.wiki.gg/images/Ancient_S.P.D.R._Construct_Trophy.png"
  },
@@ -48,6 +76,10 @@
   "url": "https://enshrouded.wiki.gg/images/thumb/Bat.png/320px-Bat.png?d0c55e"
  },
  {
+  "id": "bees",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Bees.png/320px-Bees.png?bc492c"
+ },
+ {
   "id": "boar",
   "url": "https://enshrouded.wiki.gg/images/Boar.png?165df5"
  },
@@ -60,12 +92,16 @@
   "url": "https://enshrouded.wiki.gg/images/Goat.png?dee9d8"
  },
  {
+  "id": "crab",
+  "url": "https://enshrouded.wiki.gg/images/Crab.png?6b7f21"
+ },
+ {
   "id": "cyclops",
   "url": "https://enshrouded.wiki.gg/images/Cyclops.png?b2a18a"
  },
  {
   "id": "direwolf",
-  "url": "https://enshrouded.wiki.gg/images/Direwolf_Trophy.png"
+  "url": "https://enshrouded.wiki.gg/images/thumb/Direwolf.png/320px-Direwolf.png?b088bb"
  },
  {
   "id": "draconian-vulture",
@@ -86,6 +122,10 @@
  {
   "id": "drak-priest",
   "url": "https://enshrouded.wiki.gg/images/thumb/Drak_Priest.png/320px-Drak_Priest.png?471049"
+ },
+ {
+  "id": "drak-spearfisher",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Drak_Spearfisher.png/320px-Drak_Spearfisher.png?d85a46"
  },
  {
   "id": "dune-armadillo",
@@ -180,6 +220,10 @@
   "url": "https://enshrouded.wiki.gg/images/Fell_Wispwyvern.png?7b72d8"
  },
  {
+  "id": "flaming-scorpion",
+  "url": "https://enshrouded.wiki.gg/images/thumb/Flaming_Scorpion.png/320px-Flaming_Scorpion.png?a4a4b8"
+ },
+ {
   "id": "flightless-redtail",
   "url": "https://enshrouded.wiki.gg/images/Flightless_Redtail.png?599ad5"
  },
@@ -229,7 +273,7 @@
  },
  {
   "id": "hydrakdal",
-  "url": "https://enshrouded.wiki.gg/images/thumb/Hydrak%27Dal.png/320px-Hydrak%27Dal.png"
+  "url": "https://enshrouded.wiki.gg/images/thumb/Hydrak%27dal.png/320px-Hydrak%27dal.png?6c8a8d"
  },
  {
   "id": "mushroom-crab",
@@ -237,7 +281,7 @@
  },
  {
   "id": "pink-stinger",
-  "url": "https://enshrouded.wiki.gg/images/Pink_Stinger.png?95a3e5"
+  "url": "https://enshrouded.wiki.gg/images/thumb/Pink_Stinger.png/320px-Pink_Stinger.png?80eb2f"
  },
  {
   "id": "rat",
