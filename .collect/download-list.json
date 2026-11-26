@@ -38,7 +38,7 @@
   },
   {
    "id": "adventurer-set",
-   "url": "https://enshrouded.wiki.gg/images/Adventurer_Set.png?261eee"
+   "url": "https://enshrouded.wiki.gg/images/Adventurer_Set.png?263bb5"
   },
   {
    "id": "adventurer-trousers",
@@ -66,7 +66,7 @@
   },
   {
    "id": "alchemist-apprentice-set",
-   "url": "https://enshrouded.wiki.gg/images/Alchemist_Apprentice_Set.png?891d4d"
+   "url": "https://enshrouded.wiki.gg/images/Alchemist_Apprentice_Set.png?a93345"
   },
   {
    "id": "alchemist-apprentice-trousers",
@@ -74,7 +74,7 @@
   },
   {
    "id": "alchemists-ring",
-   "url": "https://enshrouded.wiki.gg/images/Alchemist%27s_Ring.png?502ba1"
+   "url": "https://enshrouded.wiki.gg/images/Alchemist%27s_Ring.png?1447e4"
   },
   {
    "id": "alpine-antler-boots",
@@ -94,7 +94,7 @@
   },
   {
    "id": "alpine-antler-set",
-   "url": "https://enshrouded.wiki.gg/images/Alpine_Antler_Set.png?c9fd6d"
+   "url": "https://enshrouded.wiki.gg/images/Alpine_Antler_Set.png?65a358"
   },
   {
    "id": "alpine-antler-trousers",
@@ -186,7 +186,7 @@
   },
   {
    "id": "archmage-set",
-   "url": "https://enshrouded.wiki.gg/images/Archmage_Set.png?247d45"
+   "url": "https://enshrouded.wiki.gg/images/Archmage_Set.png?b6e944"
   },
   {
    "id": "archmage-trousers",
@@ -202,23 +202,27 @@
   },
   {
    "id": "ashwind-strider-boots",
-   "url": "https://enshrouded.wiki.gg/images/Ashwind_Strider_Boots.png?bf8c5c"
+   "url": "https://enshrouded.wiki.gg/images/Ashwind_Strider_Boots.png?e62207"
   },
   {
    "id": "ashwind-strider-chest",
-   "url": "https://enshrouded.wiki.gg/images/Ashwind_Strider_Chest.png?ff0ffd"
+   "url": "https://enshrouded.wiki.gg/images/Ashwind_Strider_Chest.png?a52347"
   },
   {
    "id": "ashwind-strider-gloves",
-   "url": "https://enshrouded.wiki.gg/images/Ashwind_Strider_Gloves.png?62f815"
+   "url": "https://enshrouded.wiki.gg/images/Ashwind_Strider_Gloves.png?24aa39"
   },
   {
    "id": "ashwind-strider-hood",
-   "url": "https://enshrouded.wiki.gg/images/Ashwind_Strider_Hood.png?a0692e"
+   "url": "https://enshrouded.wiki.gg/images/Ashwind_Strider_Hood.png?56cf2c"
   },
   {
    "id": "ashwind-strider-pants",
-   "url": "https://enshrouded.wiki.gg/images/Ashwind_Strider_Pants.png?efd907"
+   "url": "https://enshrouded.wiki.gg/images/Ashwind_Strider_Pants.png?e3513d"
+  },
+  {
+   "id": "ashwind-strider-set",
+   "url": "https://enshrouded.wiki.gg/images/Ashwind_Strider_Set.png?4d4d89"
   },
   {
    "id": "ashwood-wand",
@@ -242,7 +246,7 @@
   },
   {
    "id": "assassin-set",
-   "url": "https://enshrouded.wiki.gg/images/Assassin_Set.png?49184b"
+   "url": "https://enshrouded.wiki.gg/images/Assassin_Set.png?bd99fe"
   },
   {
    "id": "assassin-trousers",
@@ -309,6 +313,10 @@
    "url": "https://enshrouded.wiki.gg/images/Blackguard_Helmet.png?e2b59c"
   },
   {
+   "id": "blackguard-set",
+   "url": "https://enshrouded.wiki.gg/images/Blackguard_Set.png?c49dc0"
+  },
+  {
    "id": "blackguard-trousers",
    "url": "https://enshrouded.wiki.gg/images/Blackguard_Trousers.png?8dabf7"
   },
@@ -355,6 +363,10 @@
   {
    "id": "bloodfeather-pants",
    "url": "https://enshrouded.wiki.gg/images/Bloodfeather_Pants.png?fb7efc"
+  },
+  {
+   "id": "bloodfeather-set",
+   "url": "https://enshrouded.wiki.gg/images/Bloodfeather_Set.png?e1169f"
   },
   {
    "id": "bloodfeather-shoes",
@@ -426,7 +438,7 @@
   },
   {
    "id": "brazen-bull-set",
-   "url": "https://enshrouded.wiki.gg/images/Brazen_Bull_Set.png?3e6ad0"
+   "url": "https://enshrouded.wiki.gg/images/Brazen_Bull_Set.png?30c306"
   },
   {
    "id": "brazen-bull-shield",
@@ -546,23 +558,27 @@
   },
   {
    "id": "crestflame-boots",
-   "url": "https://enshrouded.wiki.gg/images/Crestflame_Boots.png?6372ba"
+   "url": "https://enshrouded.wiki.gg/images/Crestflame_Boots.png?b88a33"
   },
   {
    "id": "crestflame-chest",
-   "url": "https://enshrouded.wiki.gg/images/Crestflame_Chest.png?32453b"
+   "url": "https://enshrouded.wiki.gg/images/Crestflame_Chest.png?f040b6"
   },
   {
    "id": "crestflame-gloves",
-   "url": "https://enshrouded.wiki.gg/images/Crestflame_Gloves.png?3d693c"
+   "url": "https://enshrouded.wiki.gg/images/Crestflame_Gloves.png?ec7f9d"
   },
   {
    "id": "crestflame-helmet",
-   "url": "https://enshrouded.wiki.gg/images/Crestflame_Helmet.png?4c1c78"
+   "url": "https://enshrouded.wiki.gg/images/Crestflame_Helmet.png?25f869"
   },
   {
    "id": "crestflame-pants",
-   "url": "https://enshrouded.wiki.gg/images/Crestflame_Pants.png?81fe1e"
+   "url": "https://enshrouded.wiki.gg/images/Crestflame_Pants.png?60143f"
+  },
+  {
+   "id": "crestflame-set",
+   "url": "https://enshrouded.wiki.gg/images/Crestflame_Set.png?bdf632"
   },
   {
    "id": "crown-crusher",
@@ -589,8 +605,24 @@
    "url": "https://enshrouded.wiki.gg/images/Cutthroat_Boots.png?c0762a"
   },
   {
+   "id": "cutthroat-chest",
+   "url": "https://enshrouded.wiki.gg/images/Cutthroat_Chest.png?67391d"
+  },
+  {
    "id": "cutthroat-gloves",
    "url": "https://enshrouded.wiki.gg/images/Cutthroat_Gloves.png?4374d2"
+  },
+  {
+   "id": "cutthroat-helmet",
+   "url": "https://enshrouded.wiki.gg/images/Cutthroat_Helmet.png?4c25e8"
+  },
+  {
+   "id": "cutthroat-set",
+   "url": "https://enshrouded.wiki.gg/images/Cutthroat_Set.png?196eb6"
+  },
+  {
+   "id": "cutthroat-trousers",
+   "url": "https://enshrouded.wiki.gg/images/Cutthroat_Trousers.png?77f077"
   },
   {
    "id": "daggers",
@@ -642,7 +674,7 @@
   },
   {
    "id": "deadeye-set",
-   "url": "https://enshrouded.wiki.gg/images/Deadeye_Set.png?cd97e2"
+   "url": "https://enshrouded.wiki.gg/images/Deadeye_Set.png?b65600"
   },
   {
    "id": "deadeye-trousers",
@@ -682,7 +714,7 @@
   },
   {
    "id": "deerstalker-set",
-   "url": "https://enshrouded.wiki.gg/images/Deerstalker_Set.png?c08444"
+   "url": "https://enshrouded.wiki.gg/images/Deerstalker_Set.png?48cd6e"
   },
   {
    "id": "deerstalker-trousers",
@@ -758,7 +790,7 @@
   },
   {
    "id": "eagle-eye-set",
-   "url": "https://enshrouded.wiki.gg/images/Eagle_Eye_Set.png?b8efec"
+   "url": "https://enshrouded.wiki.gg/images/Eagle_Eye_Set.png?f41b32"
   },
   {
    "id": "eagle-eye-trousers",
@@ -786,7 +818,7 @@
   },
   {
    "id": "elder-set",
-   "url": "https://enshrouded.wiki.gg/images/Elder_Set.png?344bea"
+   "url": "https://enshrouded.wiki.gg/images/Elder_Set.png?dfa5a1"
   },
   {
    "id": "elder-trousers",
@@ -826,7 +858,7 @@
   },
   {
    "id": "elite-hollow-set",
-   "url": "https://enshrouded.wiki.gg/images/Elite_Hollow_Set.png?5e5a01"
+   "url": "https://enshrouded.wiki.gg/images/Elite_Hollow_Set.png?9ffa10"
   },
   {
    "id": "elms-eye-wand",
@@ -834,23 +866,27 @@
   },
   {
    "id": "emberguard-boots",
-   "url": "https://enshrouded.wiki.gg/images/Emberguard_Boots.png?fb34a6"
+   "url": "https://enshrouded.wiki.gg/images/Emberguard_Boots.png?689a6a"
   },
   {
    "id": "emberguard-chestplate",
-   "url": "https://enshrouded.wiki.gg/images/Emberguard_Chestplate.png?f040b6"
+   "url": "https://enshrouded.wiki.gg/images/Emberguard_Chestplate.png?32453b"
   },
   {
    "id": "emberguard-gloves",
-   "url": "https://enshrouded.wiki.gg/images/Emberguard_Gloves.png?650b09"
+   "url": "https://enshrouded.wiki.gg/images/Emberguard_Gloves.png?cb170f"
   },
   {
    "id": "emberguard-helmet",
-   "url": "https://enshrouded.wiki.gg/images/Emberguard_Helmet.png?f4e851"
+   "url": "https://enshrouded.wiki.gg/images/Emberguard_Helmet.png?e60013"
   },
   {
    "id": "emberguard-pants",
-   "url": "https://enshrouded.wiki.gg/images/Emberguard_Pants.png?fc7b1e"
+   "url": "https://enshrouded.wiki.gg/images/Emberguard_Pants.png?ccbf50"
+  },
+  {
+   "id": "emberguard-set",
+   "url": "https://enshrouded.wiki.gg/images/Emberguard_Set.png?6831d1"
   },
   {
    "id": "enflamed-sword",
@@ -1046,15 +1082,15 @@
   },
   {
    "id": "exceptional-ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Exceptional_Ring_of_Health.png?4c17b9"
+   "url": "https://enshrouded.wiki.gg/images/Exceptional_Ring_of_Health.png?da2070"
   },
   {
    "id": "exceptional-ring-of-mana",
-   "url": "https://enshrouded.wiki.gg/images/Exceptional_Ring_of_Mana.png?b8caad"
+   "url": "https://enshrouded.wiki.gg/images/Exceptional_Ring_of_Mana.png?4e88d3"
   },
   {
    "id": "exceptional-ring-of-stamina",
-   "url": "https://enshrouded.wiki.gg/images/Exceptional_Ring_of_Stamina.png?df46e1"
+   "url": "https://enshrouded.wiki.gg/images/Exceptional_Ring_of_Stamina.png?12f955"
   },
   {
    "id": "executioners-axe",
@@ -1205,6 +1241,10 @@
    "url": "https://enshrouded.wiki.gg/images/Flame_Arcanist_Pants.png?548197"
   },
   {
+   "id": "flame-arcanist-set",
+   "url": "https://enshrouded.wiki.gg/images/Flame_Arcanist_Set.png?d13dbd"
+  },
+  {
    "id": "flaming-gauntlets",
    "url": "https://enshrouded.wiki.gg/images/Flaming_Gauntlets.png?dba93b"
   },
@@ -1234,23 +1274,23 @@
   },
   {
    "id": "fowler-chest",
-   "url": "https://enshrouded.wiki.gg/images/Fowler_Chest.png?79741e"
+   "url": "https://enshrouded.wiki.gg/images/Fowler_Chest.png?6d76f9"
   },
   {
    "id": "fowler-gloves",
-   "url": "https://enshrouded.wiki.gg/images/Fowler_Gloves.png?6d27bf"
+   "url": "https://enshrouded.wiki.gg/images/Fowler_Gloves.png?b72584"
   },
   {
    "id": "fowler-helmet",
-   "url": "https://enshrouded.wiki.gg/images/Fowler_Helmet.png?4ac553"
+   "url": "https://enshrouded.wiki.gg/images/Fowler_Helmet.png?64f2d1"
   },
   {
    "id": "fowler-set",
-   "url": "https://enshrouded.wiki.gg/images/Fowler_Set.png?ad8d66"
+   "url": "https://enshrouded.wiki.gg/images/Fowler_Set.png?6f3603"
   },
   {
    "id": "fowler-trousers",
-   "url": "https://enshrouded.wiki.gg/images/Fowler_Trousers.png?5dac92"
+   "url": "https://enshrouded.wiki.gg/images/Fowler_Trousers.png?b0a386"
   },
   {
    "id": "freshblood-mace",
@@ -1282,7 +1322,7 @@
   },
   {
    "id": "frostbite-slasher-set",
-   "url": "https://enshrouded.wiki.gg/images/Frostbite_Slasher_Set.png?f04902"
+   "url": "https://enshrouded.wiki.gg/images/Frostbite_Slasher_Set.png?1de011"
   },
   {
    "id": "frostbite-slasher-trousers",
@@ -1302,11 +1342,11 @@
   },
   {
    "id": "fur-armor-set",
-   "url": "https://enshrouded.wiki.gg/images/Fur_Armor_Set.png?b64851"
+   "url": "https://enshrouded.wiki.gg/images/Fur_Armor_Set.png?dc8067"
   },
   {
    "id": "gemini-ring",
-   "url": "https://enshrouded.wiki.gg/images/Gemini_Ring.png?c01335"
+   "url": "https://enshrouded.wiki.gg/images/Gemini_Ring.png?1b574d"
   },
   {
    "id": "ghostly-shield",
@@ -1334,7 +1374,7 @@
   },
   {
    "id": "gloom-monarch-set",
-   "url": "https://enshrouded.wiki.gg/images/Gloom_Monarch_Set.png?3ab9f0"
+   "url": "https://enshrouded.wiki.gg/images/Gloom_Monarch_Set.png?c842cd"
   },
   {
    "id": "gloom-monarch-trousers",
@@ -1363,6 +1403,10 @@
   {
    "id": "golden-bulwark-pants",
    "url": "https://enshrouded.wiki.gg/images/Golden_Bulwark_Pants.png?f127f4"
+  },
+  {
+   "id": "golden-bulwark-set",
+   "url": "https://enshrouded.wiki.gg/images/Golden_Bulwark_Set.png?473897"
   },
   {
    "id": "golden-bulwark-shield",
@@ -1398,15 +1442,15 @@
   },
   {
    "id": "greater-ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Greater_Ring_of_Health.png?b066d9"
+   "url": "https://enshrouded.wiki.gg/images/Greater_Ring_of_Health.png?e62c51"
   },
   {
    "id": "greater-ring-of-mana",
-   "url": "https://enshrouded.wiki.gg/images/Greater_Ring_of_Mana.png?dab8af"
+   "url": "https://enshrouded.wiki.gg/images/Greater_Ring_of_Mana.png?dd8c0d"
   },
   {
    "id": "greater-ring-of-stamina",
-   "url": "https://enshrouded.wiki.gg/images/Greater_Ring_of_Stamina.png?a40466"
+   "url": "https://enshrouded.wiki.gg/images/Greater_Ring_of_Stamina.png?6e1cac"
   },
   {
    "id": "greater-thunderblast-axe",
@@ -1438,27 +1482,27 @@
   },
   {
    "id": "guard-of-the-north-boots",
-   "url": "https://enshrouded.wiki.gg/images/Guard_of_the_North_Boots.png?81a543"
+   "url": "https://enshrouded.wiki.gg/images/Guard_of_the_North_Boots.png?5aabdc"
   },
   {
    "id": "guard-of-the-north-chestplate",
-   "url": "https://enshrouded.wiki.gg/images/Guard_of_the_North_Chestplate.png?3fc5af"
+   "url": "https://enshrouded.wiki.gg/images/Guard_of_the_North_Chestplate.png?3c27ff"
   },
   {
    "id": "guard-of-the-north-gloves",
-   "url": "https://enshrouded.wiki.gg/images/Guard_of_the_North_Gloves.png?82101b"
+   "url": "https://enshrouded.wiki.gg/images/Guard_of_the_North_Gloves.png?f86986"
   },
   {
    "id": "guard-of-the-north-helmet",
-   "url": "https://enshrouded.wiki.gg/images/Guard_of_the_North_Helmet.png?ef8128"
+   "url": "https://enshrouded.wiki.gg/images/Guard_of_the_North_Helmet.png?eb765a"
   },
   {
    "id": "guard-of-the-north-pants",
-   "url": "https://enshrouded.wiki.gg/images/Guard_of_the_North_Pants.png?b7d554"
+   "url": "https://enshrouded.wiki.gg/images/Guard_of_the_North_Pants.png?4fe9a3"
   },
   {
    "id": "guard-of-the-north-set",
-   "url": "https://enshrouded.wiki.gg/images/Guard_of_the_North_Set.png?a48d11"
+   "url": "https://enshrouded.wiki.gg/images/Guard_of_the_North_Set.png?dc38f7"
   },
   {
    "id": "guard-of-the-north-sword",
@@ -1482,7 +1526,7 @@
   },
   {
    "id": "guardian-set",
-   "url": "https://enshrouded.wiki.gg/images/Guardian_Set.png?b7f4e1"
+   "url": "https://enshrouded.wiki.gg/images/Guardian_Set.png?249f90"
   },
   {
    "id": "guardian-shield",
@@ -1518,7 +1562,7 @@
   },
   {
    "id": "hailcaster-set",
-   "url": "https://enshrouded.wiki.gg/images/Hailcaster_Set.png?8275ef"
+   "url": "https://enshrouded.wiki.gg/images/Hailcaster_Set.png?afa67d"
   },
   {
    "id": "hailscourge",
@@ -1558,7 +1602,7 @@
   },
   {
    "id": "hawk-set",
-   "url": "https://enshrouded.wiki.gg/images/Hawk_Set.png?a210e4"
+   "url": "https://enshrouded.wiki.gg/images/Hawk_Set.png?5222e5"
   },
   {
    "id": "hawk-trousers",
@@ -1598,7 +1642,7 @@
   },
   {
    "id": "healer-set",
-   "url": "https://enshrouded.wiki.gg/images/Healer_Set.png?7cee16"
+   "url": "https://enshrouded.wiki.gg/images/Healer_Set.png?5db64a"
   },
   {
    "id": "healer-tunic",
@@ -1626,7 +1670,7 @@
   },
   {
    "id": "herbalist-set",
-   "url": "https://enshrouded.wiki.gg/images/Herbalist_Set.png?4fe7a2"
+   "url": "https://enshrouded.wiki.gg/images/Herbalist_Set.png?ffac73"
   },
   {
    "id": "herbalist-tunic",
@@ -1674,7 +1718,7 @@
   },
   {
    "id": "hunter-set",
-   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Set.png?dbf92b"
+   "url": "https://enshrouded.wiki.gg/images/Hunter_Set.png?e8e0a8"
   },
   {
    "id": "hunter-trousers",
@@ -1690,7 +1734,7 @@
   },
   {
    "id": "hunters-ring",
-   "url": "https://enshrouded.wiki.gg/images/Hunter%27s_Ring.png?d511c4"
+   "url": "https://enshrouded.wiki.gg/images/Hunter%27s_Ring.png?12ff66"
   },
   {
    "id": "ice-bolt-i",
@@ -1742,7 +1786,7 @@
   },
   {
    "id": "invisible-barrier",
-   "url": "https://enshrouded.wiki.gg/images/Ethereal_Plane.png?870620"
+   "url": "https://enshrouded.wiki.gg/images/Invisible_Barrier.png?38e433"
   },
   {
    "id": "iron-claw-club",
@@ -1778,7 +1822,7 @@
   },
   {
    "id": "knight-set",
-   "url": "https://enshrouded.wiki.gg/images/Knight_Set.png?9caf33"
+   "url": "https://enshrouded.wiki.gg/images/Knight_Set.png?1daa10"
   },
   {
    "id": "knight-trousers",
@@ -1790,7 +1834,7 @@
   },
   {
    "id": "lesser-ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Ring_of_Health.png?7f50ab"
+   "url": "https://enshrouded.wiki.gg/images/Lesser_Ring_of_Health.png?504e5b"
   },
   {
    "id": "lesser-ring-of-mana",
@@ -1798,7 +1842,7 @@
   },
   {
    "id": "lesser-ring-of-stamina",
-   "url": "https://enshrouded.wiki.gg/images/Lesser_Ring_of_Stamina.png?9f97c2"
+   "url": "https://enshrouded.wiki.gg/images/Lesser_Ring_of_Stamina.png?cc6401"
   },
   {
    "id": "lifelock-boots",
@@ -1819,6 +1863,10 @@
   {
    "id": "lifelock-pants",
    "url": "https://enshrouded.wiki.gg/images/Lifelock_Pants.png?3eecc4"
+  },
+  {
+   "id": "lifelock-set",
+   "url": "https://enshrouded.wiki.gg/images/Lifelock_Set.png?35febc"
   },
   {
    "id": "light-burst",
@@ -1858,7 +1906,7 @@
   },
   {
    "id": "lupas-scalper",
-   "url": "https://enshrouded.wiki.gg/images/Lupa%27s_Scalper.png?741e5e"
+   "url": "https://enshrouded.wiki.gg/images/Lupa%27s_Scalper.png?d30275"
   },
   {
    "id": "mace-of-denial",
@@ -1890,7 +1938,7 @@
   },
   {
    "id": "mage-set",
-   "url": "https://enshrouded.wiki.gg/images/Mage_Set.png?8f55ed"
+   "url": "https://enshrouded.wiki.gg/images/Mage_Set.png?6fbf4c"
   },
   {
    "id": "mage-trousers",
@@ -1914,7 +1962,7 @@
   },
   {
    "id": "magician-set",
-   "url": "https://enshrouded.wiki.gg/images/Magician_Set.png?687693"
+   "url": "https://enshrouded.wiki.gg/images/Magician_Set.png?f7309a"
   },
   {
    "id": "magician-trousers",
@@ -1970,7 +2018,7 @@
   },
   {
    "id": "marksman-boots",
-   "url": "https://enshrouded.wiki.gg/images/Marksman_Boots.png?980e6b"
+   "url": "https://enshrouded.wiki.gg/images/Marksman_Boots.png?6c4dc6"
   },
   {
    "id": "marksman-gloves",
@@ -1978,19 +2026,19 @@
   },
   {
    "id": "marksman-hood",
-   "url": "https://enshrouded.wiki.gg/images/Marksman_Hood.png?88c0d1"
+   "url": "https://enshrouded.wiki.gg/images/Marksman_Hood.png?aaacdf"
   },
   {
    "id": "marksman-set",
-   "url": "https://enshrouded.wiki.gg/images/Marksman_Set.png?56ce63"
+   "url": "https://enshrouded.wiki.gg/images/Marksman_Set.png?db506e"
   },
   {
    "id": "marksman-trousers",
-   "url": "https://enshrouded.wiki.gg/images/Marksman_Trousers.png?8372c1"
+   "url": "https://enshrouded.wiki.gg/images/Marksman_Trousers.png?191207"
   },
   {
    "id": "marksman-vest",
-   "url": "https://enshrouded.wiki.gg/images/Marksman_Vest.png?b4c11a"
+   "url": "https://enshrouded.wiki.gg/images/Marksman_Vest.png?1ce716"
   },
   {
    "id": "massive-hammer",
@@ -2026,7 +2074,7 @@
   },
   {
    "id": "mercenary-set",
-   "url": "https://enshrouded.wiki.gg/images/Mercenary_Set.png?5d62ff"
+   "url": "https://enshrouded.wiki.gg/images/Mercenary_Set.png?3e6251"
   },
   {
    "id": "mercenary-shield",
@@ -2082,7 +2130,7 @@
   },
   {
    "id": "mountains-shadow-set",
-   "url": "https://enshrouded.wiki.gg/images/Mountain%27s_Shadow_Set.png?b8f0f8"
+   "url": "https://enshrouded.wiki.gg/images/Mountain%27s_Shadow_Set.png?5615cd"
   },
   {
    "id": "mountains-shadow-shield",
@@ -2114,7 +2162,7 @@
   },
   {
    "id": "mystic-set",
-   "url": "https://enshrouded.wiki.gg/images/Mystic_Set.png?885674"
+   "url": "https://enshrouded.wiki.gg/images/Mystic_Set.png?794f6a"
   },
   {
    "id": "mythic-wand",
@@ -2169,6 +2217,10 @@
    "url": "https://enshrouded.wiki.gg/images/Omen_Helmet.png?2afb4d"
   },
   {
+   "id": "omen-set",
+   "url": "https://enshrouded.wiki.gg/images/Omen_Set.png?1cd1bc"
+  },
+  {
    "id": "omen-trousers",
    "url": "https://enshrouded.wiki.gg/images/Omen_Trousers.png?270198"
   },
@@ -2214,7 +2266,7 @@
   },
   {
    "id": "pearlfrost-mentor-set",
-   "url": "https://enshrouded.wiki.gg/images/Pearlfrost_Mentor_Set.png?41deb5"
+   "url": "https://enshrouded.wiki.gg/images/Pearlfrost_Mentor_Set.png?d42c0b"
   },
   {
    "id": "phoenix-bow",
@@ -2255,6 +2307,10 @@
   {
    "id": "plaguebringer-hood",
    "url": "https://enshrouded.wiki.gg/images/Plaguebringer_Hood.png?7d932e"
+  },
+  {
+   "id": "plaguebringer-set",
+   "url": "https://enshrouded.wiki.gg/images/Plaguebringer_Set.png?166bbd"
   },
   {
    "id": "plaguebringer-trousers",
@@ -2317,6 +2373,10 @@
    "url": "https://enshrouded.wiki.gg/images/Quetzal_Hunter_Pants.png?f23b3f"
   },
   {
+   "id": "quetzal-hunter-set",
+   "url": "https://enshrouded.wiki.gg/images/Quetzal_Hunter_Set.png?c35113"
+  },
+  {
    "id": "quetzal-hunter-shoes",
    "url": "https://enshrouded.wiki.gg/images/Quetzal_Hunter_Shoes.png?882b8e"
   },
@@ -2326,7 +2386,7 @@
   },
   {
    "id": "radiant-paladin-chestplate",
-   "url": "https://enshrouded.wiki.gg/images/Radiant_Paladin_Chestplate.png?8aa564"
+   "url": "https://enshrouded.wiki.gg/images/Radiant_Paladin_Chestplate.png?4e8fa7"
   },
   {
    "id": "radiant-paladin-gloves",
@@ -2338,7 +2398,7 @@
   },
   {
    "id": "radiant-paladin-set",
-   "url": "https://enshrouded.wiki.gg/images/Radiant_Paladin_Set.png?365a7b"
+   "url": "https://enshrouded.wiki.gg/images/Radiant_Paladin_Set.png?d2c706"
   },
   {
    "id": "radiant-paladin-trousers",
@@ -2346,7 +2406,7 @@
   },
   {
    "id": "ragged-set",
-   "url": "https://enshrouded.wiki.gg/images/Ragged_Set.png?c0283f"
+   "url": "https://enshrouded.wiki.gg/images/Ragged_Set.png?435045"
   },
   {
    "id": "ranger-boots",
@@ -2362,7 +2422,7 @@
   },
   {
    "id": "ranger-set",
-   "url": "https://enshrouded.wiki.gg/images/Ranger_Set.png?d8f367"
+   "url": "https://enshrouded.wiki.gg/images/Ranger_Set.png?af8a74"
   },
   {
    "id": "ranger-trousers",
@@ -2394,7 +2454,7 @@
   },
   {
    "id": "ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Lesser_Ring_of_Health.png?705436"
+   "url": "https://enshrouded.wiki.gg/images/Ring_of_Health.png?b414f7"
   },
   {
    "id": "ring-of-mana",
@@ -2410,11 +2470,15 @@
   },
   {
    "id": "ring-of-stamina",
-   "url": "https://enshrouded.wiki.gg/images/Ring_of_Stamina.png?7761cb"
+   "url": "https://enshrouded.wiki.gg/images/Ring_of_Stamina.png?fbab88"
+  },
+  {
+   "id": "ring-of-the-ancients",
+   "url": "https://enshrouded.wiki.gg/images/Ring_of_the_Ancients.png?9debcd"
   },
   {
    "id": "ring-of-the-burning-light",
-   "url": "https://enshrouded.wiki.gg/images/Ring_of_the_Burning_Light.png?efbf63"
+   "url": "https://enshrouded.wiki.gg/images/Ring_of_the_Burning_Light.png?e67bcb"
   },
   {
    "id": "ring-of-the-ether",
@@ -2422,7 +2486,7 @@
   },
   {
    "id": "ring-of-the-flame",
-   "url": "https://enshrouded.wiki.gg/images/Ring_of_the_Flame.png?d59566"
+   "url": "https://enshrouded.wiki.gg/images/Ring_of_the_Flame.png?10caa1"
   },
   {
    "id": "ring-of-the-heir",
@@ -2458,7 +2522,7 @@
   },
   {
    "id": "rising-fighter-set",
-   "url": "https://enshrouded.wiki.gg/images/Rising_Fighter_Set.png?18d519"
+   "url": "https://enshrouded.wiki.gg/images/Rising_Fighter_Set.png?6d8d1c"
   },
   {
    "id": "rising-fighter-shield",
@@ -2490,7 +2554,7 @@
   },
   {
    "id": "rogue-set",
-   "url": "https://enshrouded.wiki.gg/images/Rogue_Set.png?c7065c"
+   "url": "https://enshrouded.wiki.gg/images/Rogue_Set.png?1688d0"
   },
   {
    "id": "rogue-shield",
@@ -2558,7 +2622,7 @@
   },
   {
    "id": "sage-set",
-   "url": "https://enshrouded.wiki.gg/images/Sage_Set.png?9c2e07"
+   "url": "https://enshrouded.wiki.gg/images/Sage_Set.png?bc24cb"
   },
   {
    "id": "sage-tunic",
@@ -2602,7 +2666,7 @@
   },
   {
    "id": "scout-set",
-   "url": "https://enshrouded.wiki.gg/images/Scout_Set.png?82d747"
+   "url": "https://enshrouded.wiki.gg/images/Scout_Set.png?a5e133"
   },
   {
    "id": "scrap-daggers",
@@ -2626,27 +2690,27 @@
   },
   {
    "id": "sharpshooter-boots",
-   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Boots.png?cc3d96"
+   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Boots.png?95d8f7"
   },
   {
    "id": "sharpshooter-gloves",
-   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Gloves.png?92b097"
+   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Gloves.png?b8b222"
   },
   {
    "id": "sharpshooter-hood",
-   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Hood.png?668dd8"
+   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Hood.png?8d108b"
   },
   {
    "id": "sharpshooter-set",
-   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Set.png?dbf92b"
+   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Set.png?2717d5"
   },
   {
    "id": "sharpshooter-trousers",
-   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Trousers.png?2e8373"
+   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Trousers.png?451768"
   },
   {
    "id": "sharpshooter-vest",
-   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Vest.png?5ffad8"
+   "url": "https://enshrouded.wiki.gg/images/Sharpshooter_Vest.png?c3c396"
   },
   {
    "id": "shellbreaker-daggers",
@@ -2769,28 +2833,36 @@
    "url": "https://enshrouded.wiki.gg/images/Skull_Stalker_Pants.png?12526d"
   },
   {
+   "id": "skull-stalker-set",
+   "url": "https://enshrouded.wiki.gg/images/Skull_Stalker_Set.png?10444a"
+  },
+  {
    "id": "skull-stalker-shoes",
    "url": "https://enshrouded.wiki.gg/images/Skull_Stalker_Shoes.png?6f3816"
   },
   {
    "id": "sky-specter-boots",
-   "url": "https://enshrouded.wiki.gg/images/Sky_Specter_Boots.png?3df1e3"
+   "url": "https://enshrouded.wiki.gg/images/Sky_Specter_Boots.png?c198dd"
   },
   {
    "id": "sky-specter-chest",
-   "url": "https://enshrouded.wiki.gg/images/Sky_Specter_Chest.png?a52347"
+   "url": "https://enshrouded.wiki.gg/images/Sky_Specter_Chest.png?ff0ffd"
   },
   {
    "id": "sky-specter-gloves",
-   "url": "https://enshrouded.wiki.gg/images/Sky_Specter_Gloves.png?24aa39"
+   "url": "https://enshrouded.wiki.gg/images/Sky_Specter_Gloves.png?62f815"
   },
   {
    "id": "sky-specter-helmet",
-   "url": "https://enshrouded.wiki.gg/images/Sky_Specter_Helmet.png?56cf2c"
+   "url": "https://enshrouded.wiki.gg/images/Sky_Specter_Helmet.png?243805"
   },
   {
    "id": "sky-specter-pants",
-   "url": "https://enshrouded.wiki.gg/images/Sky_Specter_Pants.png?e3513d"
+   "url": "https://enshrouded.wiki.gg/images/Sky_Specter_Pants.png?833ae6"
+  },
+  {
+   "id": "sky-specter-set",
+   "url": "https://enshrouded.wiki.gg/images/Sky_Specter_Set.png?9ff657"
   },
   {
    "id": "sleek-daggers",
@@ -2822,7 +2894,7 @@
   },
   {
    "id": "soldier-set",
-   "url": "https://enshrouded.wiki.gg/images/Soldier_Set.png?103ca3"
+   "url": "https://enshrouded.wiki.gg/images/Soldier_Set.png?9cfc20"
   },
   {
    "id": "soldier-shield",
@@ -2874,7 +2946,7 @@
   },
   {
    "id": "spellbreaker-set",
-   "url": "https://enshrouded.wiki.gg/images/Spellbinder_Set.png?6cc521"
+   "url": "https://enshrouded.wiki.gg/images/Spellbinder_Set.png?f6e729"
   },
   {
    "id": "spiked-bow",
@@ -2981,6 +3053,10 @@
    "url": "https://enshrouded.wiki.gg/images/Sunpiercer_Pants.png?c411a2"
   },
   {
+   "id": "sunpiercer-set",
+   "url": "https://enshrouded.wiki.gg/images/Sunpiercer_Set.png?fb942a"
+  },
+  {
    "id": "sunpiercer-shield",
    "url": "https://enshrouded.wiki.gg/images/Sunpiercer_Shield.png?6609a2"
   },
@@ -2990,15 +3066,15 @@
   },
   {
    "id": "superior-ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Superior_Ring_of_Health.png?3777b6"
+   "url": "https://enshrouded.wiki.gg/images/Superior_Ring_of_Health.png?d0bb51"
   },
   {
    "id": "superior-ring-of-mana",
-   "url": "https://enshrouded.wiki.gg/images/Superior_Ring_of_Mana.png?1ab483"
+   "url": "https://enshrouded.wiki.gg/images/Superior_Ring_of_Mana.png?1c301d"
   },
   {
    "id": "superior-ring-of-stamina",
-   "url": "https://enshrouded.wiki.gg/images/Superior_Ring_of_Stamina.png?d267dd"
+   "url": "https://enshrouded.wiki.gg/images/Superior_Ring_of_Stamina.png?ac7883"
   },
   {
    "id": "sword-of-radiance",
@@ -3034,7 +3110,7 @@
   },
   {
    "id": "tank-set",
-   "url": "https://enshrouded.wiki.gg/images/Tank_Set.png?f2680e"
+   "url": "https://enshrouded.wiki.gg/images/Tank_Set.png?9b429c"
   },
   {
    "id": "tank-trousers",
@@ -3070,7 +3146,7 @@
   },
   {
    "id": "thaumaturge-set",
-   "url": "https://enshrouded.wiki.gg/images/Thaumaturge_Set.png?119228"
+   "url": "https://enshrouded.wiki.gg/images/Thaumaturge_Set.png?2a1baa"
   },
   {
    "id": "the-needles",
@@ -3091,6 +3167,10 @@
   {
    "id": "tidecaller-pants",
    "url": "https://enshrouded.wiki.gg/images/Tidecaller_Pants.png?a46e08"
+  },
+  {
+   "id": "tidecaller-set",
+   "url": "https://enshrouded.wiki.gg/images/Tidecaller_Set.png?d0ec81"
   },
   {
    "id": "tidecaller-shoes",
@@ -3138,7 +3218,7 @@
   },
   {
    "id": "trailblazer-set",
-   "url": "https://enshrouded.wiki.gg/images/Trailblazer_Set.png?b70c10"
+   "url": "https://enshrouded.wiki.gg/images/Trailblazer_Set.png?54e63c"
   },
   {
    "id": "trailblazer-trousers",
@@ -3166,15 +3246,15 @@
   },
   {
    "id": "ultimate-ring-of-health",
-   "url": "https://enshrouded.wiki.gg/images/Ultimate_Ring_of_Health.png?a6ab8a"
+   "url": "https://enshrouded.wiki.gg/images/Ultimate_Ring_of_Health.png?49de66"
   },
   {
    "id": "ultimate-ring-of-mana",
-   "url": "https://enshrouded.wiki.gg/images/Ultimate_Ring_of_Mana.png?528772"
+   "url": "https://enshrouded.wiki.gg/images/Ultimate_Ring_of_Mana.png?fc462b"
   },
   {
    "id": "ultimate-ring-of-stamina",
-   "url": "https://enshrouded.wiki.gg/images/Ultimate_Ring_of_Stamina.png?d09e95"
+   "url": "https://enshrouded.wiki.gg/images/Ultimate_Ring_of_Stamina.png?a2aecc"
   },
   {
    "id": "undergrowth-staff",
@@ -3262,7 +3342,7 @@
   },
   {
    "id": "warden-set",
-   "url": "https://enshrouded.wiki.gg/images/Warden_Set.png?d092f2"
+   "url": "https://enshrouded.wiki.gg/images/Warden_Set.png?85cf95"
   },
   {
    "id": "warden-trousers",
@@ -3286,7 +3366,7 @@
   },
   {
    "id": "warlock-set",
-   "url": "https://enshrouded.wiki.gg/images/Warlock_Set.png?841974"
+   "url": "https://enshrouded.wiki.gg/images/Warlock_Set.png?6135eb"
   },
   {
    "id": "warlock-shirt",
@@ -3310,7 +3390,7 @@
   },
   {
    "id": "warrior-set",
-   "url": "https://enshrouded.wiki.gg/images/Warrior_Set.png?d51901"
+   "url": "https://enshrouded.wiki.gg/images/Warrior_Set.png?7ee4fc"
   },
   {
    "id": "warrior-trousers",
@@ -3331,6 +3411,10 @@
   {
    "id": "waveborne-ritualist-pants",
    "url": "https://enshrouded.wiki.gg/images/Waveborne_Ritualist_Pants.png?ff2bef"
+  },
+  {
+   "id": "waveborne-ritualist-set",
+   "url": "https://enshrouded.wiki.gg/images/Waveborne_Ritualist_Set.png?687081"
   },
   {
    "id": "waveborne-ritualist-tunic",
@@ -3374,7 +3458,7 @@
   },
   {
    "id": "wizard-set",
-   "url": "https://enshrouded.wiki.gg/images/Wizard_Set.png?fe21b6"
+   "url": "https://enshrouded.wiki.gg/images/Wizard_Set.png?d7bbf2"
   },
   {
    "id": "wolf-daggers",
@@ -3406,7 +3490,7 @@
   },
   {
    "id": "wolfs-fang-set",
-   "url": "https://enshrouded.wiki.gg/images/Wolf%27s_Fang_Set.png?fcdebe"
+   "url": "https://enshrouded.wiki.gg/images/Wolf%27s_Fang_Set.png?cf121f"
   },
   {
    "id": "wolfs-fang-shield",
@@ -3701,6 +3785,10 @@
    "url": "https://enshrouded.wiki.gg/images/Ancient_Spire.png?3b7b7b"
   },
   {
+   "file": "images/map/ancient-spire.png",
+   "url": "https://enshrouded.wiki.gg/images/Ancient_Spire.png?3b7b7b"
+  },
+  {
    "file": "images/map/flame-shrine.png",
    "url": "https://enshrouded.wiki.gg/images/Flame_Shrine.png?f7157e"
   },
@@ -3775,10 +3863,6 @@
   {
    "file": "images/map/village.png",
    "url": "https://enshrouded.wiki.gg/images/Village.png?1fe776"
-  },
-  {
-   "file": "images/map/ancient-spire.png",
-   "url": "https://enshrouded.wiki.gg/images/Ancient_Spire.png?3b7b7b"
   },
   {
    "file": "images/map/big-ammonite.png",
